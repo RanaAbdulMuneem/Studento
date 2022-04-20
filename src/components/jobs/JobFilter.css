@@ -1,0 +1,47 @@
+#JobFilter .pay {
+    text-align: end;
+}
+#JobFilter .filter-header {
+    font-size: 18px;
+}
+
+
+#JobFilter .accordion {
+    background-color: transparent;
+}
+#JobFilter .accordion-item {
+    background-color: transparent;
+}
+#JobFilter .accordion-button {
+    background-color: transparent;
+    color: black;
+    font-size: 18px;
+}
+#JobFilter .accordion-button:focus {
+    box-shadow: none;
+    color: black;
+}
+.accordion-button:after {
+    background-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23000000'><path fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/></svg>") !important;
+}
+#JobFilter .accordion-header {
+    box-shadow: none;
+}
+
+
+#JobFilter .form-for-checkbox {
+    font-size: 12px;
+    box-shadow: none;
+    border-radius: 0px;
+    background-color: transparent;
+    border: none;
+}
+
+#JobFilter .plus-icon {
+    font-size: 20px;
+}
+
+#JobFilter .input-group {
+    background-color: white;
+    border-radius: 5px;
+}

@@ -1,0 +1,33 @@
+#JobNavigation a {
+    color: black;
+}
+#JobNavigation .bold {
+    font-weight: bold;
+}
+
+#JobNavigation .card-header {
+    background-color: white;
+}
+
+
+.job-card {
+    border-radius: 10px;
+}
+.job-card:hover {
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 6px 16px;
+}
+.job-card .bold {
+    font-weight: bold;
+}
+.job-card .card-body-link {
+    color: black;
+    text-decoration: none;
+}
+
+.job-card .card-link {
+    color: black;
+    text-decoration: none;
+}   
+.job-card .card-link:hover {
+    text-decoration: underline;
+}

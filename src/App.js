@@ -11,17 +11,28 @@ import NavBar from "./components/navbar/NavBar"
 import StudentProfile from "./components/StudentProfile/StudentProfile"
 import Footer from "./components/footer/Footer"
 
-function App() {
-  return <BrowserRouter>
-  <NavBar/>
-    <Routes>
-      <Route path="/createjob" element={<CreateJob />}></Route>
-      <Route path="/studentprofile" element={<StudentProfile />}></Route>
-      
-    </Routes>
-    <Footer/>
-  </BrowserRouter>
+import { Jobs } from './components/jobs/Jobs';
+import { Home } from './components/home/Home';
 
+
+function App() {
+  return (
+    
+      <BrowserRouter>
+        <NavBar/>
+
+        <div class="container-lg">
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/jobs" element={<Jobs />} />
+            <Route path="/createjob" element={<CreateJob />}></Route>
+            <Route path="/studentprofile" element={<StudentProfile />}></Route>
+            
+          </Routes>
+        </div>
+          <Footer/>
+      </BrowserRouter>
+  )
 }
 
 export default App;

@@ -9,7 +9,7 @@ const CreateJob = () => {
   const [jobDescription, setJobDescription ] = useState("")
   
   return (
-    <Container>
+    <div>
       <h4 className="mt-5">Create Job</h4>
       <form>
         <div class="form-group mt-4">
@@ -57,7 +57,7 @@ const CreateJob = () => {
 
         <button className="btn btn-success mt-3">Post Job</button>
       </form>
-    </Container>
+    </div>
   );
 };
 
