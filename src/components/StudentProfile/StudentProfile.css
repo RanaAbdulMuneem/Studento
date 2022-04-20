@@ -1,0 +1,12 @@
+.profile-pic{
+  border-radius: 5%;
+}
+
+.name-age-row{
+    border: solid 1px black;
+    border-radius: 2%;
+    padding: 20px;
+}
+.education-ul{
+    list-style: none;
+}
