@@ -1,0 +1,27 @@
+.job a {
+    color: #1F1F1F;
+    text-decoration: none;
+}
+
+.job a:hover {
+    text-decoration: underline;
+}
+
+.job .skill {
+    font-size: 16px;
+    background-color: #c7c7c7;
+    cursor: pointer;
+}
+
+.job .skill:hover {
+    background-color: #cfcfcf;
+}
+
+.job .info-panel {
+    border-right: solid 1px black;
+}
+@media (max-width: 992px){
+    .job .info-panel {
+        border: none;
+    }   
+}
