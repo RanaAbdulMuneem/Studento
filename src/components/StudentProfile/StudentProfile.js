@@ -4,7 +4,7 @@ import img from "../../images/p1.jpg";
 import "./StudentProfile.css";
 const StudentProfile = () => {
   return (
-    <Container>
+    <div>
       <Row className="mt-5">
         <Col className="col-lg-3">
           <img src={img} alt="not supported" className="profile-pic" />
@@ -96,7 +96,7 @@ const StudentProfile = () => {
           </Container>
         </Col>
       </Row>
-    </Container>
+    </div>
   );
 };
 export default StudentProfile;
