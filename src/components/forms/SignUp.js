@@ -1,8 +1,52 @@
 import React from "react";
-import img from "../../images/boy-table.png";
-import bg from "../../images/bg-1.svg";
+import { useState, useEffect } from "react";
+
+function validateInfo(values) {
+  let errors = {};
+
+  if (!values.name.trim()) {
+    errors.name = "Name is required";
+  }
+
+  if (!values.email) {
+    errors.email = "Email is required";
+  } else if (!/\S+@\S+\.\S+/.test(values.email)) {
+    errors.email = "Invalid email: Missing @ or .com";
+  }
+  if (!values.password) {
+    errors.password = "Password is required";
+  } else if (values.password.length <= 8) {
+    errors.password = "Password needs to be 8 characters or more";
+  }
+
+  return errors;
+}
 
 const SignUp = (props) => {
+  const [values, setValues] = useState({
+    name: "",
+    email: "",
+    password: "",
+  });
+
+  const [errors, setErrors] = useState({});
+
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setValues({
+      ...values,
+      [name]: value,
+    });
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setErrors(validateInfo(values));
+    setIsSubmitting(true);
+  };
+
   return (
     <section className="h-100" style={{ backgroundColor: "white" }}>
       <div className="container h-100 StudentSignUp" id="bg-img">
@@ -36,7 +80,15 @@ const SignUp = (props) => {
                             id="form3Example1c"
                             className="form-control border border-secondary"
                             placeholder="Your Name Here"
+                            name="name"
+                            value={values.name}
+                            onChange={handleChange}
                           />
+                          {errors.name && (
+                            <p className="p-0 m-0" style={{ color: "red" }}>
+                              {errors.name}
+                            </p>
+                          )}
                         </div>
                       </div>
                       <div className="d-flex flex-row align-items-center mb-4">
@@ -54,7 +106,16 @@ const SignUp = (props) => {
                             id="form3Example3c"
                             className="form-control border border-secondary"
                             placeholder="name@mail.com"
+                            name="email"
+                            value={values.email}
+                            onChange={handleChange}
                           />
+
+                          {errors.email && (
+                            <p className="p-0 m-0" style={{ color: "red" }}>
+                              {errors.email}
+                            </p>
+                          )}
                         </div>
                       </div>
                       <div className="d-flex flex-row align-items-center mb-4">
@@ -71,7 +132,15 @@ const SignUp = (props) => {
                             id="form3Example4c"
                             className="form-control border border-secondary"
                             placeholder="Min 8 chars."
+                            name="password"
+                            value={values.password}
+                            onChange={handleChange}
                           />
+                          {errors.password && (
+                            <p className="p-0 m-0" style={{ color: "red" }}>
+                              {errors.password}
+                            </p>
+                          )}
                         </div>
                       </div>
                       {/* <div className="d-flex flex-row align-items-center mb-4">
@@ -119,6 +188,7 @@ const SignUp = (props) => {
                           <button
                             type="submit"
                             className="btn btn-primary  w-100 mb-4"
+                            onClick={handleSubmit}
                           >
                             Register
                           </button>
