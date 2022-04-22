@@ -1,8 +1,13 @@
 import "./App.css";
-import { Button, Navbar } from "react-bootstrap";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+
+import {Container, Navbar, Nav, NavDropdown} from "react-bootstrap"
+import StudentoLogo from './images/studento_logo.png'
+
+//import NavBar from './components/navbar/'
+
+import { useState } from "react";
+import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 import CreateJob from "./components/createjob/CreateJob";
-import NavBar from "./components/navbar/NavBar";
 import StudentProfile from "./components/StudentProfile/StudentProfile";
 import CompanyProfile from "./components/companyprofile/CompanyProfile";
 import Footer from "./components/footer/Footer";
@@ -18,9 +23,67 @@ import CompanyLogin from "./components/CompanyLogin/CompanyLogin";
 
 
 function App() {
+  const [user, setUser] = useState("none")
+
+  const loginStudent = () => {
+    setUser("student")
+  }
+  const loginCompany = () => {
+    setUser("company")
+  }
+  const logout = () => {
+    setUser("none")
+  }
+
+  const NavBar = () => {
+    return  (
+      <div>
+        <Navbar bg="dark" variant="dark">
+          <Container fluid>
+          <Navbar.Brand as={Link} to="/">
+            <img
+            src={StudentoLogo}
+            class="img-fluid"
+            width="40"
+            />
+            {' '}
+            Studento
+            </Navbar.Brand>
+          <Nav className="me-auto">
+            <Nav.Link as={Link} to="/">Home</Nav.Link>
+            <Nav.Link as={Link} to="/jobs">Jobs</Nav.Link>
+          </Nav>
+          <Nav>
+            {
+              user == "none" ? (
+                <>
+                  <Nav.Link as={Link} to="/studentsignup" onClick={loginStudent}>Student Portal</Nav.Link>
+                  <Nav.Link as={Link} to="/companysignup" onClick={loginCompany}>Company Portal</Nav.Link>
+                </>
+              ) : (
+                <>
+                  <Nav.Link
+                  as={Link}
+                  to={
+                    "/" + user + "profile"
+                  }
+                  >
+                    Profile
+                  </Nav.Link>
+                  <Nav.Link as={Link} to="/" onClick={logout}>Logout</Nav.Link>
+                </>
+              )
+            }
+          </Nav>
+          </Container>
+        </Navbar>
+      </div>
+    )
+  }
+
   return (
     <BrowserRouter>
-      <NavBar />
+      <NavBar/>
 
         <div class="App container-lg mt-3 pb-5">
           <Routes>
