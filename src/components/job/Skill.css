@@ -1,0 +1,9 @@
+.skill {
+    font-size: 16px;
+    background-color: #c7c7c7;
+    cursor: pointer;
+}
+
+.skill:hover {
+    background-color: #cfcfcf;
+}

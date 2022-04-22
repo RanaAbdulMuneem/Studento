@@ -5,7 +5,7 @@ import { Link } from "react-router-dom"
 import {BsCheckAll} from 'react-icons/bs'
 
 import FastLogo from '../../images/fast_logo.jpg'
-import HomeImage from '../../images/home-image.jpg'
+import ChillingImage from '../../images/chilling.png'
 
 const CompanyCard = (props) => {
     const src = "./"
@@ -39,18 +39,16 @@ export const Home = () => {
     return (
         <div id="home" class="container-fluid">
             {/* HOOK */}
-            <div class="row my-5 px-2 py-5">
-                <div class="col">
+            <div class="row my-5 px-2 py-5 flex-wrap-reverse">
+                <div class="col-md-6 col-sm-12">
                     <h1 class="display-1 mb-5">Studento</h1>
                     <p class="info">Occaecat ut eiusmod pariatur sint culpa in culpa Lorem minim veniam dolore ad laborum deserunt.</p>
                     <p class="info">Cupidatat eiusmod laboris consectetur est magna.</p>
                     <div class="row mt-5">
-                        <div class="col-auto">
+                        <div class="d-flex flex-row">
                             <Link to="/studentlogin">
-                                <button class="btn button-student w-100">For students</button>
+                                <button class="btn button-student me-3">For students</button>
                             </Link>    
-                        </div>
-                        <div class="col-auto">
                             <Link to="/companylogin">
                                 <button class="btn button-company">For companies</button>
                             </Link>
@@ -60,15 +58,15 @@ export const Home = () => {
                         <div class="col-auto">
                             <h5>Just want to explore?</h5>
                         </div>
-                        <div class="col">
+                        <div class="col-auto">
                             <Link to="/jobs">
                                 <button class="btn button-jobs">Checkout Jobs</button>
                             </Link>
                         </div>
                     </div>
                 </div>
-                <div class="col-auto align-self-center px-0">
-                    <img src={HomeImage} class="img-fluid home-image"/>
+                <div class="col-md-6 col-sm-12">
+                    <img src={ChillingImage} class="img-fluid"></img>
                 </div>
             </div>
             <hr />

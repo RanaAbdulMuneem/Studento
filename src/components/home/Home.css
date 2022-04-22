@@ -5,7 +5,7 @@
 
 #home .button-company, .button-student, .button-jobs {
     border-radius: 5px;
-    font-size: 24px;
+    font-size: 22px;
     color: black;
     background-color: transparent;
     border: solid 1px black;
@@ -22,8 +22,8 @@
 }
 
 .company-card-logo {
-    height: 175px;
-    width: 175px;
+    height: 125px;
+    width: 125px;
     border-radius: 50px;
     margin-left: 0px;
     margin-right: 0px;
@@ -41,16 +41,4 @@
 #home .pros-desc {
     font-size: 18px;
 
-}
-
-#home .home-image {
-    display: inline;
-    border-radius: 10px;
-    box-shadow: 3px 3px 20px 0px rgba(0, 0, 0, 0.4);
-    width: 450px;
-}
-@media (max-width: 900px){
-    #home .home-image {
-        display: none;
-    }
 }

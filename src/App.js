@@ -21,7 +21,7 @@ function App() {
     <BrowserRouter>
       <NavBar />
 
-        <div class="container-lg mt-3 pb-5">
+        <div class="App container-lg mt-3 pb-5">
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/job/:id" element={<Job />} />

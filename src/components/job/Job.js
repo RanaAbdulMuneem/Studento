@@ -7,15 +7,12 @@ import { Link } from "react-router-dom"
 import {BsFillCalendarEventFill} from 'react-icons/bs'
 
 import { SaveButton } from "../buttons/Buttons"
-
-const Skill = (props) => {
-    return <div class="col-auto px-1 me-2 mb-2 skill">{props.skill}</div>
-}
+import { Skill } from './Skill'
 
 export const Job = () => {
     const details = JobData[useParams().id]
     return (
-        <div class="job container-fluid pb-5">
+        <div class="job container-fluid">
             <div class="row align-items-center py-3 mb-3 border-bottom border-dark">
                 <div class="col me-auto">
                     <h1>{details.position}</h1>
