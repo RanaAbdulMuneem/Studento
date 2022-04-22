@@ -1,13 +1,13 @@
-
-import {useState} from "react"
+import { useState } from "react";
 const CreateJob = () => {
-   
-  const [jobTitle,setJobTitle ] = useState("")
-  const [companyName,setCompanyName] = useState("")
-  const [jobType, setJobType] = useState("")
-  const [jobLocation, setJobLocation] = useState("")
-  const [jobDescription, setJobDescription ] = useState("")
-  
+  const [jobTitle, setJobTitle] = useState("");
+  const [companyName, setCompanyName] = useState("");
+  const [jobType, setJobType] = useState("");
+  const [jobLocation, setJobLocation] = useState("");
+  const [jobDescription, setJobDescription] = useState("");
+  const [jobDomain, setDomain ] = useState("")
+  const [minPay, setMinPay ] = useState("")
+
   return (
     <div>
       <h4 className="mt-5">Create Job</h4>
@@ -37,6 +37,35 @@ const CreateJob = () => {
             <option>Part-time</option>
             <option>Internship</option>
           </select>
+        </div>
+        <div class="form-group mt-4">
+          <label for="exampleFormControlSelect1">Minimium Education</label>
+          <select class="form-control mt-2" id="exampleFormControlSelect1">
+            <option>Highschool</option>
+            <option>Freshman</option>
+            <option>Sophomore</option>
+            <option>Junior</option>
+            <option>Senior</option>
+          </select>
+        </div>
+        <div class="form-group mt-4">
+          <label for="exampleFormControlSelect1">Domain</label>
+          <select class="form-control mt-2" id="exampleFormControlSelect1">
+            <option>Education</option>
+            <option>E-commerce</option>
+            <option>Healthcare</option>
+            <option>Software Engineering</option>
+            <option>Game Development</option>
+          </select>
+        </div>
+        <div class="form-group mt-4">
+          <label for="exampleFormControlInput1">Minimum Pay ( RS )</label>
+          <input
+            type="number"
+            class="form-control mt-2"
+            id="exampleFormControlInput1"
+            placeholder="100,000"
+          />
         </div>
         <div class="form-group mt-4">
           <label for="exampleFormControlSelect1">Job Location</label>

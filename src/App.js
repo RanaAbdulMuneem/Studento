@@ -45,6 +45,7 @@ function App() {
             src={StudentoLogo}
             class="img-fluid"
             width="40"
+            alt="not supported"
             />
             {' '}
             Studento
@@ -55,7 +56,7 @@ function App() {
           </Nav>
           <Nav>
             {
-              user == "none" ? (
+              user === "none" ? (
                 <>
                   <Nav.Link as={Link} to="/studentsignup" onClick={loginStudent}>Student Portal</Nav.Link>
                   <Nav.Link as={Link} to="/companysignup" onClick={loginCompany}>Company Portal</Nav.Link>
