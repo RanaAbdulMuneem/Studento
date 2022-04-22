@@ -4,6 +4,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import CreateJob from "./components/createjob/CreateJob";
 import NavBar from "./components/navbar/NavBar";
 import StudentProfile from "./components/StudentProfile/StudentProfile";
+import CompanyProfile from "./components/companyprofile/CompanyProfile";
 import Footer from "./components/footer/Footer";
 
 import StudentSignup from "./components/StudentSignup/StudentSignup";
@@ -28,6 +29,7 @@ function App() {
             <Route path="/jobs" element={<Jobs />} />
             <Route path="/createjob" element={<CreateJob />}></Route>
             <Route path="/studentprofile" element={<StudentProfile />}></Route>
+            <Route path="/companyprofile" element={<CompanyProfile />}></Route>
             <Route path="/studentsignup" element={<StudentSignup />}></Route>
             <Route path="/studentlogin" element={<StudentLogin />}></Route>
             <Route path="/companysignup" element={<CompanySignup />}></Route>
