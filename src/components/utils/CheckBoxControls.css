@@ -1,0 +1,12 @@
+.checkbox-control .form-for-checkbox {
+    font-size: 12px;
+    box-shadow: none;
+    border-radius: 0px;
+    background-color: transparent;
+    border: none;
+}
+
+.checkbox-control .input-group {
+    background-color: white;
+    border-radius: 5px;
+}

@@ -28,15 +28,6 @@
     box-shadow: none;
 }
 
-
-#JobFilter .form-for-checkbox {
-    font-size: 12px;
-    box-shadow: none;
-    border-radius: 0px;
-    background-color: transparent;
-    border: none;
-}
-
 #JobFilter .plus-icon {
     font-size: 20px;
 }

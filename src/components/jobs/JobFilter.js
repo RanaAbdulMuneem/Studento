@@ -2,7 +2,7 @@ import './JobFilter.css'
 
 import {Component, useState} from 'react'
 import {Accordion} from 'react-bootstrap'
-import {AiOutlinePlusCircle} from 'react-icons/ai'
+import {CheckBoxControls} from '../utils/CheckBoxControls'
 
 class Salary extends Component {
     constructor(props) {
@@ -37,90 +37,7 @@ class Salary extends Component {
     }
 }
 
-class CheckControls extends Component {
-    constructor(props){
-        super(props)
-        let init_checkboxes = [];
-        for (let i=0; i < Math.min(props.values.length, 5); i++){
-            init_checkboxes.push(
-                {value: props.values[i], checked: false}
-            )
-        }
-        console.log("initial", init_checkboxes)
-        this.state = {
-            dynamic: props.dynamic,
-            new_check: '',
-            checkboxes: init_checkboxes
-        }
-        
-        
-        this.handleType = this.handleType.bind(this)
-        this.handleSubmit = this.handleSubmit.bind(this)
-        this.handleChange = this.handleChange.bind(this)
-    }
 
-    handleType(event) {
-        this.setState({new_check: event.target.value})
-    }
-
-    handleSubmit(event) {
-        let updatedCheckboxes = this.state.checkboxes
-        updatedCheckboxes.unshift({value: this.state.new_check, checked: true})
-        updatedCheckboxes = updatedCheckboxes.slice(0, 5)
-        this.setState({
-            checkboxes: updatedCheckboxes,
-            new_check: ''
-        })
-        event.preventDefault()
-    }
-
-    handleChange(position) {
-        let updatedCheckboxes = this.state.checkboxes
-        updatedCheckboxes[position].checked = !updatedCheckboxes[position].checked
-        console.log("updated", updatedCheckboxes)
-        this.setState({checkboxes: updatedCheckboxes})
-    }
-    render() {
-        return (
-            <div>
-                {this.state.checkboxes.map(
-                    ({value, checked}, index) =>
-                    (
-                        <div class="form-check">
-                            <input 
-                            key={"chk-" + value}
-                            class="form-check-input" 
-                            type="checkbox" 
-                            value={value} 
-                            id={"chck-" + value} 
-                            checked={checked}
-                            onChange={() => this.handleChange(index)}
-                             />
-                            <label class="form-check-label" for={"chck-" + value}>
-                                {value}
-                            </label>
-                        </div>
-                    )
-                )}
-                {this.state.dynamic &&
-                    <form onSubmit={this.handleSubmit} class="mt-2">
-                        <div class="input-group pe-2 mb-3 align-items-center">
-                            <input 
-                            type="text" 
-                            value={this.state.new_check} 
-                            class="form-control form-for-checkbox" 
-                            onChange={this.handleType}
-                            placeholder="Other ..."
-                            />
-                            <AiOutlinePlusCircle class="plus-icon"/>
-                        </div>
-                    </form>
-                }
-            </div>
-            
-        )
-    }
-}
 
 const RadioControls = (props) => {
     return (
@@ -177,21 +94,21 @@ export const JobFilter = () => {
                 <Accordion.Item eventKey="1">
                     <Accordion.Header>Job Type</Accordion.Header>
                     <Accordion.Body>
-                        <CheckControls dynamic={false} values={types} />
+                        <CheckBoxControls dynamic={false} values={types} maxNumber={5}/>
                     {/* {types.map(type => <CheckControls label={type} />)}    */}
                     </Accordion.Body>
                 </Accordion.Item>
                 <Accordion.Item eventKey="2">
                     <Accordion.Header>Domain</Accordion.Header>
                     <Accordion.Body>
-                        <CheckControls dynamic={true} values={domains} />
+                        <CheckBoxControls dynamic={true} values={domains} maxNumber={5}/>
                         {/* <DynamicCheckControls checks={domains} /> */}
                     </Accordion.Body>
                 </Accordion.Item>
                 <Accordion.Item eventKey="3">
                     <Accordion.Header>Skills</Accordion.Header>
                     <Accordion.Body>
-                        <CheckControls dynamic={true} values={skills} />
+                        <CheckBoxControls dynamic={true} values={skills} maxNumber={5}/>
                     </Accordion.Body>
                 </Accordion.Item>
             </Accordion>
