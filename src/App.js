@@ -12,12 +12,14 @@ import StudentLogin from "./components/StudentLogin/StudentLogin";
 import { Job } from './components/job/Job'
 import { Jobs } from './components/jobs/Jobs';
 import { Home } from './components/home/Home';
+import CompanySignup from "./components/CompanySignup/CompanySignup";
+import CompanyLogin from "./components/CompanyLogin/CompanyLogin";
 
 
 function App() {
   return (
-      <BrowserRouter>
-        <NavBar/>
+    <BrowserRouter>
+      <NavBar />
 
         <div class="container-lg mt-3 pb-5">
           <Routes>
@@ -28,6 +30,8 @@ function App() {
             <Route path="/studentprofile" element={<StudentProfile />}></Route>
             <Route path="/studentsignup" element={<StudentSignup />}></Route>
             <Route path="/studentlogin" element={<StudentLogin />}></Route>
+            <Route path="/companysignup" element={<CompanySignup />}></Route>
+            <Route path="/companylogin" element={<CompanyLogin></CompanyLogin>}></Route>
           </Routes>
         </div>
 

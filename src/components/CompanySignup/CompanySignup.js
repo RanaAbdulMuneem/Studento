@@ -1,12 +1,10 @@
 import React from "react";
 import "bootstrap/dist/css/bootstrap.css";
 import { Col, Container, Row } from "react-bootstrap";
-import "./StudentSignup.css";
-import LeftSide from "./LeftSide";
-import RightSide from "./RightSide";
+import "./CompanySignup.css";
 import SignUpForm2 from "./SignUpForm2";
 
-const StudentSignup = () => {
+const CompanySignup = () => {
   return (
     <div className="p-5">
       <SignUpForm2></SignUpForm2>
@@ -14,4 +12,4 @@ const StudentSignup = () => {
   );
 };
 
-export default StudentSignup;
+export default CompanySignup;
