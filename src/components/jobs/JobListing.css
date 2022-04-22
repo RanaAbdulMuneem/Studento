@@ -11,7 +11,7 @@
 
 
 .job-card {
-    border-radius: 10px;
+    border-radius: 0px;
 }
 .job-card:hover {
     box-shadow: rgba(0, 0, 0, 0.24) 0px 6px 16px;

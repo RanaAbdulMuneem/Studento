@@ -2,12 +2,20 @@ import './JobListing.css'
 
 import { Component} from 'react'
 import { Link } from 'react-router-dom'
-import {BsChevronLeft, BsChevronRight, BsFillCalendarEventFill} from 'react-icons/bs'
 import { Tooltip, OverlayTrigger } from 'react-bootstrap'
+
+import {
+    BsChevronLeft, 
+    BsChevronRight, 
+    BsFillCalendarEventFill,
+    BsFillGeoAltFill,
+    BsFillBookFill
+} from 'react-icons/bs'
+
 import Logo from '../../images/fast_logo.jpg'
 import { SaveButton } from '../buttons/Buttons'
-
 import { JobData } from '../../API/JobData'
+import { Skill } from '../job/Skill'
 
 
 const JobNavigation = (props) => {
@@ -58,6 +66,7 @@ class JobCard extends Component {
     render () {
         return (
             <div class="card job-card mb-2">
+                {/* TITLE AND BUTTONS */}
                 <div class="card-header">
                     <div class="row">
                         <div class="col-auto">
@@ -81,6 +90,7 @@ class JobCard extends Component {
                 </div>
                 <Link to={"/job/" + this.props.details.id} class="card-body-link">
                     <div class="card-body">
+                            {/* DETAILS */}
                             <div class="row border-bottom">
                                 <div class="col me-auto">
                                     <p>{this.state.details.description}</p>
@@ -89,17 +99,51 @@ class JobCard extends Component {
                                     <b>{this.state.details.pay}</b>
                                 </div>
                             </div>
-                            <div class="row mt-1">
-                                <p><span class="bold">Location: </span>{this.state.details.location}</p>
-                                <p><span class="bold">Type: </span>{this.state.details.type}</p>
+                            {/* SKILLS */}
+                            <div class="row mt-2 px-3">
+                                {this.state.details.skills.map(skill => <Skill skill={skill} />)}
                             </div>
-                            <div class="row">
-                                <div class="col-auto ms-auto">
+                            {/* TOOLTIPS */}
+                            <div class="row justify-content-end">
+                                {/* EDUCATION */}
+                                <div class="col-auto">
                                     <OverlayTrigger
-                                    key='top'
+                                    key={this.state.details.id + "-job-edu"}
                                     placement='top'
                                     overlay={
-                                        <Tooltip id='top'>
+                                        <Tooltip id={this.state.details.id + "-job-edu"}>
+                                            {this.state.details.education} level
+                                        </Tooltip>
+                                    }
+                                    >
+                                        <div style={{cursor: "pointer"}}>
+                                            <BsFillBookFill/>
+                                        </div>
+                                    </OverlayTrigger>
+                                </div>
+                                {/* LOCATION */}
+                                <div class="col-auto">
+                                    <OverlayTrigger
+                                    key={this.state.details.id + "-job-loc"}
+                                    placement='top'
+                                    overlay={
+                                        <Tooltip id={this.state.details.id + "-job-loc"}>
+                                            {this.state.details.location}
+                                        </Tooltip>
+                                    }
+                                    >
+                                        <div style={{cursor: "pointer"}}>
+                                            <BsFillGeoAltFill/>
+                                        </div>
+                                    </OverlayTrigger>
+                                </div>
+                                {/* AGE */}
+                                <div class="col-auto">
+                                    <OverlayTrigger
+                                    key={this.state.details.id + "-job-age"}
+                                    placement='top'
+                                    overlay={
+                                        <Tooltip id={this.state.details.id + "-job-age"}>
                                             Posted {this.state.details.age} ago
                                         </Tooltip>
                                     }
