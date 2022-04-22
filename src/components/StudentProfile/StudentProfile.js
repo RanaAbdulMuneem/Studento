@@ -2,6 +2,7 @@ import { Container, Row, Col } from "react-bootstrap";
 import { StudentDetails } from "../../API/StudentDetails";
 import img from "../../images/p1.jpg";
 import "./StudentProfile.css";
+import StudentEditModalBtn from "./StudentModal";
 const StudentProfile = () => {
   return (
     <div>
@@ -11,7 +12,7 @@ const StudentProfile = () => {
         </Col>
         <Col className="col-lg-9 ">
           <Container>
-            <button className="btn btn-success btn-lg"> Edit Profile </button>
+            <StudentEditModalBtn />
             <Row className="name-age-row mt-4">
               <h5>Description</h5>
               <Col> Name : {StudentDetails.name}</Col>
@@ -29,14 +30,10 @@ const StudentProfile = () => {
             </Row>
             <Row className="name-age-row mt-4 ">
               <h5>Skills</h5>
-              
-              {
-                StudentDetails.skills.map((skill)=>{
-                  return <span>{skill}</span>
-                })
-               
-              }
-            
+
+              {StudentDetails.skills.map((skill) => {
+                return <span>{skill}</span>;
+              })}
             </Row>
             <Row className="name-age-row mt-4 education">
               <h5>Education</h5>
@@ -68,30 +65,24 @@ const StudentProfile = () => {
             <Row className="name-age-row mt-4">
               <h5>Achievements</h5>
               <ol className="education-ul">
-                {
-                  StudentDetails.achievements.map((value)=>{
-                    return <li>{value}</li>
-                  })
-                }
-                
+                {StudentDetails.achievements.map((value) => {
+                  return <li>{value}</li>;
+                })}
               </ol>
             </Row>
             <Row className="name-age-row mt-4">
               <h5>Jobs Status</h5>
-              
-                {
-                  StudentDetails.jobsApplied.map((value)=>{
-                    return <Row className="p-2">
-                      <Col>Company : {value.companyName}</Col>
-                      <Col>Title : {value.title}</Col>
-                      <Col>Status : {value.status}</Col>
-                      <hr/>
-                    </Row>
-                   
-                  })
-                }
-                
-              
+
+              {StudentDetails.jobsApplied.map((value) => {
+                return (
+                  <Row className="p-2">
+                    <Col>Company : {value.companyName}</Col>
+                    <Col>Title : {value.title}</Col>
+                    <Col>Status : {value.status}</Col>
+                    <hr />
+                  </Row>
+                );
+              })}
             </Row>
           </Container>
         </Col>

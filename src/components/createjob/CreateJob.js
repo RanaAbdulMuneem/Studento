@@ -1,9 +1,9 @@
-import { Container } from "react-bootstrap";
+
 import {useState} from "react"
 const CreateJob = () => {
    
-  const [ jobTitle,setJobTitle ] = useState("")
-  const [ companyName,setCompanyName] = useState("")
+  const [jobTitle,setJobTitle ] = useState("")
+  const [companyName,setCompanyName] = useState("")
   const [jobType, setJobType] = useState("")
   const [jobLocation, setJobLocation] = useState("")
   const [jobDescription, setJobDescription ] = useState("")
