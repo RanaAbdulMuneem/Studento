@@ -1,9 +1,6 @@
 import React from "react";
-import "./CompanyLogin.css";
-import img from "../../images/board-work.png";
-import bg from "../../images/bg-5.svg";
 
-const LogInForm2 = () => {
+const LogIn = (props) => {
   return (
     <section className="h-100" style={{ backgroundColor: "white" }}>
       <div className="container h-100 StudentSignUp" id="bg-img">
@@ -12,7 +9,7 @@ const LogInForm2 = () => {
             <div
               className="card text-black"
               style={{
-                background: `url(${bg}) no-repeat center center / cover`,
+                background: `url(${props.background}) no-repeat center center / cover`,
                 borderRadius: "25px",
               }}
             >
@@ -20,7 +17,7 @@ const LogInForm2 = () => {
                 <div className="row justify-content-center">
                   <div className="col-md-10 col-lg-6 col-xl-5 order-2 order-lg-2">
                     <p className="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4">
-                      Company Login
+                      {props.header}
                     </p>
                     <form className="mx-1 mx-md-4">
                       <div className="d-flex flex-row align-items-center mb-4">
@@ -107,13 +104,15 @@ const LogInForm2 = () => {
                             Log Me In!
                           </button>
                           <div className="row ">
-                            <div className="col-3">
+                            <div className="col-3  m-0 p-0">
                               <hr />
                             </div>
-                            <div className="col d-flex justify-content-center">
-                              <lead>Login with google</lead>
+                            <div className="col d-flex justify-content-center justify-text-center mx-1 px-0">
+                              <lead className="text-center p-0 m-0">
+                                Or Signup with Google
+                              </lead>
                             </div>
-                            <div className="col-3">
+                            <div className="col-3 m-0 p-0">
                               <hr />
                             </div>
                           </div>
@@ -171,7 +170,11 @@ const LogInForm2 = () => {
                     </form>
                   </div>
                   <div className="col-md-10 col-lg-6 col-xl-7 d-flex align-items-center order-1 order-lg-1">
-                    <img src={img} className="img-fluid" alt="Sample image" />
+                    <img
+                      src={props.image}
+                      className="img-fluid"
+                      alt="Sample image"
+                    />
                   </div>
                 </div>
               </div>
@@ -183,4 +186,4 @@ const LogInForm2 = () => {
   );
 };
 
-export default LogInForm2;
+export default LogIn;

@@ -1,13 +1,15 @@
 import React from "react";
 import "bootstrap/dist/css/bootstrap.css";
-import { Col, Container, Row } from "react-bootstrap";
-import "./CompanySignup.css";
-import SignUpForm2 from "./SignUpForm2";
+
+import SignUp from "../forms/SignUp";
+import img from "../../images/working-students.png";
+import bg from "../../images/bg-4.svg";
 
 const CompanySignup = () => {
   return (
     <div className="p-5">
-      <SignUpForm2></SignUpForm2>
+      {/* <SignUpForm2></SignUpForm2> */}
+      <SignUp header="Company Sign up" background={bg} image={img}></SignUp>
     </div>
   );
 };
