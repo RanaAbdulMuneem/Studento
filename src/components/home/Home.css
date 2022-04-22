@@ -1,0 +1,56 @@
+#home .info {
+    font-size: 24px;
+    text-align: left;
+}
+
+#home .button-company, .button-student, .button-jobs {
+    border-radius: 5px;
+    font-size: 24px;
+    color: black;
+    background-color: transparent;
+    border: solid 1px black;
+}
+#home .button-jobs {
+    font-size: 16px;
+}
+#home .button-company:hover, .button-student:hover, .button-jobs:hover {
+    color: white;
+    background-color: black;
+}
+#home .button-company:focus , .button-student:focus, .button-jobs:focus {
+    box-shadow: none;
+}
+
+.company-card-logo {
+    height: 175px;
+    width: 175px;
+    border-radius: 50px;
+    margin-left: 0px;
+    margin-right: 0px;
+}
+
+
+#home .pros-icon {
+    width: 40px;
+    height: 40px;
+}
+#home .pros-header {
+    font-size: 24px;
+    font-weight: bold;
+}
+#home .pros-desc {
+    font-size: 18px;
+
+}
+
+#home .home-image {
+    display: inline;
+    border-radius: 10px;
+    box-shadow: 3px 3px 20px 0px rgba(0, 0, 0, 0.4);
+    width: 450px;
+}
+@media (max-width: 900px){
+    #home .home-image {
+        display: none;
+    }
+}

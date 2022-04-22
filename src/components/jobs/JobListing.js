@@ -1,6 +1,7 @@
 import './JobListing.css'
 
-import { Component, useState } from 'react'
+import { Component} from 'react'
+import { Link } from 'react-router-dom'
 import {BsChevronLeft, BsChevronRight, BsFillCalendarEventFill} from 'react-icons/bs'
 import { Tooltip, OverlayTrigger } from 'react-bootstrap'
 import Logo from '../../images/fast_logo.jpg'
@@ -78,11 +79,11 @@ class JobCard extends Component {
                         </div>
                     </div>
                 </div>
-                <a href="#" class="card-body-link">
+                <Link to={"/job/" + this.props.details.id} class="card-body-link">
                     <div class="card-body">
                             <div class="row border-bottom">
                                 <div class="col me-auto">
-                                    <p>{this.state.details.descripton}</p>
+                                    <p>{this.state.details.description}</p>
                                 </div>
                                 <div class="col-lg-2 col-sm-12">
                                     <b>{this.state.details.pay}</b>
@@ -90,6 +91,7 @@ class JobCard extends Component {
                             </div>
                             <div class="row mt-1">
                                 <p><span class="bold">Location: </span>{this.state.details.location}</p>
+                                <p><span class="bold">Type: </span>{this.state.details.type}</p>
                             </div>
                             <div class="row">
                                 <div class="col-auto ms-auto">
@@ -109,7 +111,7 @@ class JobCard extends Component {
                                 </div>
                             </div>
                     </div>
-                </a>
+                </Link>
 
             </div>
         )
