@@ -36,6 +36,27 @@ const CreateJob = () => {
             <option>Full-time</option>
             <option>Part-time</option>
             <option>Internship</option>
+            <option>Freelance</option>
+          </select>
+        </div>
+        <div class="form-group mt-4">
+          <label for="exampleFormControlSelect1">Minimium Education</label>
+          <select class="form-control mt-2" id="exampleFormControlSelect1">
+            <option>Highschool</option>
+            <option>Freshman</option>
+            <option>Sophomore</option>
+            <option>Junior</option>
+            <option>Senior</option>
+          </select>
+        </div>
+        <div class="form-group mt-4">
+          <label for="exampleFormControlSelect1">Domain</label>
+          <select class="form-control mt-2" id="exampleFormControlSelect1">
+            <option>Education</option>
+            <option>E-commerce</option>
+            <option>Healthcare</option>
+            <option>Software Engineering</option>
+            <option>Game Development</option>
           </select>
         </div>
         <div class="form-group mt-4">
