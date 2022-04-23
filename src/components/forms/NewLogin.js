@@ -1,31 +1,24 @@
 import { Link, Navigate } from "react-router-dom";
 import { Component } from "react";
+import ForgetPassword from "../utils/ForgetPassword";
 
 
-class NewSignUp extends Component {
+class NewLogIn extends Component {
     constructor(props){
         super(props)
         this.state = {
-            name: "",
             email: "",
             password: "",
-            errors: {name: '', email: '', password: ''},
+            errors: {email: '', password: ''},
         }
 
-        this.handleChangeName = this.handleChangeName.bind(this)
         this.handleChangeEmail = this.handleChangeEmail.bind(this)
         this.handleChangePassword = this.handleChangePassword.bind(this)
-        this.validateName = this.validateName.bind(this)
         this.validateEmail = this.validateEmail.bind(this)
         this.validatePassword = this.validatePassword.bind(this)
         this.handleSubmit = this.handleSubmit.bind(this)
     }
 
-    handleChangeName(event) {
-        this.setState({
-            name: event.target.value
-        })
-    }
     handleChangeEmail(event) {
         this.setState({
             email: event.target.value
@@ -39,7 +32,6 @@ class NewSignUp extends Component {
     handleSubmit(event) {
         event.preventDefault()
         let valid = true
-        valid = this.validateName() && valid
         valid = this.validateEmail() && valid
         valid = this.validatePassword() && valid
         if (valid){
@@ -48,18 +40,6 @@ class NewSignUp extends Component {
         else {
             console.log("Not valid")
         }
-    }
-
-    validateName() {
-        let updated_errors = this.state.errors
-        if (!this.state.name.trim()){
-            updated_errors.name = 'Name is required'
-            this.setState({errors: updated_errors})
-            return false
-        }
-        updated_errors.name = ''
-        this.setState({errors: updated_errors})
-        return true
     }
     validateEmail() {
         let updated_errors = this.state.errors
@@ -85,11 +65,6 @@ class NewSignUp extends Component {
             this.setState({errors: updated_errors})
             return false
         }
-        else if (this.state.password.length < 8){
-            updated_errors.password = 'Password must be 8 symbols or longer'
-            this.setState({errors: updated_errors})
-            return false
-        }
         updated_errors.password = ''
         this.setState({errors: updated_errors})
         return true
@@ -107,37 +82,19 @@ class NewSignUp extends Component {
             >
                 
                 <div class="row justify-content-center">
-                    <div class="col-lg-4 col-md-10 order-lg-1 order-2 me-2">
+                    <div class="col-lg-4 col-md-10 order-1 order-lg-2 me-2">
                         <div class="row mb-5">
                             <p class="h1 fw-bold text-center">{this.props.header}</p>
                         </div>
                         <div class="row mb-3">
                         <form onSubmit={this.handleSubmit}>
-                        <label for="signup_name"><strong>Full Name</strong></label>
-                        <input
-                        type="text"
-                        id="signup_name"
-                        className="form-control border border-secondary"
-                        placeholder="Your Name Here"
-                        name="signup_name"
-                        value={this.state.name}
-                        onChange={this.handleChangeName}
-                        />
-                        {
-                            this.state.errors.name ? (
-                                <p class="text-danger">{this.state.errors.name}</p>
-                            ) : (
-                                <div class="mb-3"></div>
-                            )
-                        }
-                        
-                        <label for="signup_email"><strong>Email</strong></label>
+                        <label for="login_email"><strong>Email</strong></label>
                         <input
                         type="email"
-                        id="signup_email"
+                        id="login_email"
                         className="form-control border border-secondary"
                         placeholder="name@mail.com"
-                        name="signup_email"
+                        name="login_email"
                         value={this.state.email}
                         onChange={this.handleChangeEmail}
                         />
@@ -149,13 +106,13 @@ class NewSignUp extends Component {
                             )
                         }
 
-                        <label for="signup_password"><strong>Password</strong></label>
+                        <label for="login_password"><strong>Password</strong></label>
                         <input
                         type="password"
-                        id="signup_password"
+                        id="login_password"
                         className="form-control border border-secondary"
                         placeholder="Minimum 8 chars"
-                        name="signup_password"
+                        name="login_password"
                         value={this.state.password}
                         onChange={this.handleChangePassword}
                         />
@@ -171,9 +128,14 @@ class NewSignUp extends Component {
                         class="btn btn-primary text-center w-100"
                         type="submit"
                         >
-                            Register
+                            Log Me In!
                         </button>
                         </form>
+                        </div>
+                        <div class="row justify-content-center mb-2">
+                            <div class="col-auto">
+                                <ForgetPassword />
+                            </div>  
                         </div>
                         <div class="row justify-content-center mb-2">
                             <div class="col"><hr /></div>
@@ -211,11 +173,11 @@ class NewSignUp extends Component {
                         </div>
                         <div class="row">
                             <p className="text-center">
-                              Already have an account? <Link to={"/" + this.props.type + "login"}>Log in!</Link>
+                              Don't have an account? <Link to={"/" + this.props.type + "signup"}>Sign Up!</Link>
                             </p>
                         </div>
                     </div>
-                    <div class="col-lg col-md-12 order-lg-2 order-1 p-0 align-self-end">
+                    <div class="col-lg col-md-12 order-lg-1 order-2 p-0 align-self-end">
                         <div class="row mt-5 py-5">
                             <img src={this.props.image} class="img-fluid" />
                         </div>
@@ -228,4 +190,4 @@ class NewSignUp extends Component {
 
 }
 
-export default NewSignUp
+export default NewLogIn
