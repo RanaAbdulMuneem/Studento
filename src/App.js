@@ -58,8 +58,8 @@ function App() {
             {
               user === "none" ? (
                 <>
-                  <Nav.Link as={Link} to="/studentsignup" onClick={loginStudent}>Student Portal</Nav.Link>
-                  <Nav.Link as={Link} to="/companysignup" onClick={loginCompany}>Company Portal</Nav.Link>
+                  <Nav.Link as={Link} to="/studentsignup" onClick={loginStudent} className="end-link">Student Portal</Nav.Link>
+                  <Nav.Link as={Link} to="/companysignup" onClick={loginCompany} className="end-link">Company Portal</Nav.Link>
                 </>
               ) : (
                 <>
@@ -68,10 +68,11 @@ function App() {
                   to={
                     "/" + user + "profile"
                   }
+                  className="end-link"
                   >
                     Profile
                   </Nav.Link>
-                  <Nav.Link as={Link} to="/" onClick={logout}>Logout</Nav.Link>
+                  <Nav.Link as={Link} to="/" onClick={logout} className="end-link">Logout</Nav.Link>
                 </>
               )
             }

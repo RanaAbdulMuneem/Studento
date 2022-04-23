@@ -9,7 +9,7 @@ const CompanyLogin = () => {
   return (
     <div className="p-5">
       {/* <LogInForm2></LogInForm2> */}
-      <LogIn header="Company Login" background={bg} image={img}></LogIn>
+      <LogIn header="Company Login" background={bg} image={img} type="company"></LogIn>
     </div>
   );
 };

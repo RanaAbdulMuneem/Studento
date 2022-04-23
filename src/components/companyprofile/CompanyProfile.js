@@ -2,6 +2,7 @@ import { Container, Row, Col } from "react-bootstrap";
 import { companyDetails } from "../../API/CompanyDetails";
 import logo from "../../images/logo.png";
 import CompanyEditModalBtn from "./CompanyModal";
+import { Link } from "react-router-dom";
 import "./companyProfile.css";
 
 const CompanyProfile = () => {
@@ -15,7 +16,7 @@ const CompanyProfile = () => {
         <Col className="col-lg-9 ">
           <Container>
             <CompanyEditModalBtn/>
-            <button className="btn btn-primary btn-lg">Create a Job</button>
+            <Link to="/createjob"><button className="btn btn-primary btn-lg">Create a Job</button></Link>
             <Row className="name-age-row mt-4">
             
               <Col> Name : <b>{companyDetails.name}</b></Col>

@@ -8,7 +8,7 @@ import bg from "../../images/bg-1.svg";
 const StudentLogin = () => {
   return (
     <div className="p-5">
-      <LogIn header="Student Login" background={bg} image={img}></LogIn>
+      <LogIn header="Student Login" background={bg} image={img} type="student"></LogIn>
     </div>
   );
 };
