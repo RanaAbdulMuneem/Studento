@@ -67,6 +67,17 @@ const CompanyProfile = () => {
               <h5>Want to add a review ?</h5>
               <ReviewInput/>
             </Row>
+            <Row className="name-age-row mt-4 education">
+              <h5>Candidates</h5>
+               <hr/>
+              <p>Ahmad ali</p>
+              <button className="btn btn-success w-25">Accept</button>
+              <button className="btn btn-danger w-25">Reject</button>
+              <hr/>
+              <p>Qasim Sheikh</p>
+              <button className="btn btn-success w-25">Accept</button>
+              <button className="btn btn-danger w-25">Reject</button>
+            </Row>
           </Container>
         </Col>
       </Row>
