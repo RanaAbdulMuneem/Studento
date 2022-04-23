@@ -1,4 +1,5 @@
 import { useState } from "react";
+import {CheckBoxControls}  from "../utils/CheckBoxControls"
 const CreateJob = () => {
   const [jobTitle, setJobTitle] = useState("");
   const [companyName, setCompanyName] = useState("");
@@ -7,6 +8,13 @@ const CreateJob = () => {
   const [jobDescription, setJobDescription] = useState("");
   const [jobDomain, setDomain ] = useState("")
   const [minPay, setMinPay ] = useState("")
+  const skills = [
+    "Graphic Design",
+    "Python",
+    "React",
+    "Photography",
+    "Communication"
+]
 
   return (
     <div>
@@ -79,6 +87,12 @@ const CreateJob = () => {
             <option>Game Development</option>
           </select>
         </div>
+        
+        <div class="form-group mt-4">
+        <label for="exampleFormControlInput1">Skills</label>
+        <CheckBoxControls dynamic={true} values={skills} maxNumber={5}/>
+        </div>
+
         <div class="form-group mt-4">
           <label for="exampleFormControlInput1">Minimum Pay ( RS )</label>
           <input

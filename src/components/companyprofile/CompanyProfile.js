@@ -6,11 +6,7 @@ import { Link } from "react-router-dom";
 import "./companyProfile.css";
 import ReviewInput from "./ReviewInput";
 
-
-
-
 const CompanyProfile = () => {
-
   return (
     <Container>
       <Row className="mt-5">
@@ -19,11 +15,17 @@ const CompanyProfile = () => {
         </Col>
         <Col className="col-lg-9 ">
           <Container>
-            <CompanyEditModalBtn/>
-            <Link to="/createjob"><button className="btn btn-primary btn-lg m-1">Create a Job</button></Link>
+            <CompanyEditModalBtn />
+            <Link to="/createjob">
+              <button className="btn btn-primary btn-lg m-1">
+                Create a Job
+              </button>
+            </Link>
             <Row className="name-age-row mt-4">
-            
-              <Col> Name : <b>{companyDetails.name}</b></Col>
+              <Col>
+                {" "}
+                Name : <b>{companyDetails.name}</b>
+              </Col>
               <Col>{companyDetails.noOfEmployees} employees</Col>
               <Col>Founded in {companyDetails.foundingYear} </Col>
               <Col>
@@ -68,18 +70,29 @@ const CompanyProfile = () => {
             </Row>
             <Row className="name-age-row mt-4 education">
               <h5>Want to add a review ?</h5>
-              <ReviewInput/>
+              <ReviewInput />
             </Row>
+            
             <Row className="name-age-row mt-4 education">
               <h5>Candidates</h5>
-               <hr/>
-              <p>Ahmad ali</p>
-              <button className="btn btn-success w-25">Accept</button>
-              <button className="btn btn-danger w-25">Reject</button>
-              <hr/>
-              <p>Qasim Sheikh</p>
-              <button className="btn btn-success w-25">Accept</button>
-              <button className="btn btn-danger w-25">Reject</button>
+              <hr className="mt-4"/>
+              <Col className="d-flex align-items-center col-6"> <h5>Ahmad ali <span ><a href="/" className="view-profile">View Profile</a></span></h5> </Col>
+              <Col className="col-6 d-flex justify-content-end">
+                <div>
+                <button className="btn btn-success">Accept</button>
+                <button className="btn btn-danger">Reject</button>
+                </div>
+ 
+              </Col>
+              <hr className="mt-4"/>
+              <Col className="d-flex align-items-center col-6"> <h5>Behzad Nabeel <span ><a href="/" className="view-profile">View Profile</a></span></h5> </Col>
+              <Col className="col-6 d-flex justify-content-end">
+                <div>
+                <button className="btn btn-success">Accept</button>
+                <button className="btn btn-danger">Reject</button>
+                </div>
+ 
+              </Col>
             </Row>
           </Container>
         </Col>
