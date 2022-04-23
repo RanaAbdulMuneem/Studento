@@ -1,3 +1,9 @@
 .review-rating{
     color: red;
 }
+.view-profile{
+    /* color:rgb(99, 95, 91); */
+    font-size: smaller;
+    outline: none;
+    margin-left: 20px;
+}

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Button, Modal } from "react-bootstrap";
+import ExperienceInput from "./ExperienceInput";
 
 const StudentEditModalBtn = () => {
   const [show, setShow] = useState(false);
@@ -78,6 +79,62 @@ const StudentEditModalBtn = () => {
                 placeholder="Eg. Software Engineer, Business Analyst"
               />
             </div>
+            <div class="form-group mt-3">
+              <label for="exampleFormControlInput1">University Name</label>
+              <input
+                type="text"
+                class="form-control"
+                id="exampleFormControlInput1"
+                placeholder=""
+              />
+            </div>
+            <div class="form-group mt-3">
+              <label for="exampleFormControlInput1">Degree</label>
+              <input
+                type="text"
+                class="form-control"
+                id="exampleFormControlInput1"
+                placeholder=""
+              />
+            </div>
+            <div class="form-group mt-3">
+              <label for="exampleFormControlInput1">Major</label>
+              <input
+                type="text"
+                class="form-control"
+                id="exampleFormControlInput1"
+                placeholder=""
+              />
+            </div>
+            <div class="form-group mt-3">
+              <label for="exampleFormControlInput1">Starting Year</label>
+              <input
+                type="number"
+                class="form-control"
+                id="exampleFormControlInput1"
+                placeholder=""
+              />
+            </div>
+            <div class="form-group mt-3">
+              <label for="exampleFormControlInput1">Ending Year</label>
+              <input
+                type="number"
+                class="form-control"
+                id="exampleFormControlInput1"
+                placeholder=""
+              />
+            </div>
+            <div class="form-group mt-3">
+              <label for="exampleFormControlInput1">Description</label>
+              <input
+                type="text"
+                class="form-control"
+                id="exampleFormControlInput1"
+                placeholder=""
+              />
+            </div>
+            <ExperienceInput/>
+            
           </form>
         </Modal.Body>
         <Modal.Footer>
