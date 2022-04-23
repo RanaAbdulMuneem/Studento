@@ -8,7 +8,7 @@ const CompanyEditModalBtn = () => {
 
   return (
     <>
-      <Button variant="success" onClick={handleShow} className="mt-1 btn-lg">
+      <Button variant="success" onClick={handleShow} className="m-1 btn-lg">
         Company Profile Edit
       </Button>
 
