@@ -6,6 +6,9 @@ import { Link } from "react-router-dom";
 import "./companyProfile.css";
 import ReviewInput from "./ReviewInput";
 
+
+
+
 const CompanyProfile = () => {
 
   return (
@@ -17,7 +20,7 @@ const CompanyProfile = () => {
         <Col className="col-lg-9 ">
           <Container>
             <CompanyEditModalBtn/>
-            <Link to="/createjob"><button className="btn btn-primary btn-lg">Create a Job</button></Link>
+            <Link to="/createjob"><button className="btn btn-primary btn-lg m-1">Create a Job</button></Link>
             <Row className="name-age-row mt-4">
             
               <Col> Name : <b>{companyDetails.name}</b></Col>

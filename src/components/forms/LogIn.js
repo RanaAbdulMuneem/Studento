@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
+import ForgetPassword from "../utils/ForgetPassword";
 
 function validateInfo(values) {
   let errors = {};
@@ -153,7 +154,7 @@ const LogIn = (props) => {
                       </div> */}
                       <div className="d-flex flex-row align-items-center mb-4">
                         <i className="fas fa-lock fa-lg me-3 fa-fw" />
-                        <div className="form-outline flex-fill mb-0">
+                        <div className="form-outline flex-fill mb-0 text-center">
                           <button
                             type="submit"
                             className="btn btn-primary  w-100 mb-4"
@@ -161,24 +162,33 @@ const LogIn = (props) => {
                           >
                             Log Me In!
                           </button>
+                          {/* <a href="#">Forgot Password?</a> */}
+                          <ForgetPassword />
                           <div className="row ">
                             <div className="col-3  m-0 p-0">
                               <hr />
                             </div>
                             <div className="col d-flex justify-content-center justify-text-center mx-1 px-0">
                               <lead className="text-center p-0 m-0">
-                                Or Signup with Google
+                                Or
                               </lead>
                             </div>
+                            
                             <div className="col-3 m-0 p-0">
                               <hr />
                             </div>
                           </div>
                           <button
                             type="submit"
-                            className="btn btn-light  w-100 my-4 border-secondary"
+                            className="btn btn-light  w-100  border-secondary"
                           >
                             Get Started With Google
+                          </button>
+                          <button
+                            type="submit"
+                            className="btn btn-light  w-100 my-4 border-secondary"
+                          >
+                            Login With Facebook
                           </button>
                           <div>
                             <p

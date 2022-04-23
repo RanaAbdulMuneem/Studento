@@ -199,7 +199,7 @@ const SignUp = (props) => {
                             </div>
                             <div className="col d-flex justify-content-center justify-text-center mx-1 px-0">
                               <lead className="text-center p-0 m-0">
-                                Or Signup with Google
+                                Or
                               </lead>
                             </div>
                             <div className="col-3 m-0 p-0">
@@ -208,9 +208,17 @@ const SignUp = (props) => {
                           </div>
                           <button
                             type="submit"
-                            className="btn btn-light  w-100 my-4 border-secondary"
+                            className="btn btn-light  w-100 border-secondary"
+                            href="www.google.com"
                           >
                             Get Started With Google
+                          </button>
+                          <button
+                            type="submit"
+                            className="btn btn-light  w-100 my-4 border-secondary"
+                            href="www.facebook.com"
+                          >
+                            Login with Facebook
                           </button>
                           <div>
                             <p
