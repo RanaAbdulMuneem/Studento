@@ -9,7 +9,7 @@ const CompanySignup = () => {
   return (
     <div className="p-5">
       {/* <SignUpForm2></SignUpForm2> */}
-      <SignUp header="Company Sign up" background={bg} image={img}></SignUp>
+      <SignUp header="Company Sign up" background={bg} image={img} type="company"></SignUp>
     </div>
   );
 };

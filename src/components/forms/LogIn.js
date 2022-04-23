@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 
 function validateInfo(values) {
@@ -190,7 +191,7 @@ const LogIn = (props) => {
                               <a href="#"> privacy policy</a>.
                             </p>
                             <p className="text-center">
-                              Don't have an account? <a href="#"> Sign Up!</a>
+                              Don't have an account? <Link to={"/" + props.type + "signup"}> Sign Up!</Link>
                             </p>
                           </div>
                         </div>

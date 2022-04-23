@@ -10,7 +10,7 @@ const StudentSignup = () => {
   return (
     <div className="p-5">
       {/* <SignUpForm2></SignUpForm2> */}
-      <SignUp header="Student Signup" background={bg} image={img}></SignUp>
+      <SignUp header="Student Signup" background={bg} image={img} type="student"></SignUp>
     </div>
   );
 };
