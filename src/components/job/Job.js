@@ -6,7 +6,7 @@ import { useParams } from "react-router-dom"
 import { Link } from "react-router-dom"
 import {BsFillCalendarEventFill} from 'react-icons/bs'
 
-import { SaveButton } from "../buttons/Buttons"
+import { SaveButton } from "../utils/Buttons"
 import { Skill } from './Skill'
 
 export const Job = () => {

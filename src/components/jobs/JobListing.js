@@ -13,7 +13,7 @@ import {
 } from 'react-icons/bs'
 
 import Logo from '../../images/fast_logo.jpg'
-import { SaveButton } from '../buttons/Buttons'
+import { SaveButton } from '../utils/Buttons'
 import { JobData } from '../../API/JobData'
 import { Skill } from '../job/Skill'
 
