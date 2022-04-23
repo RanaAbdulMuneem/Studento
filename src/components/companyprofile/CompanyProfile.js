@@ -76,7 +76,7 @@ const CompanyProfile = () => {
             <Row className="name-age-row mt-4 education">
               <h5>Candidates</h5>
               <hr className="mt-4"/>
-              <Col className="d-flex align-items-center col-6"> <h5>Ahmad ali <span ><a href="/" className="view-profile">View Profile</a></span></h5> </Col>
+              <Col className="d-flex align-items-center col-6"> <h5>Ahmad ali <span ><Link to="/studentprofile" className="view-profile">View Profile</Link></span></h5> </Col>
               <Col className="col-6 d-flex justify-content-end">
                 <div>
                 <button className="btn btn-success">Accept</button>
@@ -85,7 +85,7 @@ const CompanyProfile = () => {
  
               </Col>
               <hr className="mt-4"/>
-              <Col className="d-flex align-items-center col-6"> <h5>Behzad Nabeel <span ><a href="/" className="view-profile">View Profile</a></span></h5> </Col>
+              <Col className="d-flex align-items-center col-6"> <h5>Behzad Nabeel <span ><Link to="/studentprofile" className="view-profile">View Profile</Link></span></h5> </Col>
               <Col className="col-6 d-flex justify-content-end">
                 <div>
                 <button className="btn btn-success">Accept</button>
