@@ -4,6 +4,7 @@ import logo from "../../images/logo.png";
 import CompanyEditModalBtn from "./CompanyModal";
 import { Link } from "react-router-dom";
 import "./companyProfile.css";
+import ReviewInput from "./ReviewInput";
 
 const CompanyProfile = () => {
 
@@ -61,6 +62,10 @@ const CompanyProfile = () => {
                   </div>
                 );
               })}
+            </Row>
+            <Row className="name-age-row mt-4 education">
+              <h5>Want to add a review ?</h5>
+              <ReviewInput/>
             </Row>
           </Container>
         </Col>
