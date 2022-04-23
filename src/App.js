@@ -22,6 +22,8 @@ import CompanySignup from "./components/CompanySignup/CompanySignup";
 import CompanyLogin from "./components/CompanyLogin/CompanyLogin";
 
 
+import NewSignUp from './components/forms/NewSignUp'
+
 function App() {
   const [user, setUser] = useState("none")
 
