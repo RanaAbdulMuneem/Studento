@@ -8,7 +8,7 @@ const CompanyEditModalBtn = () => {
 
   return (
     <>
-      <Button variant="success" onClick={handleShow} className="m-1 btn-lg">
+      <Button variant="success" onClick={handleShow} className="mt-1 btn-lg">
         Company Profile Edit
       </Button>
 
@@ -18,7 +18,11 @@ const CompanyEditModalBtn = () => {
         </Modal.Header>
         <Modal.Body>
           <form className="container">
-            <div class="form-group">
+            <label class="form-label" for="customFile">
+              Upload Company logo
+            </label>
+            <input type="file" class="form-control" id="customFile" />
+            <div class="form-group mt-3">
               <label for="exampleFormControlInput1">Company Name</label>
               <input
                 type="text"
@@ -45,8 +49,7 @@ const CompanyEditModalBtn = () => {
                 placeholder=""
               />
             </div>
-            
-            
+
             <div class="form-group mt-3">
               <label for="exampleFormControlTextarea1">Description</label>
               <textarea

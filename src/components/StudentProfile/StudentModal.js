@@ -11,7 +11,7 @@ const StudentEditModalBtn = () => {
       <Button
         variant="success"
         onClick={handleShow}
-        className="btn-lg btn btn-success"
+        className="btn-lg btn btn-success mt-2"
       >
         Edit Profile
       </Button>
@@ -22,7 +22,11 @@ const StudentEditModalBtn = () => {
         </Modal.Header>
         <Modal.Body>
           <form className="container">
-            <div class="form-group">
+            <label class="form-label" for="customFile">
+              Upload Profile Image
+            </label>
+            <input type="file" class="form-control" id="customFile" />
+            <div class="form-group mt-3">
               <label for="exampleFormControlInput1">Name</label>
               <input
                 type="text"
