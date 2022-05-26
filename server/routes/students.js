@@ -85,6 +85,48 @@ router.get("/profile", async (req, res) => {
   }
 });
 
+router.post("/edit", async (req, res) => {
+
+  if (!req.headers["token"]){
+    res.status(401).json({status: "error"});
+  }
+  else {
+    try {
+      const decodedToken = jwt.verify(req.headers["token"], "somerandomsetofsymbols");
+      const id = decodedToken.id;
+
+      Student.updateOne(
+        { _id: id },
+        {
+          name: req.body.name,
+          description: req.body.description,
+          age: parseInt(req.body.age),
+          location: req.body.location,
+          primaryRole:req.body.primaryRole,
+          university: req.body.university,
+          degree: req.body.degree,
+          major: req.body.major,
+          universityDescription: req.body.universityDescription,
+          graduationYear: req.body.graduationYear,
+          achievments: req.body.achievments,
+          experience: req.body.experience,
+          Skills: req.body.skills
+        },
+        function (err) {
+          if (err) {
+            console.log(err);
+            res.status(500);
+          }
+        }
+      );
+    }
+    catch (error) {
+      console.log(error);
+      res.status(500).send("Invalid token");
+    }
+  }
+});
+
 
 //THIS ENDPOINT IS BROKEN
 // router.post("/edit", async (req, res) => {

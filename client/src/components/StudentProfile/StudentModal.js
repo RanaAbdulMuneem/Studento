@@ -26,10 +26,11 @@ const StudentEditModalBtn = (props) => {
   const handleShow = () => setShow(true);
  const handleEdit = (e) => {
   e.preventDefault();
-  fetch("http://localhost:3001/editstudentprofile", {
+  fetch("http://localhost:3001/students/edit", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
+      "token": localStorage.getItem("token")
     },
     body: JSON.stringify({
       name : name,
