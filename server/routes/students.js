@@ -2,7 +2,6 @@ var express = require('express');
 var router = express.Router();
 const bcrypt = require ('bcryptjs')
 const jwt = require("jsonwebtoken")
-const mongoose = require("mongoose");
 
 const Student = require("../models/student.model");
 
@@ -127,51 +126,5 @@ router.post("/edit", async (req, res) => {
   }
 });
 
-
-//THIS ENDPOINT IS BROKEN
-// router.post("/edit", async (req, res) => {
-//   console.log(req.body);
-//   if (!req.headers["token"]){
-//     res.status(401).json({status: "error"});
-//   }
-//   else {
-//     try {
-//       console.log("token verified");
-//       const decodedToken = jwt.verify(req.headers["token"], "somerandomsetofsymbols");
-//       const id = decodedToken.id;
-//       Student.updateOne(
-//         { _id: id },
-//         {
-//           name: req.body.name,
-//           description: req.body.description,
-//           age: parseInt(req.body.age),
-//           location: req.body.location,
-//           primaryRole:req.body.primaryRole,
-//           university: req.body.university,
-//           degree: req.body.degree,
-//           major: req.body.major,
-//           universityDescription: req.body.universityDescription,
-//           graduationYear: req.body.graduationYear,
-//           achievments: req.body.achievments,
-//           experience: req.body.experience,
-//           Skills: req.body.skills
-    
-//         },
-//         function (err) {
-//           if (err) {
-//             console.log(err);
-//           }
-//           else {
-//             res.status(200);
-//           }
-//         }
-//       );
-//     }
-//     catch (error) {
-//       console.log(error);
-//       res.status(500).send("Invalid Token");
-//     }
-//   }
-// });
 
 module.exports = router;

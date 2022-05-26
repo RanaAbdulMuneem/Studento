@@ -4,6 +4,8 @@ var router = express.Router();
 //OLD ENDPOINTS
 
 const Student = require("../models/student.model");
+const Company = require("../models/company.model")
+const Job = require("../models/job.model")
 
 router.get("/", (req, res) => {
   res.send("hello world");
