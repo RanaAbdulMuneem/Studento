@@ -2,8 +2,7 @@ const mongoose = require('mongoose')
 
 const Job = new mongoose.Schema(
 	{
-		companyName: { type: String, required: true},
-		companyEmail: { type: String, required: true},
+        company: {type: mongoose.Schema.Types.ObjectID, ref: 'Company', required: true},
         jobTitle: { type: String, required: true},
 		education: { type: String, required: true },
         jobType: { type: String, required: true },
@@ -11,7 +10,8 @@ const Job = new mongoose.Schema(
         jobDomain: { type: String, required: true },
         minPay: { type: Number, required: true },
         jobDescription: { type: String, required: true },
-        skills: { type: Array }
+        skills: { type: Array, required: true },
+        dateCreated: { type: Date, required: true}
 	}
 
 )

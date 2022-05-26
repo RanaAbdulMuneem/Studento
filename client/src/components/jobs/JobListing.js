@@ -1,8 +1,9 @@
 import './JobListing.css'
 
-import { Component} from 'react'
+import { Component, useState, useEffect} from 'react'
 import { Link } from 'react-router-dom'
 import { Tooltip, OverlayTrigger } from 'react-bootstrap'
+import axios from 'axios'
 
 import {
     BsChevronLeft, 
@@ -19,6 +20,11 @@ import { Skill } from '../job/Skill'
 
 
 const JobNavigation = (props) => {
+
+    const handlePageChange = (page) => {
+        props.setPage(page);
+    }
+
     return (
         <div id="JobNavigation" class="container-fluid p-3 component-shadow mb-3 bg-white">
             <div class="row">
@@ -28,19 +34,34 @@ const JobNavigation = (props) => {
                 <div class="col-auto">
                     <nav aria-label="Page navigation example">
                         <ul class="pagination">
-                            <li class="page-item">
-                            <a class="page-link" href="#" aria-label="Previous">
-                                <BsChevronLeft />
-                            </a>
-                            </li>
-                            <li class="page-item"><a class="page-link" href="#">1</a></li>
-                            <li class="page-item"><a class="page-link" href="#">2</a></li>
-                            <li class="page-item"><a class="page-link" href="#">3</a></li>
-                            <li class="page-item">
-                            <a class="page-link" href="#" aria-label="Next">
-                                <BsChevronRight />
-                            </a>
-                            </li>
+                            
+                            
+                            {
+                                props.page > 0 && (
+                                    <>
+                                        <li class="page-item" onClick={() => props.setPage(props.page-1)}>
+                                            <p class="page-link" aria-label="Previous">
+                                                <BsChevronLeft />
+                                            </p>
+                                        </li>
+                                        <li class="page-item" onClick={() => props.setPage(props.page-1)}><p class="page-link">{props.page}</p></li>
+                                    </>
+                                )
+                            }
+                            <li class="page-item active"><p class="page-link">{props.page+1}</p></li>
+                            {
+                                props.page < props.pageCount-1 && (
+                                    <>
+                                        <li class="page-item" onClick={() => props.setPage(props.page+1)}><p class="page-link">{props.page+2}</p></li>
+                                        <li class="page-item" onClick={() => props.setPage(props.page+1)}>
+                                            <p class="page-link" aria-label="Next">
+                                                <BsChevronRight />
+                                            </p>
+                                        </li>
+                                    </>
+                                )
+                            }
+                            
                         </ul>
                     </nav>
                 </div>
@@ -75,11 +96,11 @@ class JobCard extends Component {
                             </a>
                         </div>
                         <div class="col-auto me-auto">
-                            <h5 class="card-title">{this.state.details.position}</h5>
+                            <h5 class="card-title">{this.state.details.jobTitle}</h5>
                             <p>
-                                <a href="#" class="card-link">{this.state.details.company}</a>
-                                <span>, {this.state.details.city}, </span>
-                                <span>{this.state.details.country}</span>
+                                <a href="#" class="card-link">{this.state.details.companyName}</a>
+                                {/* <span>, {this.state.details.City}, </span>
+                                <span>, {this.state.details.Country}, </span> */}
                             </p>
                         </div>
                         <div class="col-auto ms-auto">
@@ -93,10 +114,10 @@ class JobCard extends Component {
                             {/* DETAILS */}
                             <div class="row border-bottom">
                                 <div class="col me-auto">
-                                    <p>{this.state.details.description}</p>
+                                    <p>{this.state.details.jobDescription}</p>
                                 </div>
                                 <div class="col-lg-2 col-sm-12">
-                                    <b>{this.state.details.pay}</b>
+                                    <b>{this.state.details.minPay}</b>
                                 </div>
                             </div>
                             {/* SKILLS */}
@@ -108,10 +129,10 @@ class JobCard extends Component {
                                 {/* EDUCATION */}
                                 <div class="col-auto">
                                     <OverlayTrigger
-                                    key={this.state.details.id + "-job-edu"}
+                                    key={this.state.details._id + "-job-edu"}
                                     placement='top'
                                     overlay={
-                                        <Tooltip id={this.state.details.id + "-job-edu"}>
+                                        <Tooltip id={this.state.details._id + "-job-edu"}>
                                             {this.state.details.education} level
                                         </Tooltip>
                                     }
@@ -124,11 +145,11 @@ class JobCard extends Component {
                                 {/* LOCATION */}
                                 <div class="col-auto">
                                     <OverlayTrigger
-                                    key={this.state.details.id + "-job-loc"}
+                                    key={this.state.details._id + "-job-loc"}
                                     placement='top'
                                     overlay={
-                                        <Tooltip id={this.state.details.id + "-job-loc"}>
-                                            {this.state.details.location}
+                                        <Tooltip id={this.state.details._id + "-job-loc"}>
+                                            {this.state.details.jobLocation}
                                         </Tooltip>
                                     }
                                     >
@@ -140,11 +161,11 @@ class JobCard extends Component {
                                 {/* AGE */}
                                 <div class="col-auto">
                                     <OverlayTrigger
-                                    key={this.state.details.id + "-job-age"}
+                                    key={this.state.details._id + "-job-age"}
                                     placement='top'
                                     overlay={
-                                        <Tooltip id={this.state.details.id + "-job-age"}>
-                                            Posted {this.state.details.age} ago
+                                        <Tooltip id={this.state.details._id + "-job-age"}>
+                                            Posted {this.state.details.dateCreated} ago
                                         </Tooltip>
                                     }
                                     >
@@ -163,10 +184,30 @@ class JobCard extends Component {
 }
 
 export const JobListing = () => {
+
+    const [joblist, setJoblist] = useState([]);
+    const [results, setResults] = useState(0);
+    const [pageCount, setPageCount] = useState(0);
+    const [page, setPage] = useState(0);
+
+    useEffect(() => {
+        console.log("USE EFFECT TRIGGERED");
+        axios.get("http://localhost:3001/jobs", {params: {page: page}})
+        .then((response) => {
+            console.log(response.data)
+            setResults(response.data.results);
+            setPageCount(response.data.pageCount)
+            setJoblist(response.data.jobs);
+        })
+        .catch((error) => {
+            console.log(error);
+        })
+    }, [page])
+
     return (
         <div id="JobListing" class="container-fluid px-0">
-            <JobNavigation results="54,241" />
-            {JobData.map(job => <JobCard details={job} />)}
+            <JobNavigation page={page} setPage={setPage} pageCount={pageCount} results={results} />
+            {joblist.map(job => <JobCard details={job} key={job._id}/>)}
         </div>
     )
 }
