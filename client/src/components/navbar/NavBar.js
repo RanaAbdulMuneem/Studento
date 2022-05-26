@@ -1,24 +1,23 @@
-import './Navbar.css'
-
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {Container, Navbar, Nav, NavDropdown} from "react-bootstrap"
-import { Component } from "react";
+import { Component, useEffect, useState } from "react";
 
 import StudentoLogo from '../../images/studento_logo.png'
 
 export const NavBar = (props) => {
-  
-  const loginStudent = () => {
-    props.user = "student"
-  }
-  const loginCompany = () => {
-    props.user = "company"
-  }
-  const logout = () => {
-    props.user = "none"
-  }
-  
-  
+  const [user, setUser] = useState(undefined);
+  const data = localStorage.getItem("token");
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    setUser(data);
+  })
+
+  const handleLogout = () => {
+		localStorage.removeItem('token')
+		navigate('/');
+	}
+
   return  (
     <div>
       <Navbar bg="dark" variant="dark">
@@ -28,6 +27,7 @@ export const NavBar = (props) => {
           src={StudentoLogo}
           class="img-fluid"
           width="40"
+          alt="not supported"
           />
           {' '}
           Studento
@@ -38,15 +38,23 @@ export const NavBar = (props) => {
         </Nav>
         <Nav>
           {
-            props.user == "none" ? (
+            user == undefined ? (
               <>
-                <Nav.Link as={Link} to="/studentsignup" onClick={loginStudent}>Student Portal</Nav.Link>
-                <Nav.Link as={Link} to="/companysignup" onClick={loginCompany}>Company Portal</Nav.Link>
+                <Nav.Link as={Link} to="/studentsignup"  className="end-link">Student Portal</Nav.Link>
+                <Nav.Link as={Link} to="/companysignup" className="end-link">Company Portal</Nav.Link>
               </>
             ) : (
               <>
-                <Nav.Link as={Link} to={"/" + props.user + "profile"}>Profile</Nav.Link>
-                <Nav.Link as={Link} to="/" onClick={logout}>Logout</Nav.Link>
+                <Nav.Link
+                as={Link}
+                to={
+                  "/" + user + "profile"
+                }
+                className="end-link"
+                >
+                  Profile
+                </Nav.Link>
+                <Nav.Link className="end-link" onClick={handleLogout}>Logout</Nav.Link>
               </>
             )
           }

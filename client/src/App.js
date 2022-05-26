@@ -20,70 +20,9 @@ import { Jobs } from './components/jobs/Jobs';
 import { Home } from './components/home/Home';
 import CompanySignup from "./components/CompanySignup/CompanySignup";
 import CompanyLogin from "./components/CompanyLogin/CompanyLogin";
-
-
-import NewSignUp from './components/forms/NewSignUp'
+import NavBar from "./components/navbar/NavBar";
 
 function App() {
-  const [user, setUser] = useState("none")
-
-  const loginStudent = () => {
-    setUser("student")
-  }
-  const loginCompany = () => {
-    setUser("company")
-  }
-  const logout = () => {
-    setUser("none")
-  }
-
-  const NavBar = () => {
-    return  (
-      <div>
-        <Navbar bg="dark" variant="dark">
-          <Container fluid>
-          <Navbar.Brand as={Link} to="/">
-            <img
-            src={StudentoLogo}
-            class="img-fluid"
-            width="40"
-            alt="not supported"
-            />
-            {' '}
-            Studento
-            </Navbar.Brand>
-          <Nav className="me-auto">
-            <Nav.Link as={Link} to="/">Home</Nav.Link>
-            <Nav.Link as={Link} to="/jobs">Jobs</Nav.Link>
-          </Nav>
-          <Nav>
-            {
-              user === "none" ? (
-                <>
-                  <Nav.Link as={Link} to="/studentsignup" onClick={loginStudent} className="end-link">Student Portal</Nav.Link>
-                  <Nav.Link as={Link} to="/companysignup" onClick={loginCompany} className="end-link">Company Portal</Nav.Link>
-                </>
-              ) : (
-                <>
-                  <Nav.Link
-                  as={Link}
-                  to={
-                    "/" + user + "profile"
-                  }
-                  className="end-link"
-                  >
-                    Profile
-                  </Nav.Link>
-                  <Nav.Link as={Link} to="/" onClick={logout} className="end-link">Logout</Nav.Link>
-                </>
-              )
-            }
-          </Nav>
-          </Container>
-        </Navbar>
-      </div>
-    )
-  }
 
   return (
     <BrowserRouter>

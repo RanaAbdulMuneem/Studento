@@ -40,7 +40,8 @@ const StudentLogin = () => {
 
     if (data.user) {
       localStorage.setItem("token", data.user);
-      alert("Login successful");
+      //alert("Login successful");
+      console.log('data.user', data.user)
       handleStudentProfile(data.user);
     } else {
       alert("Please check your username and password");

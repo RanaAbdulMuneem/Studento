@@ -10,6 +10,8 @@ const StudentProfile = () => {
   const { email } = state;
   const [_email, setEmail] = useState(email);
   const [studentDetails, setStudentDetails] = useState({});
+  console.log("--->State: ", state);
+  console.log("--->_email: ", _email);
   const handleUserData = async () => {
     const response = await fetch("http://localhost:3001/findstudent", {
       method: "POST",
@@ -56,10 +58,12 @@ const StudentProfile = () => {
             <Row className="name-age-row mt-4 ">
               <h5>Skills</h5>
 
+              {/* FIX THIS */}
+              {/* 
               {studentDetails.skills &&
                 studentDetails.skills.map((skill) => {
                   return <span>{skill}</span>;
-                })}
+                })} */}
             </Row>
             <Row className="name-age-row mt-4 education">
               <h5>Education</h5>
