@@ -14,23 +14,23 @@ const CompanyLogin = () => {
   const [companyEmail, setCompanyEmail] = useState();
   const [companyPassword, setCompanyPassword] = useState();
 
-  const handleCompanyProfile = (user) => {
-    const { name, email, noOfEmployees, description, yearFounded } = user;
-    console.log(name + " " + email + " " + description + " " + noOfEmployees);
-    navigate("/companyprofile", {
-      state: {
-        name: name,
-        email: email,
-        noOfEmployees: noOfEmployees,
-        description: description,
-        yearFounded: yearFounded,
-      },
-    });
-  };
+  // const handleCompanyProfile = (user) => {
+  //   const { name, email, noOfEmployees, description, yearFounded } = user;
+  //   console.log(name + " " + email + " " + description + " " + noOfEmployees);
+  //   navigate("/companyprofile", {
+  //     state: {
+  //       name: name,
+  //       email: email,
+  //       noOfEmployees: noOfEmployees,
+  //       description: description,
+  //       yearFounded: yearFounded,
+  //     },
+  //   });
+  // };
 
   const handleCompanyLogin = async (e) => {
     e.preventDefault();
-    const response = await fetch("http://localhost:3001/companylogin", {
+    const response = await fetch("http://localhost:3001/companies/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -41,11 +41,13 @@ const CompanyLogin = () => {
       }),
     });
     const data = await response.json();
-
-    if (data.user) {
-      localStorage.setItem("token", data.user);
-      alert("Login successful");
-      handleCompanyProfile(data.user);
+    if (data.token) {
+      localStorage.setItem("token", data.token);
+      // localStorage.setItem("type", "student")
+      //alert("Login successful");
+      console.log('data.user', data.token);
+      navigate("/companyprofile");
+      //handleStudentProfile(data.token);
     } else {
       alert("Please check your username and password");
     }

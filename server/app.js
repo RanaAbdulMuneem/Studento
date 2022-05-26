@@ -8,7 +8,7 @@ var logger = require('morgan');
 
 var indexRouter = require('./routes/index');
 var studentsRouter = require('./routes/students');
-//var companiesRouter = require('./routes/companies');
+var companiesRouter = require('./routes/companies');
 var jobsRouter = require('./routes/jobs');
 
 var app = express();
@@ -31,7 +31,7 @@ mongoose.connect("mongodb://localhost:27017/StudentoDB", {
 
 app.use('/', indexRouter);
 app.use('/students', studentsRouter);
-//app.use('/companies', companiesRouter);
+app.use('/companies', companiesRouter);
 app.use('/jobs', jobsRouter)
 
 // catch 404 and forward to error handler

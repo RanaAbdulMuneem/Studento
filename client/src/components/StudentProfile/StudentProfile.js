@@ -42,7 +42,7 @@ const StudentProfile = () => {
         <Col className="col-lg-9 ">
           {studentDetails.name}
           <Container>
-            <StudentEditModalBtn studentDetails={studentDetails} email={studentDetails.email}/>
+            {/* <StudentEditModalBtn studentDetails={studentDetails} email={studentDetails.email}/> */}
             <Row className="name-age-row mt-4">
               <h5>Description</h5>
               <Col> Name : {studentDetails.name}</Col>

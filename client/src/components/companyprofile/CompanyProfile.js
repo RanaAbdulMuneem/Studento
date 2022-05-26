@@ -1,5 +1,5 @@
 import { Container, Row, Col } from "react-bootstrap";
-import { companyDetails } from "../../API/CompanyDetails";
+// import { companyDetails } from "../../API/CompanyDetails";
 import logo from "../../images/logo.png";
 import CompanyEditModalBtn from "./CompanyModal";
 import { Link } from "react-router-dom";
@@ -7,28 +7,55 @@ import "./companyProfile.css";
 import ReviewInput from "./ReviewInput";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
+import axios from "axios";
 
 const CompanyProfile = () => {
   const navigate = useNavigate();
-  const { state } = useLocation();
-  const { name, email, noOfEmployees, description, yearFounded } = state;
-  const [company, setCompany] = useState({
-    name: name,
-    email:email,
-    noOfEmployees: noOfEmployees,
-    description: description,
-    yearFounded: yearFounded,
+  // const { state } = useLocation();
+  // const { name, email, noOfEmployees, description, yearFounded } = state;
+  // const [company, setCompany] = useState({
+  //   name: name,
+  //   email:email,
+  //   noOfEmployees: noOfEmployees,
+  //   description: description,
+  //   yearFounded: yearFounded,
 
-  });
-  const handleCreateJob = () => {
-    navigate("/createjob", {
-      state: {
-        company: company,
-      },
-    });
+  // });
+
+  // const handleCreateJob = () => {
+  //   navigate("/createjob", {
+  //     state: {
+  //       company: companyDetails.name,
+  //     },
+  //   });
+  // }
+  const token = localStorage.getItem("token");
+  if (!token) {
+    localStorage.removeItem("token");
+    window.location.href = "/companylogin";
   }
-  
-  
+
+  const [companyDetails, setCompanyDetails] = useState({});
+
+  const handleUserData = async () => {
+    axios
+      .get("http://localhost:3001/companies/profile", {
+        headers: {
+          token: localStorage.getItem("token"),
+        },
+      })
+      .then((response) => {
+        setCompanyDetails(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  useEffect(() => {
+    handleUserData();
+  }, []);
+
   return (
     <Container>
       <Row className="mt-5">
@@ -37,40 +64,37 @@ const CompanyProfile = () => {
         </Col>
         <Col className="col-lg-9 ">
           <Container>
-            <CompanyEditModalBtn
-              company={company}
-              setCompany={setCompany}
-            />
+            <CompanyEditModalBtn company={companyDetails} email={companyDetails.email} />
 
-            
-              <button className="btn btn-primary btn-lg m-1"
-              onClick={handleCreateJob}
-              >
-                Create a Job
-              </button>
-          
+            <button
+              className="btn btn-primary btn-lg m-1"
+              // onClick={handleCreateJob}
+            >
+              Create a Job
+            </button>
+
             <div>
               <Row className="name-age-row mt-4">
                 <Col>
                   {" "}
-                  Name : <b>{company.name}</b>
+                  Name : <b>{companyDetails.name}</b>
                 </Col>
-                <Col>{company.noOfEmployees} employees</Col>
-                <Col>Founded in {company.yearFounded}</Col>
+                <Col>{companyDetails.noOfEmployees} employees</Col>
+                <Col>Founded in {companyDetails.yearFounded}</Col>
                 <Col>
-                  {companyDetails.city}, {companyDetails.country}
+                  {/* {companyDetails.city}, {companyDetails.country} */}
                 </Col>
               </Row>
               <Row className="name-age-row mt-4">
                 <h5>Description</h5>
-                <p>{company.description}</p>
+                <p>{companyDetails.description}</p>
               </Row>
             </div>
 
             <Row className="name-age-row mt-4 ">
               <h5>Jobs</h5>
 
-              {companyDetails.jobs.map((job) => {
+              {/* {companyDetails.jobs.map((job) => {
                 return (
                   <div>
                     <hr />
@@ -82,12 +106,12 @@ const CompanyProfile = () => {
                     <button className="btn btn-secondary">Apply now</button>
                   </div>
                 );
-              })}
+              })} */}
             </Row>
             <Row className="name-age-row mt-4 education">
               <h5>Reviews</h5>
 
-              {companyDetails.reviews.map((review) => {
+              {/* {companyDetails.reviews.map((review) => {
                 return (
                   <div>
                     <hr />
@@ -96,7 +120,7 @@ const CompanyProfile = () => {
                     <p>{review.comment}</p>
                   </div>
                 );
-              })}
+              })} */}
             </Row>
             <Row className="name-age-row mt-4 education">
               <h5>Want to add a review ?</h5>

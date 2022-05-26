@@ -17,7 +17,7 @@ const CompanySignup = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     console.log(companyName, companyEmail, companyPassword);
-    const response = await fetch("http://localhost:3001/companysignup", {
+    const response = await fetch("http://localhost:3001/companies/signup", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
