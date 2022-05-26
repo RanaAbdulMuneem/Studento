@@ -1,9 +1,10 @@
-var express = require('express');
+var express = require("express");
 var router = express.Router();
 
 //OLD ENDPOINTS
 
 const Student = require("../models/student.model");
+const Company = require("../models/company.model")
 
 router.get("/", (req, res) => {
   res.send("hello world");
@@ -104,10 +105,8 @@ router.post("/addjob", async (req, res) => {
 });
 
 router.post("/editstudentprofile", async (req, res) => {
-
   console.log(req.body);
-  
-  
+
   Student.updateOne(
     { email: req.body.email },
     {
@@ -115,7 +114,7 @@ router.post("/editstudentprofile", async (req, res) => {
       description: req.body.description,
       age: parseInt(req.body.age),
       location: req.body.location,
-      primaryRole:req.body.primaryRole,
+      primaryRole: req.body.primaryRole,
       university: req.body.university,
       degree: req.body.degree,
       major: req.body.major,
@@ -123,8 +122,7 @@ router.post("/editstudentprofile", async (req, res) => {
       graduationYear: req.body.graduationYear,
       achievments: req.body.achievments,
       experience: req.body.experience,
-      Skills: req.body.skills
-
+      Skills: req.body.skills,
     },
     function (err) {
       if (err) {
@@ -133,6 +131,5 @@ router.post("/editstudentprofile", async (req, res) => {
     }
   );
 });
-
 
 module.exports = router;
