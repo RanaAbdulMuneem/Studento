@@ -46,12 +46,18 @@ export const Home = () => {
                     <p class="info">Cupidatat eiusmod laboris consectetur est magna.</p>
                     <div class="row mt-5">
                         <div class="d-flex flex-row">
-                            <Link to="/studentlogin">
-                                <button class="btn button-student me-3">For students</button>
-                            </Link>    
-                            <Link to="/companylogin">
-                                <button class="btn button-company">For companies</button>
-                            </Link>
+                            {
+                                !localStorage.getItem("token") && (
+                                    <>
+                                        <Link to="/studentlogin">
+                                            <button class="btn button-student me-3">For students</button>
+                                        </Link>    
+                                        <Link to="/companylogin">
+                                            <button class="btn button-company">For companies</button>
+                                        </Link>
+                                    </>
+                                )
+                            }
                         </div>
                     </div>
                     <div class="row mt-5 align-items-center">

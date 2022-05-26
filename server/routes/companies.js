@@ -10,6 +10,22 @@ router.get("/", function (req, res, next) {
   res.send("Companies router");
 });
 
+router.get("/:id", async (req, res) => {
+  try {
+    const company = await Company.findById(req.params.id, {password: 0});
+    if (company) {
+      res.status(200).json(company);
+    }
+    else {
+      res.status(404);
+    }
+  }
+  catch (error) {
+    console.log(error);
+    res.status(500);
+  }
+})
+
 router.post("/signup", async (req, res) => {
     console.log(req.body);
     try {
@@ -25,7 +41,6 @@ router.post("/signup", async (req, res) => {
       res.json({ status: "error", error: "Duplicate email" });
     }
   });
-
 
 
   router.post("/login", async (req, res) => {
@@ -73,7 +88,7 @@ router.get("/profile", async (req, res) => {
       try {
         const decodedToken = jwt.verify(req.headers["token"], "somerandomsetofsymbols");
         const id = decodedToken.id;
-        Company.findOne({_id: id}, (err, doc) => {
+        Company.findById(id, (err, doc) => {
           if (err){
             res.status(500);
           }

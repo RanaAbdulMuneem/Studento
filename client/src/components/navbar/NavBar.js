@@ -6,15 +6,22 @@ import StudentoLogo from '../../images/studento_logo.png'
 
 export const NavBar = (props) => {
   const [user, setUser] = useState(undefined);
-  const data = localStorage.getItem("token");
   const navigate = useNavigate();
 
   useEffect(() => {
-    setUser(data);
+    const type = localStorage.getItem("type");
+    if (type){
+      setUser(type);
+    }
+    else {
+      setUser(undefined);
+    }
   })
 
   const handleLogout = () => {
-		localStorage.removeItem('token')
+		localStorage.removeItem('token');
+    localStorage.removeItem('type');
+    setUser(undefined);
 		navigate('/');
 	}
 
@@ -34,7 +41,11 @@ export const NavBar = (props) => {
           </Navbar.Brand>
         <Nav className="me-auto">
           <Nav.Link as={Link} to="/">Home</Nav.Link>
-          <Nav.Link as={Link} to="/jobs">Jobs</Nav.Link>
+          {
+            user != "company" && (
+              <Nav.Link as={Link} to="/jobs">Jobs</Nav.Link>
+            )
+          }
         </Nav>
         <Nav>
           {

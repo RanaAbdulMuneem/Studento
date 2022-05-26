@@ -38,21 +38,24 @@ const CompanyProfile = () => {
   const [companyDetails, setCompanyDetails] = useState({});
 
   const handleUserData = async () => {
-    axios
-      .get("http://localhost:3001/companies/profile", {
+    console.log("HANDLE USER DATA");
+    axios.get("http://localhost:3001/companies/profile", {
         headers: {
-          token: localStorage.getItem("token"),
+          "token": localStorage.getItem("token"),
         },
       })
       .then((response) => {
+        console.log("response.data", response.data)
         setCompanyDetails(response.data);
       })
       .catch((error) => {
         console.log(error);
+        console.log("ERROR OCCURED");
       });
   };
 
   useEffect(() => {
+    console.log("USE EFFECT TRIGGERED")
     handleUserData();
   }, []);
 

@@ -43,7 +43,7 @@ const CompanyLogin = () => {
     const data = await response.json();
     if (data.token) {
       localStorage.setItem("token", data.token);
-      // localStorage.setItem("type", "student")
+      localStorage.setItem("type", "company")
       //alert("Login successful");
       console.log('data.user', data.token);
       navigate("/companyprofile");

@@ -26,5 +26,21 @@ router.get('/', async (req, res) => {
     }
 })
 
+router.get('/:id', async (req, res) => {
+    try {
+        const job = await Job.findById(req.params.id);
+        if (job) {
+            res.status(200).json(job)
+        }
+        else {
+            res.status(404);
+        }
+    }
+    catch (error) {
+        console.log(error);
+        res.status(500);
+    }
+})
+
 
 module.exports = router;

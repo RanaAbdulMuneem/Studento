@@ -103,13 +103,17 @@ class JobCard extends Component {
                                 <span>, {this.state.details.Country}, </span> */}
                             </p>
                         </div>
-                        <div class="col-auto ms-auto">
-                            <button class="btn btn-primary me-3">Apply</button>
-                            <SaveButton />
-                        </div>
+                        {
+                            localStorage.getItem("token") && (
+                                <div class="col-auto ms-auto">
+                                    <button class="btn btn-primary me-3">Apply</button>
+                                    <SaveButton />
+                                </div>
+                            )
+                        }
                     </div>
                 </div>
-                <Link to={"/job/" + this.props.details.id} class="card-body-link">
+                <Link to={"/job/" + this.state.details._id} class="card-body-link">
                     <div class="card-body">
                             {/* DETAILS */}
                             <div class="row border-bottom">
