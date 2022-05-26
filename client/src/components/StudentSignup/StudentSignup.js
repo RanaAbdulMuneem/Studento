@@ -19,7 +19,7 @@ const StudentSignup = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     console.log(studentName, studentEmail, studentPassword);
-    const response = await fetch("http://localhost:3001/studentsignup", {
+    const response = await fetch("http://localhost:3001/students/signup", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

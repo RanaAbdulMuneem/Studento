@@ -1,36 +1,37 @@
 import { Container, Row, Col } from "react-bootstrap";
-// import { StudentDetails } from "../../API/StudentDetails";
 import img from "../../images/p1.jpg";
 import "./StudentProfile.css";
 import StudentEditModalBtn from "./StudentModal";
-import { useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
+import axios from 'axios'
+
 const StudentProfile = () => {
-  const { state } = useLocation();
-  const { email } = state;
-  const [_email, setEmail] = useState(email);
+  const token = localStorage.getItem('token');
+  if (!token) {
+    localStorage.removeItem('token');
+    window.location.href = "/studentlogin";
+  }
+  
   const [studentDetails, setStudentDetails] = useState({});
-  console.log("--->State: ", state);
-  console.log("--->_email: ", _email);
+
   const handleUserData = async () => {
-    const response = await fetch("http://localhost:3001/findstudent", {
-      method: "POST",
+
+    axios.get("http://localhost:3001/students/profile", {
       headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        email: _email,
-      }),
-    });
-    const [data] = await response.json();
-    setStudentDetails(data);
+        "token": localStorage.getItem("token")
+      }
+    })
+    .then((response) => {
+      setStudentDetails(response.data);
+    })
+    .catch((error) => {
+      console.log(error);
+    })
   };
 
   useEffect(() => {
-    if (_email) {
       handleUserData();
-    }
-  }, [_email]);
+	}, [])
 
   return (
     <div>
@@ -41,7 +42,7 @@ const StudentProfile = () => {
         <Col className="col-lg-9 ">
           {studentDetails.name}
           <Container>
-            <StudentEditModalBtn studentDetails={studentDetails} email={_email}/>
+            <StudentEditModalBtn studentDetails={studentDetails} email={studentDetails.email}/>
             <Row className="name-age-row mt-4">
               <h5>Description</h5>
               <Col> Name : {studentDetails.name}</Col>
@@ -57,13 +58,11 @@ const StudentProfile = () => {
             </Row>
             <Row className="name-age-row mt-4 ">
               <h5>Skills</h5>
-
-              {/* FIX THIS */}
-              {/* 
+              
               {studentDetails.skills &&
                 studentDetails.skills.map((skill) => {
                   return <span>{skill}</span>;
-                })} */}
+                })}
             </Row>
             <Row className="name-age-row mt-4 education">
               <h5>Education</h5>

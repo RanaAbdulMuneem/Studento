@@ -12,21 +12,19 @@ const StudentLogin = () => {
   const [studentEmail, setStudentEmail] = useState("");
   const [studentPassword, setStudentPassword] = useState("");
 
-  const handleStudentProfile = (user) => {
-    const { email } = user;
-
-    navigate("/studentprofile", {
-      state: {
-        email: email,
-      },
-    });
-  };
+  // const handleStudentProfile = (token) => {
+  //   navigate("/studentprofile", {
+  //     state: {
+  //       token: token,
+  //     },
+  //   });
+  // };
 
   const handleStudentLogin = async (e) => {
     e.preventDefault();
     console.log("student login");
     console.log(studentEmail, studentPassword);
-    const response = await fetch("http://localhost:3001/studentlogin", {
+    const response = await fetch("http://localhost:3001/students/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -37,12 +35,13 @@ const StudentLogin = () => {
       }),
     });
     const data = await response.json();
-
-    if (data.user) {
-      localStorage.setItem("token", data.user);
+    if (data.token) {
+      localStorage.setItem("token", data.token);
+      localStorage.setItem("type", "student")
       //alert("Login successful");
-      console.log('data.user', data.user)
-      handleStudentProfile(data.user);
+      console.log('data.user', data.token);
+      navigate("/studentprofile");
+      //handleStudentProfile(data.token);
     } else {
       alert("Please check your username and password");
     }

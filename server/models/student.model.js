@@ -5,18 +5,18 @@ const Student = new mongoose.Schema(
 		name: { type: String, required: true},
 		email: { type: String, required: true, unique: true },
 		password: { type: String, required: true },
-        age: { type: Number, required: true },
-        gender: { type: String, required: true },
-        location: { type: String, required: true },
-        primaryRole: { type: String, required: true },
-        university: { type: String, required: true },
-        degree : { type: String, required: true },
-        major: { type: String, required: true },
-        graduationYear: { type: String, required: true },
-        universityDescription: { type: String, required: true },
-        experience : { type: String, required: true },
-        achievements : { type: String, required: true },
-        skills: { type: String, required: true }
+        age: { type: Number, required: false },
+        gender: { type: String, required: false },
+        location: { type: String, required: false },
+        primaryRole: { type: String, required: false },
+        university: { type: String, required: false },
+        degree : { type: String, required: false },
+        major: { type: String, required: false },
+        graduationYear: { type: String, required: false },
+        universityDescription: { type: String, required: false },
+        experience : { type: String, required: false },
+        achievements : { type: String, required: false },
+        skills: { type: Array, required: false }
 	}
 
 )

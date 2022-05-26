@@ -48,7 +48,7 @@ export const NavBar = (props) => {
                 <Nav.Link
                 as={Link}
                 to={
-                  "/" + user + "profile"
+                  "/" + localStorage.getItem("type") + "profile"
                 }
                 className="end-link"
                 >
