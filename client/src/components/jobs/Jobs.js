@@ -10,11 +10,11 @@ export const Jobs = () => {
         <div class="Jobs">
             <div class="container-fluid">
                 <div class="row mb-2">
-                  <JobSearch />  
+                  <JobSearch filters={filters} setSearch={setFilters}/>  
                 </div>
                 <div class="row">
                     <div class="col-lg-4 col-sm-12 p-0 me-3">
-                        <JobFilter setFilters={setFilters} />
+                        <JobFilter filters={filters} setFilters={setFilters} />
                     </div>
                     <div class="col-lg col-sm-12 p-0">
                         <JobListing filters={filters}/>
