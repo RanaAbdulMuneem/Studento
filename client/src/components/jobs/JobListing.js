@@ -104,8 +104,14 @@ class JobCard extends Component {
                             </p>
                         </div>
                         <div class="col-auto ms-auto">
-                            <button class="btn btn-primary me-3">Apply</button>
-                            <SaveButton />
+                            {
+                                localStorage.getItem["token"] && (
+                                    <>
+                                        <button class="btn btn-primary me-3">Apply</button>
+                                        <SaveButton />
+                                    </>
+                                )
+                            }
                         </div>
                     </div>
                 </div>
@@ -117,7 +123,7 @@ class JobCard extends Component {
                                     <p>{this.state.details.jobDescription}</p>
                                 </div>
                                 <div class="col-lg-2 col-sm-12">
-                                    <b>{this.state.details.minPay}</b>
+                                    <b>PKR {this.state.details.minPay}</b>
                                 </div>
                             </div>
                             {/* SKILLS */}
@@ -183,7 +189,7 @@ class JobCard extends Component {
     }
 }
 
-export const JobListing = () => {
+export const JobListing = (props) => {
 
     const [joblist, setJoblist] = useState([]);
     const [results, setResults] = useState(0);
@@ -191,10 +197,9 @@ export const JobListing = () => {
     const [page, setPage] = useState(0);
 
     useEffect(() => {
-        console.log("USE EFFECT TRIGGERED");
-        axios.get("http://localhost:3001/jobs", {params: {page: page}})
+        let parameters = {...props.filters, page: page};
+        axios.get("http://localhost:3001/jobs",{params: parameters})
         .then((response) => {
-            console.log(response.data)
             setResults(response.data.results);
             setPageCount(response.data.pageCount)
             setJoblist(response.data.jobs);
@@ -202,7 +207,7 @@ export const JobListing = () => {
         .catch((error) => {
             console.log(error);
         })
-    }, [page])
+    }, [page, props.filters])
 
     return (
         <div id="JobListing" class="container-fluid px-0">

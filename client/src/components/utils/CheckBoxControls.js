@@ -39,6 +39,7 @@ export class CheckBoxControls extends Component {
             new_check: ''
         })
         event.preventDefault()
+        this.handleCheckedList();
     }
 
     handleChange(position) {
@@ -46,7 +47,17 @@ export class CheckBoxControls extends Component {
         updatedCheckboxes[position].checked = !updatedCheckboxes[position].checked
         console.log("updated", updatedCheckboxes)
         this.setState({checkboxes: updatedCheckboxes})
+        this.handleCheckedList();
     }
+
+    handleCheckedList() {
+        let checked = []
+        for(let i=0; i<this.state.checkboxes.length; i++){
+            this.state.checkboxes[i].checked && (checked.push(this.state.checkboxes[i].value))
+        }
+        this.props.setList(checked);
+    }
+
     render() {
         return (
             <div class="checkbox-control">

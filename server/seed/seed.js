@@ -47,13 +47,13 @@ mongoose.connect("mongodb://localhost:27017/StudentoDB", {
         await Job.create({
         company: _id,
         jobTitle: "Software engineer " + i,
-        education: "Bachelors",
-        jobType: "Full time",
+        education: i%2==0? "Senior": "Junior",
+        jobType: "Part-time",
         jobLocation: "On site",
-        jobDomain: "Software engineering",
-        minPay: 70000,
+        jobDomain: "Software Engineering",
+        minPay: 1000*i,
         jobDescription: "Plz make software for us, We pay",
-        skills: ["C++", "Python,", "JavaScript", "MERN", "ReactJS"],
+        skills: ["C++", "Python", "JavaScript", "MERN", "React"],
         dateCreated: Date.now()
         })
     }
