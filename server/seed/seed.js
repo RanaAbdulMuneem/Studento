@@ -38,18 +38,36 @@ mongoose.connect("mongodb://localhost:27017/StudentoDB", {
         email: "arbisoft@mail.com",
         password: password,
     })
+    await Company.create({
+        name: "Devsinc",
+        email: "devsinc@mail.com",
+        password: password,
+    })
 
-    const company = await Company.findOne({name: "Arbisoft"}).exec();
-    const _id = company._id;
-    console.log("arbisoft", company)
+    let company = await Company.findOne({name: "Arbisoft"});
     console.log('Creating jobs')
     for (let i=0; i<30; i++){
         await Job.create({
-        company: _id,
-        jobTitle: "Software engineer " + i,
+        company: company._id,
+        jobTitle: "Software Engineer " + i,
         education: i%2==0? "Senior": "Junior",
         jobType: "Part-time",
         jobLocation: "On site",
+        jobDomain: "Software Engineering",
+        minPay: 1000*i,
+        jobDescription: "Plz make software for us, We pay",
+        skills: ["C++", "Python", "JavaScript", "MERN", "React"],
+        dateCreated: Date.now()
+        })
+    }
+    company = await Company.findOne({name: "Devsinc"});
+    for (let i=0; i<30; i++){
+        await Job.create({
+        company: company._id,
+        jobTitle: "Web Developer " + i,
+        education: i%2==0? "Highschool": "Sophomore",
+        jobType: i%3==0? "Part-time": "Freelance",
+        jobLocation: i%2==0? "On site": "Hybrid",
         jobDomain: "Software Engineering",
         minPay: 1000*i,
         jobDescription: "Plz make software for us, We pay",

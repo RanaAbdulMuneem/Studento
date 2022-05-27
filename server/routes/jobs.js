@@ -17,6 +17,7 @@ router.get('/', async (req, res) => {
     req.query.type && (query.jobType = req.query.type);
     req.query.domain && (query.jobDomain = {$in: req.query.domain});
     req.query.skills && (query.skills = {$in: req.query.skills});
+    req.query.search && (query.jobTitle = RegExp('.*'+req.query.search+'*.'))
     try {
         const jobs = await Job.find(query)
         .limit(PAGE_SIZE)
@@ -37,7 +38,6 @@ router.get('/', async (req, res) => {
 
 
 router.post("/addjob", async (req, res) => {
-  console.log(req.body)
   const { skills } = req.body;
   const skillsArr = skills.split(",");
   

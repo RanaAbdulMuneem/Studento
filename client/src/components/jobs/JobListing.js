@@ -225,7 +225,7 @@ export const JobListing = (props) => {
     const [results, setResults] = useState(0);
     const [pageCount, setPageCount] = useState(0);
     const [page, setPage] = useState(0);
-
+    console.log('JOB LISTING', props.filters);
     useEffect(() => {
         let parameters = {...props.filters, page: page};
         axios.get("http://localhost:3001/jobs",{params: parameters})

@@ -7,16 +7,9 @@ import {CheckBoxControls} from '../utils/CheckBoxControls'
 
 const Salary = (props) => {
 
-    // handleChange(event) {        
-    //     this.setState({value: Number(event.target.value)});
-    //     this.props.setMinPay(this.state.value);
-    //     console.log("SETTING MINPAY:", this.state.value)
-    // }
-
     const [value, setValue] = useState(0);
     useEffect(() => {
         props.setMinPay(value);
-        console.log("SET MIN PAY: ", value);
     }, [value])
     
     return (
@@ -106,8 +99,8 @@ export const JobFilter = (props) => {
     const [skills, setSkills] = useState([]);
 
     const handleApply = () => {
-        console.log("SENDING MINPAY:", minPay);
         props.setFilters({
+            ...props.filters,
             minPay: minPay,
             education: education,
             type: type,
