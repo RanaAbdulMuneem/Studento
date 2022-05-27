@@ -1,13 +1,16 @@
-var express = require('express');
+var express = require("express");
 var router = express.Router();
-const bcrypt = require ('bcryptjs')
-const jwt = require("jsonwebtoken")
+const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
 
 const Student = require("../models/student.model");
+const Otp = require("../models/otp.model");
+
+const { removeListener } = require("../models/student.model");
 
 /* GET users listing. */
-router.get('/', function(req, res, next) {
-  res.send('Students router');
+router.get("/", function (req, res, next) {
+  res.send("Students router");
 });
 
 router.post("/signup", async (req, res) => {
@@ -46,38 +49,38 @@ router.post("/login", async (req, res) => {
         id: user._id,
       },
       "somerandomsetofsymbols",
-      {expiresIn: "1h"}
+      { expiresIn: "1h" }
     );
 
     return res.status(200).json({
       token: token,
-      expiresIn: 3600
+      expiresIn: 3600,
     });
   } else {
     return res.status(401).json({
-      token: false 
+      token: false,
     });
   }
 });
 
 router.get("/profile", async (req, res) => {
-  if (!req.headers["token"]){
-    res.status(401).json({status: "error"});
-  }
-  else {
+  if (!req.headers["token"]) {
+    res.status(401).json({ status: "error" });
+  } else {
     try {
-      const decodedToken = jwt.verify(req.headers["token"], "somerandomsetofsymbols");
+      const decodedToken = jwt.verify(
+        req.headers["token"],
+        "somerandomsetofsymbols"
+      );
       const id = decodedToken.id;
-      Student.findOne({_id: id}, (err, doc) => {
-        if (err){
+      Student.findOne({ _id: id }, (err, doc) => {
+        if (err) {
           res.status(500);
-        }
-        else {
+        } else {
           res.json(doc);
         }
       });
-    }
-    catch (error) {
+    } catch (error) {
       console.log(error);
       res.status(500).send("Invalid token");
     }
@@ -85,13 +88,14 @@ router.get("/profile", async (req, res) => {
 });
 
 router.post("/edit", async (req, res) => {
-
-  if (!req.headers["token"]){
-    res.status(401).json({status: "error"});
-  }
-  else {
+  if (!req.headers["token"]) {
+    res.status(401).json({ status: "error" });
+  } else {
     try {
-      const decodedToken = jwt.verify(req.headers["token"], "somerandomsetofsymbols");
+      const decodedToken = jwt.verify(
+        req.headers["token"],
+        "somerandomsetofsymbols"
+      );
       const id = decodedToken.id;
 
       Student.updateOne(
@@ -101,7 +105,7 @@ router.post("/edit", async (req, res) => {
           description: req.body.description,
           age: parseInt(req.body.age),
           location: req.body.location,
-          primaryRole:req.body.primaryRole,
+          primaryRole: req.body.primaryRole,
           university: req.body.university,
           degree: req.body.degree,
           major: req.body.major,
@@ -109,7 +113,7 @@ router.post("/edit", async (req, res) => {
           graduationYear: req.body.graduationYear,
           achievments: req.body.achievments,
           experience: req.body.experience,
-          Skills: req.body.skills
+          Skills: req.body.skills,
         },
         function (err) {
           if (err) {
@@ -118,13 +122,44 @@ router.post("/edit", async (req, res) => {
           }
         }
       );
-    }
-    catch (error) {
+    } catch (error) {
       console.log(error);
       res.status(500).send("Invalid token");
     }
   }
 });
 
+router.post("/email-send", async (req, res) => {
+  // let data = await Student.findOne({ email: req.body.email });
+  //let data = await Student.findOne({ email: req.body.studentEmail });
+  console.log(req.body);
+  const data = await Student.findOne({
+    email: req.body.studentEmail,
+  });
+
+  console.log(req.body.studentEmail);
+  const response = {};
+  if (data) {
+    let otpcode = Math.floor(Math.random() * 1000 + 1);
+    let otpData = new Otp({
+      email: req.body.email,
+      code: otpcode,
+      expireIn: new Date().getTime() + 300 * 1000,
+    });
+    let otpResponse = await otpData.save();
+    response.status = "success";
+    response.message = "Check Your Inbox :)";
+    console.log("otp code is : %d", otpcode);
+  } else {
+    response.status = "error";
+    response.message = "Email Id not exist";
+  }
+
+  res.status(200).json(response);
+});
+
+router.post("/change-password", async (req, res) => {
+  res.status(200).json("ok");
+});
 
 module.exports = router;

@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.css";
 import LogIn from "../forms/LogIn";
+import jwt_decode from "jwt-decode";
 
 import img from "../../images/work-mess.png";
 import bg from "../../images/bg-1.svg";
@@ -11,6 +12,56 @@ const StudentLogin = () => {
   const navigate = useNavigate();
   const [studentEmail, setStudentEmail] = useState("");
   const [studentPassword, setStudentPassword] = useState("");
+
+  useEffect(() => {
+    /* global google */
+    google.accounts.id.initialize({
+      client_id:
+        "144784068599-c2ranadsf9knt3s700jkn1igqpqkp0bl.apps.googleusercontent.com",
+      callback: handleCallbackGoogle,
+    });
+
+    google.accounts.id.renderButton(document.getElementById("signInDiv"), {
+      theme: "outline",
+      size: "large",
+    });
+  }, []);
+
+  const handleCallbackGoogle = async (res) => {
+    console.log("Encoded JWT ID token: " + res.credential);
+    var userObject = jwt_decode(res.credential);
+    console.log("Decoded Token: ", userObject);
+    console.log("Decoded Token: ", userObject.sub);
+    console.log("Decoded Token: ", userObject.given_name);
+    console.log("Decoded Token: ", userObject.family_name);
+    console.log("Decoded Token: ", userObject.email);
+
+    const studentEmail = userObject.email;
+    const studentPassword = userObject.sub;
+
+    const response = await fetch("http://localhost:3001/students/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        studentEmail,
+        studentPassword,
+      }),
+    });
+
+    const data = await response.json();
+    if (data.token) {
+      localStorage.setItem("token", data.token);
+      localStorage.setItem("type", "student");
+      //alert("Login successful");
+      console.log("data.user", data.token);
+      navigate("/studentprofile");
+      //handleStudentProfile(data.token);
+    } else {
+      alert("Some Error Occurred");
+    }
+  };
 
   // const handleStudentProfile = (token) => {
   //   navigate("/studentprofile", {
@@ -37,14 +88,21 @@ const StudentLogin = () => {
     const data = await response.json();
     if (data.token) {
       localStorage.setItem("token", data.token);
-      localStorage.setItem("type", "student")
+      localStorage.setItem("type", "student");
       //alert("Login successful");
-      console.log('data.user', data.token);
+      console.log("data.user", data.token);
       navigate("/studentprofile");
       //handleStudentProfile(data.token);
     } else {
       alert("Please check your username and password");
     }
+  };
+
+  const handleFailure = (res) => {
+    alert("failed");
+  };
+  const handleLogin = (googleData) => {
+    console.log(googleData);
   };
 
   return (
@@ -187,12 +245,7 @@ const StudentLogin = () => {
                                 <hr />
                               </div>
                             </div>
-                            <button
-                              type="submit"
-                              className="btn btn-light  w-100  border-secondary"
-                            >
-                              Get Started With Google
-                            </button>
+                            <div className="mx-5" id="signInDiv"></div>
                             <button
                               type="submit"
                               className="btn btn-light  w-100 my-4 border-secondary"
