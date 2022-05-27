@@ -66,12 +66,12 @@ const CompanyProfile = () => {
           <Container>
             <CompanyEditModalBtn company={companyDetails} email={companyDetails.email} />
 
-            <button
+            <a
               className="btn btn-primary btn-lg m-1"
-              // onClick={handleCreateJob}
+              href="/createjob"
             >
               Create a Job
-            </button>
+            </a>
 
             <div>
               <Row className="name-age-row mt-4">
