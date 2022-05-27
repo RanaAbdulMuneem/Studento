@@ -9,7 +9,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
 
-const CompanyProfile = () => {
+const CompanyProfile = () => {  
   const navigate = useNavigate();
   // const { state } = useLocation();
   // const { name, email, noOfEmployees, description, yearFounded } = state;

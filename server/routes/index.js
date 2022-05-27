@@ -68,8 +68,7 @@ router.get("/getallcompanies", async (req, res) => {
 });
 
 router.post("/editcompanyprofile", async (req, res) => {
-  const { name, email, description, noOfEmployees, yearFounded } =
-    await req.body;
+  const { name, email, description, noOfEmployees, yearFounded } = req.body;
   console.log(req.body);
   Company.updateOne(
     { email: email },
@@ -82,6 +81,9 @@ router.post("/editcompanyprofile", async (req, res) => {
     function (err) {
       if (err) {
         console.log(err);
+      }
+      else {
+        res.send(200);
       }
     }
   );
