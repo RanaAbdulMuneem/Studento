@@ -67,27 +67,27 @@ router.get("/getallcompanies", async (req, res) => {
   return res.json(companies);
 });
 
-router.post("/editcompanyprofile", async (req, res) => {
-  const { name, email, description, noOfEmployees, yearFounded } = req.body;
-  console.log(req.body);
-  Company.updateOne(
-    { email: email },
-    {
-      name: name,
-      description: description,
-      noOfEmployees: parseInt(noOfEmployees),
-      yearFounded: parseInt(yearFounded),
-    },
-    function (err) {
-      if (err) {
-        console.log(err);
-      }
-      else {
-        res.send(200);
-      }
-    }
-  );
-});
+// router.post("/editcompanyprofile", async (req, res) => {
+//   const { name, email, description, noOfEmployees, yearFounded } = req.body;
+//   console.log(req.body);
+//   Company.updateOne(
+//     { email: email },
+//     {
+//       name: name,
+//       description: description,
+//       noOfEmployees: parseInt(noOfEmployees),
+//       yearFounded: parseInt(yearFounded),
+//     },
+//     function (err) {
+//       if (err) {
+//         console.log(err);
+//       }
+//       else {
+//         res.send(200);
+//       }
+//     }
+//   );
+// });
 
 // router.post("/addjob", async (req, res) => {
 //   const { skills } = req.body;

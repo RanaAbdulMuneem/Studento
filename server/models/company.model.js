@@ -4,6 +4,7 @@ const Company = new mongoose.Schema(
 	{
 		name: { type: String, required: true, unique: true },
 		email: { type: String, required: true, unique: true },
+		companyImage : { type:String, required: false },
 		password: { type: String, required: true },
         noOfEmployees: { type: Number, required: false },
         yearFounded: { type: Number, required: false },

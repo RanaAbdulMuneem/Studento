@@ -6,6 +6,19 @@ const mongoose = require("mongoose");
 
 const Company = require("../models/company.model");
 
+const multer = require("multer")
+
+const storage = multer.diskStorage({
+  destination: (req, file, callback) =>  {
+    callback(null, "./client/public/uploads/");
+  },
+  filename: (req, file, callback) => {
+    callback(null, file.originalname);
+  }
+})
+
+const upload = multer({storage: storage});
+
 router.get("/", function (req, res, next) {
   res.send("Companies router");
 });
@@ -88,6 +101,31 @@ router.get("/profile", async (req, res) => {
       }
     }
   });
+
+
+
+router.post("/edit", upload.single("companyImage"), async (req, res) => {
+   console.log("inside server /edit ")
+  console.log(req.body)
+  Company.updateOne(
+    { email: req.body.email },
+    {
+      name: req.body.name,
+      description: req.body.description,
+      noOfEmployees: parseInt(req.body.noOfEmployees),
+      yearFounded: parseInt(req.body.yearFounded),
+      companyImage: req.file.originalname
+    },
+    function (err) {
+      if (err) {
+        console.log(err);
+      }
+      else {
+        res.send(200);
+      }
+    }
+  );
+});
 
 
   module.exports = router;
