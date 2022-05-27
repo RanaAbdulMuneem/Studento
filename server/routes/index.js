@@ -87,23 +87,23 @@ router.post("/editcompanyprofile", async (req, res) => {
   );
 });
 
-router.post("/addjob", async (req, res) => {
-  const { skills } = req.body;
-  const skillsArr = skills.split(",");
-  console.log(skillsArr);
-  Job.create({
-    companyName: req.body.companyName,
-    companyEmail: req.body.companyEmail,
-    jobTitle: req.body.jobTitle,
-    jobType: req.body.jobType,
-    education: req.body.education,
-    jobLocation: req.body.jobLocation,
-    jobDomain: req.body.jobDomain,
-    minPay: req.body.minPay,
-    jobDescription: req.body.jobDescription,
-    skills: skillsArr,
-  });
-});
+// router.post("/addjob", async (req, res) => {
+//   const { skills } = req.body;
+//   const skillsArr = skills.split(",");
+//   console.log(skillsArr);
+//   Job.create({
+//     companyName: req.body.companyName,
+//     companyEmail: req.body.companyEmail,
+//     jobTitle: req.body.jobTitle,
+//     jobType: req.body.jobType,
+//     education: req.body.education,
+//     jobLocation: req.body.jobLocation,
+//     jobDomain: req.body.jobDomain,
+//     minPay: req.body.minPay,
+//     jobDescription: req.body.jobDescription,
+//     skills: skillsArr,
+//   });
+// });
 
 router.post("/editstudentprofile", async (req, res) => {
   console.log(req.body);

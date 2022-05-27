@@ -1,10 +1,11 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { CheckBoxControls } from "../utils/CheckBoxControls";
 import {useLocation} from "react-router-dom"
+import axios from "axios"
 const CreateJob = () => {
 
-  const { state } = useLocation();
-  const { company } = state;
+  // const { state } = useLocation();
+  // const { company } = state;
 
   const [jobTitle, setJobTitle] = useState("");
   const [education, setEducation] = useState("");
@@ -15,10 +16,32 @@ const CreateJob = () => {
   const [minPay, setMinPay] = useState("");
   const [skills, setSkills] = useState("");
 
+
+  const [companyDetails, setCompanyDetails] = useState({});
+
+  const handleUserData = async () => {
+    axios
+      .get("http://localhost:3001/companies/profile", {
+        headers: {
+          token: localStorage.getItem("token"),
+        },
+      })
+      .then((response) => {
+        setCompanyDetails(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  useEffect(() => {
+    handleUserData();
+  }, []);
+
   const handleSubmit = (e) => {
        e.preventDefault();
        console.log(jobTitle, education, jobType, jobLocation, jobDescription, jobDomain, minPay, skills);
-       fetch("http://localhost:3001/addjob", {
+       fetch("http://localhost:3001/jobs/addjob", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -32,8 +55,8 @@ const CreateJob = () => {
         jobDomain,
         minPay,
         skills,
-        companyName: company.name,
-        companyEmail: company.email
+        id: companyDetails._id,
+        dateCreated: new Date()
       }),
     });
     alert("Job posted")
@@ -41,7 +64,7 @@ const CreateJob = () => {
 
   return (
     <div>
-      Job posted by {company.name}
+      Job posted by {companyDetails.name}
       <h4 className="mt-5">Create Job</h4>
       <form onSubmit={handleSubmit}>
         <div class="form-group mt-4">

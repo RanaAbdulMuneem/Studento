@@ -27,4 +27,26 @@ router.get('/', async (req, res) => {
 })
 
 
+router.post("/addjob", async (req, res) => {
+  console.log(req.body)
+  const { skills } = req.body;
+  const skillsArr = skills.split(",");
+  
+ 
+
+  await Job.create({
+    company : req.body.id,
+    jobTitle: req.body.jobTitle,
+    jobType: req.body.jobType,
+    education: req.body.education,
+    jobLocation: req.body.jobLocation,
+    jobDomain: req.body.jobDomain,
+    minPay: req.body.minPay,
+    jobDescription: req.body.jobDescription,
+    skills: skillsArr,
+    dateCreated: req.body.dateCreated
+  });
+});
+
+
 module.exports = router;

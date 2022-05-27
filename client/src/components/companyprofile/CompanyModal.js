@@ -27,12 +27,19 @@ const CompanyEditModalBtn = (props) => {
         description : description,
       }),
     });
-    props.setCompany({})
-    props.setCompany({name:name,email:email,noOfEmployees:noOfEmployees,description:description,yearFounded:yearFounded})
+   
     alert("Profile updated")
     
        
   }
+  useEffect(() => {
+    setName(props.company.name)
+    setEmail(props.company.email)
+    setNoOfEmployees(props.company.noOfEmployees)
+    setDescription(props.company.description)
+    setYearFounded(props.company.yearFounded)
+ 
+  },[props.company])
 
   return (
     <>

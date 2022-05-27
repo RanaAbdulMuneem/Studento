@@ -11,7 +11,7 @@ const Job = new mongoose.Schema(
         minPay: { type: Number, required: true },
         jobDescription: { type: String, required: true },
         skills: { type: Array, required: true },
-        dateCreated: { type: Date, required: true}
+        dateCreated: { type: Date, required: false}
 	}
 
 )
