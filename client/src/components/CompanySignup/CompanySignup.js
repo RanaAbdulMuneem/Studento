@@ -6,6 +6,8 @@ import bg from "../../images/bg-4.svg";
 import NewSignUp from "../forms/NewSignUp";
 import { Link, useNavigate } from "react-router-dom";
 
+// import jwt_decode from "jwt-decode";
+
 import { useState } from "react";
 
 const CompanySignup = () => {
@@ -13,6 +15,46 @@ const CompanySignup = () => {
   const [companyName, setCompanyName] = useState("");
   const [companyEmail, setCompanyEmail] = useState("");
   const [companyPassword, setCompanyPassword] = useState("");
+
+  // useEffect(() => {
+  //   /* global google */
+  //   google.accounts.id.initialize({
+  //     client_id:
+  //       "144784068599-c2ranadsf9knt3s700jkn1igqpqkp0bl.apps.googleusercontent.com",
+  //     callback: handleCallbackGoogle,
+  //   });
+
+  //   google.accounts.id.renderButton(document.getElementById("signUpDiv"), {
+  //     theme: "outline",
+  //     size: "large",
+  //   });
+  // }, []);
+
+  // const handleCallbackGoogle = async (res) => {
+  //   console.log("Encoded JWT ID token: " + res.credential);
+  //   var userObject = jwt_decode(res.credential);
+  //   console.log("Decoded Token: ", userObject);
+  //   console.log("Decoded Token: ", userObject.sub);
+  //   console.log("Decoded Token: ", userObject.given_name);
+  //   console.log("Decoded Token: ", userObject.family_name);
+  //   console.log("Decoded Token: ", userObject.email);
+
+  //   const companyName = userObject.given_name + " " + userObject.family_name;
+  //   const companyEmail = userObject.email;
+  //   const companyPassword = userObject.sub;
+
+  //   console.log(studentName, studentEmail, studentPassword);
+  //   const response = await fetch("http://localhost:3001/students/signup", {
+  //     method: "POST",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //     },
+  //     body: JSON.stringify({
+  //       companyName,
+  //       companyEmail,
+  //       companyPassword,
+  //     }),
+  //   });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -34,8 +76,7 @@ const CompanySignup = () => {
     if (data.status === "ok") {
       navigate("/companylogin");
     }
-   
-  }
+  };
 
   return (
     <div className="p-5">
