@@ -6,6 +6,8 @@ var router = express.Router();
 const Student = require("../models/student.model");
 const Company = require("../models/company.model")
 const Job = require("../models/job.model")
+const Application = require("../models/application.model")
+
 
 router.get("/", (req, res) => {
   res.send("hello world");
@@ -134,5 +136,27 @@ router.post("/editstudentprofile", async (req, res) => {
     }
   );
 });
+
+router.get("/getallapplications", async (req, res) => {
+  console.log("reached in applications")
+  const applications = await Application.find();
+  return res.json(applications);
+});
+
+router.post("/updateapplication", async (req, res) => {
+  console.log(req.body)
+  Application.updateOne(
+    { _id: req.body.id },
+    {
+      status: req.body.status
+    },
+    function (err) {
+      if (err) {
+        console.log(err);
+        res.status(500);
+      }
+    }
+  );
+})
 
 module.exports = router;

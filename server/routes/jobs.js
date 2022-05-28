@@ -4,6 +4,8 @@ const jwt = require("jsonwebtoken")
 
 const Job = require('../models/job.model');
 const Application = require('../models/application.model')
+const Company = require('../models/company.model')
+const Student = require('../models/student.model')
 
 router.get('/', async (req, res) => {
     const PAGE_SIZE = 10;
@@ -84,13 +86,15 @@ router.post('/:id/apply', async (req, res) => {
     try {
       const decodedToken = jwt.verify(req.headers["token"], "somerandomsetofsymbols");
       const job = await Job.findById(req.params.id);
+      const company = await Company.findById(job.company);
+      const student = await Student.findById(decodedToken.id);
       if (job) {
         const exists = await Application.findOne({student: decodedToken.id, job: job._id});
         if (exists) {
           res.status(400).send("Application already submitted");
         }
         else {
-          await Application.create({student: decodedToken.id, job: job._id, company: job.company});
+          await Application.create({student: decodedToken.id, job: job._id, jobTitle : job.jobTitle, company: job.company, status: "Pending", companyName: company.name, studentName: student.name});
           res.status(200).json({
             job: job._id,
             student: decodedToken.id
@@ -129,5 +133,26 @@ router.get('/:id/isapplied', async (req, res) => {
     }
   }
 })
+
+
+// router.get('/getapplicant', async (req, res) => {
+//   try {
+//     const id = req.body.id;
+//     const job = await Job.findById(id);
+//     if (job) {
+//       res.status(200).json(job);
+//     }
+//     else {
+//       res.status(404);
+//     }
+//   }
+//   catch (error) {
+//     console.log(error);
+//     res.status(500);
+//   }
+// })
+
+
+
 
 module.exports = router;

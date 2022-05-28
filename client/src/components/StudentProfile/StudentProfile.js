@@ -3,35 +3,71 @@ import img from "../../images/p1.jpg";
 import "./StudentProfile.css";
 import StudentEditModalBtn from "./StudentModal";
 import { useEffect, useState } from "react";
-import axios from 'axios'
+import axios from "axios";
 
 const StudentProfile = () => {
-  const token = localStorage.getItem('token');
+  const token = localStorage.getItem("token");
   if (!token) {
-    localStorage.removeItem('token');
+    localStorage.removeItem("token");
     window.location.href = "/studentlogin";
   }
-  
+
   const [studentDetails, setStudentDetails] = useState({});
+  const [applications, setApplications] = useState([]);
+
+  // const handleApplicants = () => {
+  //   axios.get("http://localhost:3001/jobs/getallapplicants")
+  //   .then((response) => {
+  //     console.log("job details : ", response.data)
+  //     setApplicants(response.data);
+  //   })
+  //   .catch((error) => {
+  //     console.log(error);
+  //   })
+
+  // }
+
+  // const [jobDetails, setJobDetails] = useState({});
+  // const handleJobsData = () => {
+  //   axios.get("http://localhost:3001/jobs/getjobdetails",{})
+  //   .then((response) => {
+  //     console.log("job details : ", response.data)
+  //     setJobDetails(response.data);
+  //   })
+  //   .catch((error) => {
+  //     console.log(error);
+  //   })
+
+  // }
+
+  const handleApplications = async () => {
+    fetch("http://localhost:3001/getallapplications")
+      .then((res) => res.json())
+      .then((data) => {
+        setApplications(data);
+      });
+  };
 
   const handleUserData = async () => {
-
-    axios.get("http://localhost:3001/students/profile", {
-      headers: {
-        "token": localStorage.getItem("token")
-      }
-    })
-    .then((response) => {
-      setStudentDetails(response.data);
-    })
-    .catch((error) => {
-      console.log(error);
-    })
+    axios
+      .get("http://localhost:3001/students/profile", {
+        headers: {
+          token: localStorage.getItem("token"),
+        },
+      })
+      .then((response) => {
+        setStudentDetails(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   useEffect(() => {
-      handleUserData();
-	}, [])
+    handleUserData();
+    handleApplications();
+    // handleJobsData();
+  }, []);
 
   return (
     <div>
@@ -58,7 +94,7 @@ const StudentProfile = () => {
             </Row>
             <Row className="name-age-row mt-4 ">
               <h5>Skills</h5>
-              
+
               {studentDetails.skills &&
                 studentDetails.skills.map((skill) => {
                   return <span>{skill}</span>;
@@ -86,17 +122,18 @@ const StudentProfile = () => {
             </Row>
             <Row className="name-age-row mt-4">
               <h5>Jobs Status</h5>
-              {/* 
-              {StudentDetails.jobsApplied.map((value) => {
+              {/* {jobDetails.jobTitle} */}
+              {applications.filter(application => application.student === studentDetails._id).map((applicantion) => {
                 return (
-                  <Row className="p-2">
-                    <Col>Company : {value.companyName}</Col>
-                    <Col>Title : {value.title}</Col>
-                    <Col>Status : {value.status}</Col>
+                  <div className="row mt-4">
+                    <div className="col col-4 h6"> {applicantion.companyName}</div>
+                    <div className="col col-4"> {applicantion.jobTitle}</div>
+                    <div className="col col-4 text-danger"> {applicantion.status}</div>
+
                     <hr />
-                  </Row>
+                  </div>
                 );
-              })} */}
+              })}
             </Row>
           </Container>
         </Col>
