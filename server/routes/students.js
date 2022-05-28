@@ -1,4 +1,6 @@
 var express = require("express");
+var nodemailer = require("nodemailer");
+
 var router = express.Router();
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
@@ -23,6 +25,35 @@ router.post("/signup", async (req, res) => {
       password: newPassword,
     });
     res.json({ status: "ok" });
+
+    // *********************
+    // NodeMailer Mail Send
+    var transporter = nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        user: "studento.assist@gmail.com",
+        pass: "Studentosupport1",
+      },
+    });
+
+    var mailOptions = {
+      from: "studento.assist@gmail.com",
+      to: req.body.studentEmail,
+      subject: "Welcome To Studento",
+      text:
+        "Dear, " +
+        req.body.studentName +
+        " You have successfully registed an account.",
+    };
+
+    transporter.sendMail(mailOptions, function (error, info) {
+      if (error) {
+        console.log(error);
+      } else {
+        console.log("Email sent: " + info.response);
+      }
+    });
+    // *********************
   } catch (err) {
     console.log(err);
     res.json({ status: "error", error: "Duplicate email" });
@@ -140,9 +171,11 @@ router.post("/email-send", async (req, res) => {
   console.log(req.body.studentEmail);
   const response = {};
   if (data) {
+    const mail = req.body.studentEmail;
     let otpcode = Math.floor(Math.random() * 1000 + 1);
+
     let otpData = new Otp({
-      email: req.body.email,
+      email: mail,
       code: otpcode,
       expireIn: new Date().getTime() + 300 * 1000,
     });
@@ -150,6 +183,31 @@ router.post("/email-send", async (req, res) => {
     response.status = "success";
     response.message = "Check Your Inbox :)";
     console.log("otp code is : %d", otpcode);
+    // *********************
+    // NodeMailer Mail Send
+    var transporter = nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        user: "studento.assist@gmail.com",
+        pass: "Studentosupport1",
+      },
+    });
+
+    var mailOptions = {
+      from: "studento.assist@gmail.com",
+      to: req.body.studentEmail,
+      subject: "Sending Email using Node.js",
+      text: "Your otp code is: " + otpcode,
+    };
+
+    transporter.sendMail(mailOptions, function (error, info) {
+      if (error) {
+        console.log(error);
+      } else {
+        console.log("Email sent: " + info.response);
+      }
+    });
+    // *********************
   } else {
     response.status = "error";
     response.message = "Email Id not exist";
