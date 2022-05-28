@@ -9,7 +9,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
 
-const CompanyProfile = () => {  
+const CompanyProfile = () => {
   const navigate = useNavigate();
   // const { state } = useLocation();
   // const { name, email, noOfEmployees, description, yearFounded } = state;
@@ -36,6 +36,42 @@ const CompanyProfile = () => {
   }
 
   const [companyDetails, setCompanyDetails] = useState({});
+  const [applications, setApplications] = useState([]);
+
+  const handleAccept = async (id) => {
+    console.log("is id empty",id)
+    fetch("http://localhost:3001/updateapplication", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        id: id,
+        status: "Accepted",
+      }),
+    });
+  };
+  const handleReject = async (id) => {
+    console.log("is id empty",id)
+    fetch("http://localhost:3001/updateapplication", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        id: id,
+        status: "Rejected",
+      }),
+    });
+  };
+
+  const handleApplications = async () => {
+    await fetch("http://localhost:3001/getallapplications")
+      .then((res) => res.json())
+      .then((data) => {
+        setApplications(data);
+      });
+  };
 
   const handleUserData = async () => {
     axios
@@ -54,6 +90,7 @@ const CompanyProfile = () => {
 
   useEffect(() => {
     handleUserData();
+    handleApplications();
   }, []);
 
   return (
@@ -64,12 +101,12 @@ const CompanyProfile = () => {
         </Col>
         <Col className="col-lg-9 ">
           <Container>
-            <CompanyEditModalBtn company={companyDetails} email={companyDetails.email} />
+            <CompanyEditModalBtn
+              company={companyDetails}
+              email={companyDetails.email}
+            />
 
-            <a
-              className="btn btn-primary btn-lg m-1"
-              href="/createjob"
-            >
+            <a className="btn btn-primary btn-lg m-1" href="/createjob">
               Create a Job
             </a>
 
@@ -129,42 +166,44 @@ const CompanyProfile = () => {
 
             <Row className="name-age-row mt-4 education">
               <h5>Candidates</h5>
-              <hr className="mt-4" />
-              <Col className="d-flex align-items-center col-6">
-                {" "}
-                <h5>
-                  Ahmad ali{" "}
-                  <span>
-                    <Link to="/studentprofile" className="view-profile">
-                      View Profile
-                    </Link>
-                  </span>
-                </h5>{" "}
-              </Col>
-              <Col className="col-6 d-flex justify-content-end">
-                <div>
-                  <button className="btn btn-success">Accept</button>
-                  <button className="btn btn-danger">Reject</button>
-                </div>
-              </Col>
-              <hr className="mt-4" />
-              <Col className="d-flex align-items-center col-6">
-                {" "}
-                <h5>
-                  Behzad Nabeel{" "}
-                  <span>
-                    <Link to="/studentprofile" className="view-profile">
-                      View Profile
-                    </Link>
-                  </span>
-                </h5>{" "}
-              </Col>
-              <Col className="col-6 d-flex justify-content-end">
-                <div>
-                  <button className="btn btn-success">Accept</button>
-                  <button className="btn btn-danger">Reject</button>
-                </div>
-              </Col>
+              {applications && applications.filter( application => application.company === companyDetails._id ).map((application) => {
+                return (
+                  <div className="row mt-4">
+                    <div className="col col-2 h6">
+                      {" "}
+                      {application.studentName}
+                    </div>
+                    <div className="col col-2"> {application.jobTitle}</div>
+                    <div className="col col-2">
+                      {" "}
+                      <a href="/"> View Profile </a>
+                    </div>
+                    <div className="col col-2">
+                      <button
+                        onClick={() => handleAccept(application._id)}
+                        className="btn btn-success"
+                      >
+                        Accept
+                      </button>
+                    </div>
+                    <div className="col col-2">
+                      {" "}
+                      <button
+                        onClick={() => handleReject(application._id)}
+                        className="btn btn-danger"
+                      >
+                        Reject
+                      </button>
+                    </div>
+                    <div className="col col-2 text-danger h6">
+                      
+                        {application.status}
+                    
+                    </div>
+
+                  </div>
+                );
+              })}
             </Row>
           </Container>
         </Col>
