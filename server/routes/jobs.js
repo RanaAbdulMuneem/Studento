@@ -22,6 +22,10 @@ router.get('/', async (req, res) => {
     req.query.search && (query.jobTitle = RegExp('.*'+req.query.search+'*.'))
     try {
         const jobs = await Job.find(query)
+        .populate({
+          path: 'company',
+          select: {name: 1, city: 1, country: 1}
+        })
         .limit(PAGE_SIZE)
         .skip(PAGE_SIZE * (page));
         const results = (await Job.find(query)).length;
@@ -43,9 +47,8 @@ router.post("/addjob", async (req, res) => {
   const { skills } = req.body;
   const skillsArr = skills.split(",");
   
- 
-
-  await Job.create({
+  const company = await Company.findById(req.body.id);
+  let job = new Job({
     company : req.body.id,
     jobTitle: req.body.jobTitle,
     jobType: req.body.jobType,
@@ -56,7 +59,10 @@ router.post("/addjob", async (req, res) => {
     jobDescription: req.body.jobDescription,
     skills: skillsArr,
     dateCreated: req.body.dateCreated
-  });
+  })
+  await job.save();
+  company.jobs.push(job._id);
+  await company.save();
 });
 
 

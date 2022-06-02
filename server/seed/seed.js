@@ -55,7 +55,7 @@ mongoose.connect("mongodb://localhost:27017/StudentoDB", {
     let company = await Company.findOne({name: "Arbisoft"});
     console.log('Creating jobs')
     for (let i=0; i<30; i++){
-        await Job.create({
+        const job = new Job({
         company: company._id,
         jobTitle: "Software Engineer " + i,
         education: i%2==0? "Senior": "Junior",
@@ -67,10 +67,13 @@ mongoose.connect("mongodb://localhost:27017/StudentoDB", {
         skills: ["C++", "Python", "JavaScript", "MERN", "React"],
         dateCreated: Date.now()
         })
+        await job.save();
+        company.jobs.push(job._id);
+        await company.save();
     }
     company = await Company.findOne({name: "Devsinc"});
     for (let i=0; i<30; i++){
-        await Job.create({
+        const job = new Job({
         company: company._id,
         jobTitle: "Web Developer " + i,
         education: i%2==0? "Highschool": "Sophomore",
@@ -82,6 +85,9 @@ mongoose.connect("mongodb://localhost:27017/StudentoDB", {
         skills: ["C++", "Python", "JavaScript", "MERN", "React"],
         dateCreated: Date.now()
         })
+        await job.save();
+        company.jobs.push(job._id);
+        await company.save();
     }
     
     console.log("seeded!");

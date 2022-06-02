@@ -7,6 +7,7 @@ import img from "../../images/work-mess.png";
 import bg from "../../images/bg-1.svg";
 import { Link, useNavigate } from "react-router-dom";
 import NewLogIn from "../forms/NewLogin";
+import axios from "axios";
 
 const StudentLogin = () => {
   const navigate = useNavigate();
@@ -64,31 +65,45 @@ const StudentLogin = () => {
 
   const handleStudentLogin = async (e) => {
     e.preventDefault();
-    const response = await fetch("http://localhost:3001/students/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        studentEmail,
-        studentPassword,
-      }),
-    });
-    const data = await response.json();
-    if (data.token) {
-      localStorage.setItem("token", data.token);
+    axios.post(`http://localhost:3001/students/login`, {studentEmail, studentPassword})
+    .then((response) => {
+      //----------TO BE REMOVED---------------
+      localStorage.setItem("token", response.data.token);
       localStorage.setItem("type", "student");
+      //----------TO BE REMOVED---------------
+      localStorage.setItem('user', JSON.stringify(response.data));
+      navigate("/studentprofile");
+    })
+    .catch((error) => {
+      alert(error.response.data);
+      console.log(error);
+    })
+    // const response = await fetch("http://localhost:3001/students/login", {
+    //   method: "POST",
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //   },
+    //   body: JSON.stringify({
+    //     studentEmail,
+    //     studentPassword,
+    //   }),
+    // });
+    // const data = await response.json();
+    // if (data.token) {
+
+    //   //----------TO BE REMOVED---------------
+    //   localStorage.setItem("token", data.token);
+    //   localStorage.setItem("type", "student");
+    //   //----------TO BE REMOVED---------------
       
-      //-------------------------
-      localStorage.setItem('user', JSON.stringify(data));
-      //------------------------
+    //   localStorage.setItem('user', JSON.stringify(data));
 
       //console.log("data.user", data.token);
-      navigate("/studentprofile");
+      //navigate("/studentprofile");
       //handleStudentProfile(data.token);
-    } else {
-      alert("Please check your username and password");
-    }
+    // } else {
+    //   alert("Please check your username and password");
+    // }
   };
 
   const handleFailure = (res) => {

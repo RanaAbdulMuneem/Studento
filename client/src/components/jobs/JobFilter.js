@@ -2,7 +2,6 @@ import './JobFilter.css'
 
 import {Component, useState, useEffect} from 'react'
 import {Accordion} from 'react-bootstrap'
-import Form from 'react-bootstrap/Form'
 import {CheckBoxControls} from '../utils/CheckBoxControls'
 
 const Salary = (props) => {
@@ -14,7 +13,7 @@ const Salary = (props) => {
     
     return (
         <div>
-            <label for="min_pay" class="form-label filter-header">Minimum Pay</label>
+            <label htmlFor="min_pay" class="form-label filter-header">Minimum Pay</label>
             <input 
                 type="range"
                 class="form-range" 
@@ -51,9 +50,9 @@ const EducationLevels = (props) => {
         <div>
             {props.levels.map(
                 level => 
-                    <div class="form-check">
+                    <div class="form-check" key={level}>
                         <input class="form-check-input" type="radio" name="radio-education" value={level} id={level} onChange={e => props.setEducation(e.currentTarget.value)}/>
-                        <label class="form-check-label" for={level}>
+                        <label class="form-check-label" htmlFor={level}>
                             {level}
                         </label>
                     </div>                    
