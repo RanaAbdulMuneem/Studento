@@ -24,33 +24,38 @@ const StudentEditModalBtn = (props) => {
  const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
- const handleEdit = (e) => {
+ 
+  const handleEdit = (e) => {
   e.preventDefault();
+
+  const newDetails = {
+    name : name,
+    email : props.email,
+    age:age,
+    location:location,
+    university:university,
+    degree:degree,
+    major:major,
+    graduationYear:graduationYear,
+    universityDescription:universityDescription,
+    skills:skills,
+    primaryRole:primaryRole,
+    experience:experience,
+    achievments:achievments,
+
+
+  }
+
   fetch("http://localhost:3001/students/edit", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
       "token": localStorage.getItem("token")
     },
-    body: JSON.stringify({
-      name : name,
-      email : props.email,
-      age:age,
-      location:location,
-      university:university,
-      degree:degree,
-      major:major,
-      graduationYear:graduationYear,
-      universityDescription:universityDescription,
-      skills:skills,
-      primaryRole:primaryRole,
-      experience:experience,
-      achievments:achievments,
-
-
-    }),
+    body: JSON.stringify(newDetails),
   });
    
+  props.setDetails(newDetails);
    alert("Blog updated")
   
      

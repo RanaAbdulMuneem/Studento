@@ -76,9 +76,11 @@ const StudentProfile = () => {
           <img src={img} alt="not supported" className="profile-pic" />
         </Col>
         <Col className="col-lg-9 ">
-          {studentDetails.name}
+          <h1 class="display-3">
+            {studentDetails.name}
+          </h1>
           <Container>
-            {/* <StudentEditModalBtn studentDetails={studentDetails} email={studentDetails.email}/> */}
+            <StudentEditModalBtn studentDetails={studentDetails} setDetails={setStudentDetails} email={studentDetails.email}/>
             <Row className="name-age-row mt-4">
               <h5>Description</h5>
               <Col> Name : {studentDetails.name}</Col>

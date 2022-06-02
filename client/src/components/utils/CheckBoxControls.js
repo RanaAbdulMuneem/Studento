@@ -12,7 +12,6 @@ export class CheckBoxControls extends Component {
                 {value: props.values[i], checked: false}
             )
         }
-        console.log("initial", init_checkboxes)
         this.state = {
             dynamic: props.dynamic,
             new_check: '',

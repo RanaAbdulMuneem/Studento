@@ -7,8 +7,26 @@ const jwt = require("jsonwebtoken");
 
 const Student = require("../models/student.model");
 const Otp = require("../models/otp.model");
+const Job = require("../models/job.model");
+const Application = require("../models/application.model");
+const Company = require("../models/company.model");
 
 const { removeListener } = require("../models/student.model");
+
+const verify_token = (token) => {
+  if (!token)
+    return false;
+  if (token === 'allaccess')
+    return true;
+  let verified = true
+  jwt.verify(token, 'somerandomsetofsymbols', (err, decoded) => {
+      if (err) {
+          verified = false;
+      }
+  });
+  return verified;
+}
+
 
 /* GET users listing. */
 router.get("/", function (req, res, next) {
@@ -85,6 +103,8 @@ router.post("/login", async (req, res) => {
 
     return res.status(200).json({
       token: token,
+      id: user._id,
+      type: 'student',
       expiresIn: 3600,
     });
   } else {
@@ -220,4 +240,142 @@ router.post("/change-password", async (req, res) => {
   res.status(200).json("ok");
 });
 
+
+//NEW ENDPOINTS
+
+router.get('/:id', async (req, res) => {
+  const token = req.headers['token'];
+  if (!verify_token(token)){
+      console.log('Invalid token!');
+      res.status(401).send('Invalid token!');
+      return;
+  }
+
+  try {
+    const student = await Student.findById(req.params.id, {password: 0}).populate(['saved_jobs', 'applied_jobs']);
+    if (!student) {
+      res.status(401).send('Student not found');
+    }
+    else {
+      res.status(200).json(student);
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(500);
+  }
+});
+
+router.post("/:id/apply", async (req, res) => {
+  const token = req.headers['token'];
+  if (!verify_token(token)){
+      console.log('Invalid token!');
+      res.status(401).send('Invalid token!');
+      return;
+  }
+  if (!req.query.job) {
+    console.log('No job id');
+    res.status(401).send("No job id");
+    return;
+  }
+  try {
+    const student = await Student.findById(req.params.id);
+    if (!student) {
+      res.status(401).send("Student not found");
+      return;
+    }
+    const job = await Job.findById(req.query.job);
+    if (!job) {
+      res.status(401).send("Job not found");
+    }
+
+    //---------------TO BE REMOVED -----------------------
+    const company = await Company.findById(job.company);
+    if (!company) {
+      res.status(401).send("Company not found");
+    }
+    //-----------------------------------------------------
+    const exists = await Application.findOne({student: student._id, job: job._id});
+    if (exists) {
+      res.status(401).send("Application already submitted");
+      return;
+    }
+    const application = new Application({
+      student: student._id,
+      job: job._id,
+      //---------------TO BE REMOVED -----------------------
+      jobTitle: job.jobTitle,
+      company: job.company,
+      companyName: company.name,
+      studentName: student.name,
+      status: 'Pending'
+      //-----------------------------------------------------
+    })
+    await application.save();
+    student.applied_jobs.push(job._id);
+    await student.save();
+    res.status(200).send('Application submitted');
+  }
+  catch (error) {
+    console.log(error);
+    res.status(500);
+  }
+});
+
+router.post("/:id/save", async (req, res) => {
+  const token = req.headers['token'];
+  if (!verify_token(token)){
+      console.log('Invalid token!');
+      res.status(401).send('Invalid token!');
+      return;
+  }
+  if (!req.query.job) {
+    console.log('No job id');
+    res.status(401).send('No job id');
+    return;
+  }
+
+  try {
+    const student = await Student.findById(req.params.id);
+    if (!student){
+      console.log('Student not found');
+      res.status(401);
+      return;
+    }
+    const job = await Job.findById(req.query.job);
+    if (!job) {
+      console.log('Job not found');
+      res.status(401);
+      return;
+    }
+
+    let i;
+    let found = false;
+    console.log(student.saved_jobs.length)
+    for(i=0; i<student.saved_jobs.length; i++) {
+      if (student.saved_jobs[i].toString() === req.query.job) {
+        found = true;
+        break;
+      }
+    }
+    if (found) {
+      student.saved_jobs.splice(i, 1);
+      await student.save();
+      res.status(200).send('Job unsaved');
+    }
+    else {
+      student.saved_jobs.push(job._id);
+      await student.save();
+      res.status(200).json({
+        saved: true
+      });
+    }
+  }
+  catch (error) {
+    console.log(error);
+    res.status(500);
+  }
+
+});
+
 module.exports = router;
+

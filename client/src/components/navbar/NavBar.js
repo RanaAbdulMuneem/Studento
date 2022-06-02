@@ -15,6 +15,10 @@ export const NavBar = (props) => {
 
   const handleLogout = () => {
 		localStorage.removeItem('token')
+    localStorage.removeItem('type')
+    //------------------------------
+    localStorage.removeItem('user');
+    //------------------------------
 		navigate('/');
 	}
 

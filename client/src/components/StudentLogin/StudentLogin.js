@@ -54,6 +54,7 @@ const StudentLogin = () => {
     if (data.token) {
       localStorage.setItem("token", data.token);
       localStorage.setItem("type", "student");
+
       //alert("Login successful");
       console.log("data.user", data.token);
       navigate("/studentprofile");
@@ -73,8 +74,6 @@ const StudentLogin = () => {
 
   const handleStudentLogin = async (e) => {
     e.preventDefault();
-    console.log("student login");
-    console.log(studentEmail, studentPassword);
     const response = await fetch("http://localhost:3001/students/login", {
       method: "POST",
       headers: {
@@ -89,8 +88,12 @@ const StudentLogin = () => {
     if (data.token) {
       localStorage.setItem("token", data.token);
       localStorage.setItem("type", "student");
-      //alert("Login successful");
-      console.log("data.user", data.token);
+      
+      //-------------------------
+      localStorage.setItem('user', JSON.stringify(data));
+      //------------------------
+
+      //console.log("data.user", data.token);
       navigate("/studentprofile");
       //handleStudentProfile(data.token);
     } else {

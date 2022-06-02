@@ -72,44 +72,6 @@ const JobNavigation = (props) => {
 
 
 const JobCard = (props) => {
-
-    const [user, setUser] = useState(false);
-    const [applied, setApplied] = useState(false);
-    const [saved, setSaved] = useState(false);
-
-    const handleUserData = async () => {
-        await axios.get('http://localhost:3001/jobs/'+props.details._id+'/isapplied',{
-            headers: {'token': localStorage.getItem('token')}
-        })
-        .then((response) => {
-            setApplied(response.data.applied);
-        })
-        .catch((error) => {
-            console.log(error)
-        })
-    }
-
-    const handleApply = async () => {
-        console.log('SENDING APPLICATION', localStorage.getItem('token'));
-        await axios.post('http://localhost:3001/jobs/'+props.details._id+'/apply', null,{
-            headers: {'token': localStorage.getItem('token')}
-        })
-        .then((response) => {
-            setApplied(true);
-        })
-        .catch((error) => {
-            console.log(error)
-            alert('Error: Could not apply')
-        })
-    }
-
-    useEffect(() => {
-        if (localStorage.getItem('token')){
-            setUser(true);
-            handleUserData();
-        }
-    }, [])
-
     return (
         <div class="card job-card mb-2">
             {/* TITLE AND BUTTONS */}
@@ -130,23 +92,25 @@ const JobCard = (props) => {
                     </div>
                     <div class="col-auto ms-auto">
                         {
-                            user && (
+                            props.user && (
                                 <>
                                     {
-                                        applied ? (
+                                        props.applied ? (
                                             <button class="btn btn-primary me-3 disabled">Applied</button>
                                         ) : (
-                                            <button class="btn btn-primary me-3" onClick={handleApply}>Apply</button>
+                                            <button class="btn btn-primary me-3" onClick={() => props.handleApply(props.details._id)}>Apply</button>
                                         )
                                     }
-                                    <SaveButton saved={saved} setSaved={setSaved}/>
+                                    <SaveButton saved={props.saved} setSaved={() => props.handleSave(props.details._id)}/>
                                 </>
                             )
                         }
                     </div>
                 </div>
             </div>
-            <Link to={"/job/" + props.details.id} class="card-body-link">
+            {/* IF THERE IS TIME THEN IMPLEMENT */}
+            {/* <Link to={"/job/" + props.details.id} class="card-body-link"> */}
+            <Link to='/jobs' class="card-body-link">
                 <div class="card-body">
                         {/* DETAILS */}
                         <div class="row border-bottom">
@@ -225,24 +189,76 @@ export const JobListing = (props) => {
     const [results, setResults] = useState(0);
     const [pageCount, setPageCount] = useState(0);
     const [page, setPage] = useState(0);
-    console.log('JOB LISTING', props.filters);
-    useEffect(() => {
+    const [loading, setLoading] = useState(true);
+
+
+    const handleApply = async (job_id) => {
+        await axios.post('http://localhost:3001/students/'+props.user.id+'/apply?job='+job_id, null,{
+            headers: {'token': localStorage.getItem('token')}
+        })
+        .then((response) => {
+            props.setAppliedList(oldList => [...oldList, job_id]);
+        })
+        .catch((error) => {
+            console.log(error)
+            alert('Error: Could not apply')
+        })
+    }
+    const handleSave = async (job_id) => {
+        await axios.post('http://localhost:3001/students/'+props.user.id+'/save?job='+job_id, null,{
+            headers: {'token': localStorage.getItem('token')}
+        })
+        .then((response) => {
+            if (response.data.saved)
+                props.setSavedList(oldList => [...oldList, job_id]);
+            else
+                props.setSavedList(oldList => oldList.filter(job => job !== job_id));
+        })
+        .catch((error) => {
+            console.log(error)
+            alert('Error: Could not save')
+        })
+    }
+
+
+    const handleLoadJobs = async () => {
         let parameters = {...props.filters, page: page};
         axios.get("http://localhost:3001/jobs",{params: parameters})
         .then((response) => {
             setResults(response.data.results);
             setPageCount(response.data.pageCount)
             setJoblist(response.data.jobs);
+            setLoading(false);
         })
         .catch((error) => {
             console.log(error);
         })
+    }
+
+    useEffect(() => {
+        handleLoadJobs();
     }, [page, props.filters])
 
+    useEffect(() => {
+
+    }, [props.appliedList])
+
+    if (loading) {
+        return <h1>Loading ...</h1>
+    }
     return (
         <div id="JobListing" class="container-fluid px-0">
             <JobNavigation page={page} setPage={setPage} pageCount={pageCount} results={results} />
-            {joblist.map(job => <JobCard details={job} key={job._id}/>)}
+            {joblist.map(job => 
+            <JobCard 
+            details={job} 
+            key={job._id} 
+            user={props.user && true}
+            applied={props.appliedList.includes(job._id)}
+            saved={props.savedList.includes(job._id)}
+            handleApply={handleApply}
+            handleSave={handleSave}
+            />)}
         </div>
     )
 }

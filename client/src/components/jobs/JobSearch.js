@@ -8,7 +8,6 @@ import { useState } from 'react'
 export const JobSearch = (props) => {
 
     const [value, setValue] = useState('');
-    console.log('JOB SEARCH', props.filters);
     
     return (
         <div id="JobSearch" class="container-fluid py-3 component-shadow">

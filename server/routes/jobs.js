@@ -77,63 +77,6 @@ router.get('/:id', async (req, res) => {
   }
 })
 
-router.post('/:id/apply', async (req, res) => {
-  console.log('APPLYING', req.headers["token"]);
-  if (!req.headers["token"]){
-    res.status(401).json({status: "error"});
-  }
-  else {
-    try {
-      const decodedToken = jwt.verify(req.headers["token"], "somerandomsetofsymbols");
-      const job = await Job.findById(req.params.id);
-      const company = await Company.findById(job.company);
-      const student = await Student.findById(decodedToken.id);
-      if (job) {
-        const exists = await Application.findOne({student: decodedToken.id, job: job._id});
-        if (exists) {
-          res.status(400).send("Application already submitted");
-        }
-        else {
-          await Application.create({student: decodedToken.id, job: job._id, jobTitle : job.jobTitle, company: job.company, status: "Pending", companyName: company.name, studentName: student.name});
-          res.status(200).json({
-            job: job._id,
-            student: decodedToken.id
-          });
-        }
-      }
-      else {
-        res.status(404);
-      }
-    }
-    catch (error) {
-      console.log(error);
-      res.status(500);
-    }
-  }
-})
-
-router.get('/:id/isapplied', async (req, res) => {
-  if (!req.headers["token"]){
-    res.status(401).json({status: "error"});
-  }
-  else {
-    try {
-      const decodedToken = jwt.verify(req.headers["token"], "somerandomsetofsymbols");
-      const exists = await Application.findOne({student: decodedToken.id, job: req.params.id})
-      if (exists) {
-        res.status(200).json({applied: true})
-      }
-      else {
-        res.status(200).json({applied: false})
-      }
-    }
-    catch (error) {
-      console.log(error);
-      res.status(500);
-    }
-  }
-})
-
 
 // router.get('/getapplicant', async (req, res) => {
 //   try {
