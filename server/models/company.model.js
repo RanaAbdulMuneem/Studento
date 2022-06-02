@@ -8,8 +8,7 @@ const Company = new mongoose.Schema(
         noOfEmployees: { type: Number, required: false },
         yearFounded: { type: Number, required: false },
         description: { type: String, required: false },
-		city: {type: String},
-		country: {type: String}
+		location: {type: String, required: false}
 	}
 
 )

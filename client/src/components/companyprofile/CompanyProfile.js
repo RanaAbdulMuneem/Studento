@@ -38,8 +38,27 @@ const CompanyProfile = () => {
   const [companyDetails, setCompanyDetails] = useState({});
   const [applications, setApplications] = useState([]);
 
+  const [totalApplications, setTotalApplications] = useState(0);
+  const [totalRejected, setTotalRejected] = useState(0);
+  const [totalAccepted, setTotalAccepted] = useState(0);
+
+  const getStats = async () => {
+    const getApplications = applications.filter(
+      (application) => application.company === companyDetails._id
+    );
+    setTotalApplications(getApplications.length);
+    const accepted = getApplications.filter(
+      (application) => application.status === "Accepted"
+    );
+    setTotalAccepted(accepted.length);
+    const rejected = getApplications.filter(
+      (application) => application.status === "Rejected"
+    );
+    setTotalRejected(rejected.length);
+  };
+
   const handleAccept = async (id) => {
-    console.log("is id empty",id)
+    console.log("is id empty", id);
     fetch("http://localhost:3001/updateapplication", {
       method: "POST",
       headers: {
@@ -52,7 +71,7 @@ const CompanyProfile = () => {
     });
   };
   const handleReject = async (id) => {
-    console.log("is id empty",id)
+    console.log("is id empty", id);
     fetch("http://localhost:3001/updateapplication", {
       method: "POST",
       headers: {
@@ -71,10 +90,11 @@ const CompanyProfile = () => {
       .then((data) => {
         setApplications(data);
       });
+    // setTimeout(getStats, 5000);
   };
 
   const handleUserData = async () => {
-    axios
+   await axios
       .get("http://localhost:3001/companies/profile", {
         headers: {
           token: localStorage.getItem("token"),
@@ -91,6 +111,7 @@ const CompanyProfile = () => {
   useEffect(() => {
     handleUserData();
     handleApplications();
+  
   }, []);
 
   return (
@@ -120,9 +141,7 @@ const CompanyProfile = () => {
                 </Col>
                 <Col>{companyDetails.noOfEmployees} employees</Col>
                 <Col>Founded in {companyDetails.yearFounded}</Col>
-                <Col>
-                  {/* {companyDetails.city}, {companyDetails.country} */}
-                </Col>
+                <Col>Location: {companyDetails.location}</Col>
               </Row>
               <Row className="name-age-row mt-4">
                 <h5>Description</h5>
@@ -168,47 +187,71 @@ const CompanyProfile = () => {
               <ReviewInput />
             </Row>
 
-              {/* CANDIDATE - ONLY FOR COMPANY */}
+            {/* CANDIDATE - ONLY FOR COMPANY */}
             <Row className="name-age-row mt-4 education">
               <h5>Candidates</h5>
-              {applications && applications.filter( application => application.company === companyDetails._id ).map((application) => {
-                return (
-                  <div className="row mt-4">
-                    <div className="col col-2 h6">
-                      {" "}
-                      {application.studentName}
-                    </div>
-                    <div className="col col-2"> {application.jobTitle}</div>
-                    <div className="col col-2">
-                      {" "}
-                      <a href="/"> View Profile </a>
-                    </div>
-                    <div className="col col-2">
-                      <button
-                        onClick={() => handleAccept(application._id)}
-                        className="btn btn-success"
-                      >
-                        Accept
-                      </button>
-                    </div>
-                    <div className="col col-2">
-                      {" "}
-                      <button
-                        onClick={() => handleReject(application._id)}
-                        className="btn btn-danger"
-                      >
-                        Reject
-                      </button>
-                    </div>
-                    <div className="col col-2 text-danger h6">
-                      
-                        {application.status}
-                    
-                    </div>
+              <div className="row mt-3">
+               
+                <div className="col col-lg-4 col-sm-12">
+                  <b>Total Applications : </b>
+                  {applications.filter(
+                    (application) => application.company === companyDetails._id
+                  ).length}
+                </div>
+                <div className="col col-lg-4 col-sm-12"><b>Total Rejections : </b>
+                {applications.filter(
+                    (application) => application.company === companyDetails._id && application.status === "Rejected"
+                  ).length}
+                </div>
+                <div className="col col-lg-4">
+                  <b>Total Accepted : </b>
+                  {applications.filter(
+                    (application) => application.company === companyDetails._id && application.status === "Accepted"
+                  ).length}
+                </div>
+                <hr/>
+              </div>
 
-                  </div>
-                );
-              })}
+              {applications &&
+                applications
+                  .filter(
+                    (application) => application.company === companyDetails._id
+                  )
+                  .map((application) => {
+                    return (
+                      <div className="row mt-4">
+                        <div className="col col-2 h6">
+                          {" "}
+                          {application.studentName}
+                        </div>
+                        <div className="col col-2"> {application.jobTitle}</div>
+                        <div className="col col-2">
+                          {" "}
+                          <a href="/"> View Profile </a>
+                        </div>
+                        <div className="col col-2">
+                          <button
+                            onClick={() => handleAccept(application._id)}
+                            className="btn btn-success"
+                          >
+                            Accept
+                          </button>
+                        </div>
+                        <div className="col col-2">
+                          {" "}
+                          <button
+                            onClick={() => handleReject(application._id)}
+                            className="btn btn-danger"
+                          >
+                            Reject
+                          </button>
+                        </div>
+                        <div className="col col-2 text-danger h6">
+                          {application.status}
+                        </div>
+                      </div>
+                    );
+                  })}
             </Row>
           </Container>
         </Col>
