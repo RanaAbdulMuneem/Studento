@@ -55,22 +55,12 @@ const StudentLogin = () => {
       localStorage.setItem("token", data.token);
       localStorage.setItem("type", "student");
 
-      //alert("Login successful");
       console.log("data.user", data.token);
       navigate("/studentprofile");
-      //handleStudentProfile(data.token);
     } else {
       alert("Some Error Occurred");
     }
   };
-
-  // const handleStudentProfile = (token) => {
-  //   navigate("/studentprofile", {
-  //     state: {
-  //       token: token,
-  //     },
-  //   });
-  // };
 
   const handleStudentLogin = async (e) => {
     e.preventDefault();

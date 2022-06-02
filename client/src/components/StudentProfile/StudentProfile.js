@@ -4,59 +4,37 @@ import "./StudentProfile.css";
 import StudentEditModalBtn from "./StudentModal";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const StudentProfile = () => {
-  const token = localStorage.getItem("token");
-  if (!token) {
-    localStorage.removeItem("token");
-    window.location.href = "/studentlogin";
-  }
+  const navigate = useNavigate();
+  const user = JSON.parse(localStorage.getItem('user'));
 
-  const [studentDetails, setStudentDetails] = useState({});
+  const [student, setStudent] = useState({});
   const [applications, setApplications] = useState([]);
-
-  // const handleApplicants = () => {
-  //   axios.get("http://localhost:3001/jobs/getallapplicants")
-  //   .then((response) => {
-  //     console.log("job details : ", response.data)
-  //     setApplicants(response.data);
-  //   })
-  //   .catch((error) => {
-  //     console.log(error);
-  //   })
-
-  // }
-
-  // const [jobDetails, setJobDetails] = useState({});
-  // const handleJobsData = () => {
-  //   axios.get("http://localhost:3001/jobs/getjobdetails",{})
-  //   .then((response) => {
-  //     console.log("job details : ", response.data)
-  //     setJobDetails(response.data);
-  //   })
-  //   .catch((error) => {
-  //     console.log(error);
-  //   })
-
-  // }
+  const [loading1, setLoading1] = useState(true);
+  const [loading2, setLoading2] = useState(true);
 
   const handleApplications = async () => {
-    fetch("http://localhost:3001/getallapplications")
-      .then((res) => res.json())
-      .then((data) => {
-        setApplications(data);
-      });
+    axios.get(`http://localhost:3001/students/${user.id}/applications`, {headers: {token: user.token}})
+    .then((response) => {
+      setApplications(response.data);
+      setLoading2(false);
+    })
+    .catch((error) => {
+
+    });
   };
 
   const handleUserData = async () => {
-    axios
-      .get("http://localhost:3001/students/profile", {
+    axios.get(`http://localhost:3001/students/${user.id}`, {
         headers: {
           token: localStorage.getItem("token"),
         },
       })
       .then((response) => {
-        setStudentDetails(response.data);
+        setStudent(response.data);
+        setLoading1(false);
       })
       .catch((error) => {
         console.log(error);
@@ -64,11 +42,21 @@ const StudentProfile = () => {
   };
 
   useEffect(() => {
-    handleUserData();
-    handleApplications();
+    if (!user || user.type!=='student'){
+      localStorage.clear('user');
+      navigate('/studentlogin');
+      return;
+    }
+    else {
+      handleUserData();
+      handleApplications();
+    }
     // handleJobsData();
   }, []);
 
+  //-----------REPLACE WITH BOOTSTRAP LOADING-------------------
+  if (loading1 || loading2)
+    return <h1>Loading ...</h1>
   return (
     <div>
       <Row className="mt-5">
@@ -77,61 +65,74 @@ const StudentProfile = () => {
         </Col>
         <Col className="col-lg-9 ">
           <h1 class="display-3">
-            {studentDetails.name}
+            {student.name}
           </h1>
           <Container>
-            <StudentEditModalBtn studentDetails={studentDetails} setDetails={setStudentDetails} email={studentDetails.email}/>
+            <StudentEditModalBtn studentDetails={student} setDetails={setStudent} email={student.email}/>
             <Row className="name-age-row mt-4">
               <h5>Description</h5>
-              <Col> Name : {studentDetails.name}</Col>
-              <Col> Age : {studentDetails.age} </Col>
-              <Col>Gender : {studentDetails.gender} </Col>
-              <Col>Location : {studentDetails.location}</Col>
+              <Col> Name : {student.name}</Col>
+              <Col> Age : {student.age} </Col>
+              <Col>Gender : {student.gender} </Col>
+              <Col>Location : {student.location}</Col>
             </Row>
             <Row className="name-age-row mt-4 ">
               <h5>Primary Role</h5>
               <p>
-                Currently, Looking for a role as {studentDetails.primaryRole}
+                Currently, Looking for a role as {student.primaryRole}
               </p>
             </Row>
             <Row className="name-age-row mt-4 ">
               <h5>Skills</h5>
 
-              {studentDetails.skills &&
-                studentDetails.skills.map((skill) => {
+              {student.skills &&
+                student.skills.map((skill) => {
                   return <span>{skill}</span>;
                 })}
             </Row>
             <Row className="name-age-row mt-4 education">
               <h5>Education</h5>
               <ul className="education-ul">
-                <li>University : {studentDetails.university}</li>
-                <li>Degree : {studentDetails.degree}</li>
-                <li>Major : {studentDetails.major}</li>
-                <li>Start Year : {studentDetails.graduationYear}</li>
-                <li>Description : {studentDetails.universityDescription}</li>
+                <li>University : {student.university}</li>
+                <li>Degree : {student.degree}</li>
+                <li>Major : {student.major}</li>
+                <li>Start Year : {student.graduationYear}</li>
+                <li>Description : {student.universityDescription}</li>
               </ul>
             </Row>
             <Row className="name-age-row mt-4">
               <h5>Experience</h5>
               <ul className="education-ul">
-                <li>Company Name : {studentDetails.experience}</li>
+                <li>Company Name : {student.experience}</li>
               </ul>
             </Row>
             <Row className="name-age-row mt-4">
               <h5>Achievements</h5>
-              <ol className="education-ul">{studentDetails.achievements}</ol>
+              <ol className="education-ul">{student.achievements}</ol>
             </Row>
             <Row className="name-age-row mt-4">
               <h5>Jobs Status</h5>
               {/* {jobDetails.jobTitle} */}
-              {applications.filter(application => application.student === studentDetails._id).map((applicantion) => {
+              {applications.map((application) => {
                 return (
                   <div className="row mt-4">
-                    <div className="col col-4 h6"> {applicantion.companyName}</div>
-                    <div className="col col-4"> {applicantion.jobTitle}</div>
-                    <div className="col col-4 text-danger"> {applicantion.status}</div>
+                    <div className="col col-4 h6"> {application.job.company.name}</div>
+                    <div className="col col-4"> {application.job.jobTitle}</div>
+                    <div className="col col-4 text-danger"> {application.status}</div>
 
+                    <hr />
+                  </div>
+                );
+              })}
+            </Row>
+            <Row className="name-age-row mt-4">
+              <h5>Saved Jobs</h5>
+              {student.saved_jobs.map((job) => {
+                return (
+                  <div className="row mt-4">
+                    <div className="col col-4 h6"> {job.company.name}</div>
+                    <div className="col col-4"> {job.jobTitle}</div>
+                    <div className="col col-4"> {job.jobType}</div>
                     <hr />
                   </div>
                 );

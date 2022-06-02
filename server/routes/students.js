@@ -252,7 +252,24 @@ router.get('/:id', async (req, res) => {
   }
 
   try {
-    const student = await Student.findById(req.params.id, {password: 0}).populate(['saved_jobs', 'applied_jobs']);
+    const student = await Student.findById(req.params.id, {password: 0}).populate([
+      {
+        path: 'saved_jobs',
+        select: {_id: 1, company:1, jobTitle:1, jobType: 1}, 
+        populate: {
+          path: 'company',
+          select: {name: 1}
+        }
+      }, 
+      {
+        path: 'applied_jobs',
+        select: {job: 1, status: 1},
+        populate: [
+          { path: 'job', select: {jobTitle: 1}},
+          { path: 'company', select: {name: 1}}
+        ]
+      }
+    ]);
     if (!student) {
       res.status(401).send('Student not found');
     }
@@ -264,6 +281,35 @@ router.get('/:id', async (req, res) => {
     res.status(500);
   }
 });
+
+router.get('/:id/applications', async (req, res) => {
+  const token = req.headers['token'];
+  if (!verify_token(token)){
+      console.log('Invalid token!');
+      res.status(401).send('Invalid token!');
+      return;
+  }
+  try {
+    const student = await Student.findById(req.params.id);
+    if (!student) {
+      res.status(401).send("Student not found");
+      return;
+    }
+    const applications = await Application.find({student: student._id}).populate({
+      path: 'job',
+      select: {company: 1, jobTitle: 1,},
+      populate: {
+        path: 'company',
+        select: {password: 0}
+      }
+    })
+    res.status(200).json(applications);
+  }
+  catch (error) {
+    console.log(error);
+    res.status(500);
+  }
+})
 
 router.post("/:id/apply", async (req, res) => {
   const token = req.headers['token'];
@@ -311,7 +357,7 @@ router.post("/:id/apply", async (req, res) => {
       //-----------------------------------------------------
     })
     await application.save();
-    student.applied_jobs.push(job._id);
+    student.applied_jobs.push(application._id);
     await student.save();
     res.status(200).send('Application submitted');
   }
