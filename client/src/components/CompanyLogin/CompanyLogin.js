@@ -1,4 +1,5 @@
 import React from "react";
+import axios from 'axios'
 import "bootstrap/dist/css/bootstrap.css";
 
 import LogIn from "../forms/LogIn";
@@ -14,50 +15,46 @@ const CompanyLogin = () => {
   const [companyEmail, setCompanyEmail] = useState();
   const [companyPassword, setCompanyPassword] = useState();
 
-  // const handleCompanyProfile = (user) => {
-  //   const { name, email, noOfEmployees, description, yearFounded } = user;
-  //   console.log(name + " " + email + " " + description + " " + noOfEmployees);
-  //   navigate("/companyprofile", {
-  //     state: {
-  //       name: name,
-  //       email: email,
-  //       noOfEmployees: noOfEmployees,
-  //       description: description,
-  //       yearFounded: yearFounded,
-  //     },
-  //   });
-  // };
-
   const handleCompanyLogin = async (e) => {
     e.preventDefault();
-    const response = await fetch("http://localhost:3001/companies/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        companyEmail,
-        companyPassword,
-      }),
-    });
-    const data = await response.json();
-    if (data.token) {
-      localStorage.setItem("token", data.token);
-      // localStorage.setItem("type", "student")
-      //alert("Login successful");
-      console.log('data.user', data.token);
+    axios.post(`http://localhost:3001/companies/login`, {companyEmail, companyPassword})
+    .then((response) => {
+      //----------TO BE REMOVED---------------
+      localStorage.setItem("token", response.data.token);
+      localStorage.setItem("type", "company");
+      //----------TO BE REMOVED---------------
+      localStorage.setItem('user', JSON.stringify(response.data));
       navigate("/companyprofile");
-      //handleStudentProfile(data.token);
-    } else {
-      alert("Please check your username and password");
-    }
+    })
+    .catch((error) => {
+      alert(error.response.data);
+      console.log(error);
+    })
+    // const response = await fetch("http://localhost:3001/companies/login", {
+    //   method: "POST",
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //   },
+    //   body: JSON.stringify({
+    //     companyEmail,
+    //     companyPassword,
+    //   }),
+    // });
+    // const data = await response.json();
+    // if (data.token) {
+    //   localStorage.setItem("token", data.token);
+    //   // localStorage.setItem("type", "student")
+    //   //alert("Login successful");
+    //   console.log('data.user', data.token);
+    //   navigate("/companyprofile");
+    //   //handleStudentProfile(data.token);
+    // } else {
+    //   alert("Please check your username and password");
+    // }
   };
 
   return (
     <div className="p-5">
-      {/* <LogInForm2></LogInForm2> */}
-      {/* <LogIn header="Company Login" background={bg} image={img} type="company"></LogIn> */}
-      {/* <NewLogIn header="Company Login" background={bg} image={img} type="company"></NewLogIn> */}
       <section className="h-100" style={{ backgroundColor: "white" }}>
         <div className="container h-100 StudentSignUp" id="bg-img">
           <div className="row d-flex justify-content-center align-items-center h-100">

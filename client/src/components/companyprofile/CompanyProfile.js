@@ -11,88 +11,69 @@ import axios from "axios";
 
 const CompanyProfile = () => {
   const navigate = useNavigate();
-  // const { state } = useLocation();
-  // const { name, email, noOfEmployees, description, yearFounded } = state;
-  // const [company, setCompany] = useState({
-  //   name: name,
-  //   email:email,
-  //   noOfEmployees: noOfEmployees,
-  //   description: description,
-  //   yearFounded: yearFounded,
-
-  // });
-
-  // const handleCreateJob = () => {
-  //   navigate("/createjob", {
-  //     state: {
-  //       company: companyDetails.name,
-  //     },
-  //   });
-  // }
+  const user = JSON.parse(localStorage.getItem('user'));
   const token = localStorage.getItem("token");
-  if (!token) {
-    localStorage.removeItem("token");
-    window.location.href = "/companylogin";
-  }
 
   const [companyDetails, setCompanyDetails] = useState({});
   const [applications, setApplications] = useState([]);
+  const [loading1, setLoading1] = useState(true);
+  const [loading2, setLoading2] = useState(true);
 
-  const handleAccept = async (id) => {
-    console.log("is id empty",id)
-    fetch("http://localhost:3001/updateapplication", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        id: id,
-        status: "Accepted",
-      }),
-    });
-  };
-  const handleReject = async (id) => {
-    console.log("is id empty",id)
-    fetch("http://localhost:3001/updateapplication", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        id: id,
-        status: "Rejected",
-      }),
-    });
-  };
+  const handleResolve = async (app_id, status) => {
+    axios.patch(`http://localhost:3001/companies/${user.id}/resolve-application`,
+    {application: app_id, status: status},
+    {headers: {token: user.token}})
+    .then((response) => {
+      const index = applications.findIndex(app => app._id === app_id);
+      let updatedApps = [...applications];
+      updatedApps[index].status = status;
+      setLoading2(true);
+      setApplications(updatedApps);
+    })
+  }
 
   const handleApplications = async () => {
-    await fetch("http://localhost:3001/getallapplications")
-      .then((res) => res.json())
-      .then((data) => {
-        setApplications(data);
-      });
+    axios.get(`http://localhost:3001/companies/${user.id}/applications`, {headers: {token: user.token}})
+    .then((response) => {
+      setApplications(response.data);
+      setLoading2(false);
+    })
+    .catch((error) => {
+      console.log(error);
+    })
   };
 
   const handleUserData = async () => {
-    axios
-      .get("http://localhost:3001/companies/profile", {
-        headers: {
-          token: localStorage.getItem("token"),
-        },
-      })
-      .then((response) => {
-        setCompanyDetails(response.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    axios.get(`http://localhost:3001/companies/${user.id}`, { headers: {token: user.token}})
+    .then((response) => {
+      setLoading1(true);
+      setCompanyDetails(response.data);
+    })
+    .catch((error) => {
+      console.log(error);
+    });
   };
 
   useEffect(() => {
+    if (!user || user.type != 'company') {
+      localStorage.clear('user');
+      navigate('/');
+      return;
+    }
     handleUserData();
     handleApplications();
   }, []);
 
+  useEffect(() => {
+    setLoading1(false);
+  }, [companyDetails]);
+  useEffect(() => {
+    setLoading2(false);
+  }, [applications]);
+
+  //-------------REPLACE WITH BOOTSTRAP LOADING ---------------------
+  if (loading1 || loading2)
+    return <h1>Loading ...</h1>;
   return (
     <Container>
       <Row className="mt-5">
@@ -130,27 +111,10 @@ const CompanyProfile = () => {
               </Row>
             </div>
 
-            <Row className="name-age-row mt-4 ">
-              <h5>Jobs</h5>
-
-              {/* {companyDetails.jobs.map((job) => {
-                return (
-                  <div>
-                    <hr />
-                    <h5>{job.title}</h5>
-                    <p> Job Type : {job.jobType} </p>
-                    <p> Job Location : {job.jobLocation} </p>
-                    <h6>Description</h6>
-                    <p>{job.description} </p>
-                    <button className="btn btn-secondary">Apply now</button>
-                  </div>
-                );
-              })} */}
-            </Row>
-            <Row className="name-age-row mt-4 education">
+            {/* <Row className="name-age-row mt-4 education">
               <h5>Reviews</h5>
 
-              {/* {companyDetails.reviews.map((review) => {
+              {companyDetails.reviews.map((review) => {
                 return (
                   <div>
                     <hr />
@@ -159,52 +123,61 @@ const CompanyProfile = () => {
                     <p>{review.comment}</p>
                   </div>
                 );
-              })} */}
-            </Row>
+              })}
+            </Row> */}
 
             {/* REVIEW - ONLY FOR STUDENTS */}
-            <Row className="name-age-row mt-4 education">
+            {/* <Row className="name-age-row mt-4 education">
               <h5>Want to add a review ?</h5>
               <ReviewInput />
-            </Row>
+            </Row> */}
 
               {/* CANDIDATE - ONLY FOR COMPANY */}
             <Row className="name-age-row mt-4 education">
               <h5>Candidates</h5>
-              {applications && applications.filter( application => application.company === companyDetails._id ).map((application) => {
+              {applications.map((application) => {
                 return (
                   <div className="row mt-4">
-                    <div className="col col-2 h6">
-                      {" "}
-                      {application.studentName}
-                    </div>
-                    <div className="col col-2"> {application.jobTitle}</div>
-                    <div className="col col-2">
-                      {" "}
-                      <a href="/"> View Profile </a>
-                    </div>
-                    <div className="col col-2">
-                      <button
-                        onClick={() => handleAccept(application._id)}
-                        className="btn btn-success"
-                      >
-                        Accept
-                      </button>
-                    </div>
-                    <div className="col col-2">
-                      {" "}
-                      <button
-                        onClick={() => handleReject(application._id)}
-                        className="btn btn-danger"
-                      >
-                        Reject
-                      </button>
-                    </div>
-                    <div className="col col-2 text-danger h6">
-                      
-                        {application.status}
                     
+                    <div className="col col-2">
+                      {application.job.jobTitle}
                     </div>
+
+                    <div className="col col-2 h6">
+                      {application.student.name}
+                    </div>
+
+                    <div className="col col-2">
+                      <Link to={`/students/${application.student._id}`}>View Profile</Link>
+                    </div>
+
+                    <div className="col col-2 text-danger h6">
+                      {application.status}
+                    </div>
+
+                    {application.status === 'Pending' && (
+                      <>
+                        
+                        <div className="col col-2">
+                          <button
+                            onClick={() => handleResolve(application._id, 'Accepted')}
+                            className="btn btn-success"
+                          >
+                            Accept
+                          </button>
+                        </div>
+                        
+                        <div className="col col-2">
+                          {" "}
+                          <button
+                            onClick={() => handleResolve(application._id, 'Rejected')}
+                            className="btn btn-danger"
+                          >
+                            Reject
+                          </button>
+                        </div>
+                      </>
+                    )}
 
                   </div>
                 );

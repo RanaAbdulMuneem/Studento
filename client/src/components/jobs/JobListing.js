@@ -18,6 +18,8 @@ import { SaveButton } from '../utils/Buttons'
 import { JobData } from '../../API/JobData'
 import { Skill } from '../job/Skill'
 
+import { timeAgo } from '../../utils/Parser'
+
 
 const JobNavigation = (props) => {
 
@@ -70,7 +72,6 @@ const JobNavigation = (props) => {
     )
 }
 
-
 const JobCard = (props) => {
     return (
         <div class="card job-card mb-2">
@@ -83,11 +84,11 @@ const JobCard = (props) => {
                         </a>
                     </div>
                     <div class="col-auto me-auto">
-                        <h5 class="card-title">{props.details.jobTitle}</h5>
+                        <h5 class="card-title">{props.job.jobTitle}</h5>
                         <p>
-                            <a href="#" class="card-link">{props.details.companyName}</a>
-                            {/* <span>, {this.state.details.City}, </span>
-                            <span>, {this.state.details.Country}, </span> */}
+                            <Link to={`/companies/${props.job.company._id}`}>{props.job.company.name}</Link>
+                            <span>, {props.job.company.city}, </span>
+                            <span>{props.job.company.country}</span>
                         </p>
                     </div>
                     <div class="col-auto ms-auto">
@@ -98,10 +99,10 @@ const JobCard = (props) => {
                                         props.applied ? (
                                             <button class="btn btn-primary me-3 disabled">Applied</button>
                                         ) : (
-                                            <button class="btn btn-primary me-3" onClick={() => props.handleApply(props.details._id)}>Apply</button>
+                                            <button class="btn btn-primary me-3" onClick={() => props.handleApply(props.job._id)}>Apply</button>
                                         )
                                     }
-                                    <SaveButton saved={props.saved} setSaved={() => props.handleSave(props.details._id)}/>
+                                    <SaveButton saved={props.saved} setSaved={() => props.handleSave(props.job._id)}/>
                                 </>
                             )
                         }
@@ -109,32 +110,35 @@ const JobCard = (props) => {
                 </div>
             </div>
             {/* IF THERE IS TIME THEN IMPLEMENT */}
-            {/* <Link to={"/job/" + props.details.id} class="card-body-link"> */}
+            {/* <Link to={"/job/" + props.job.id} class="card-body-link"> */}
             <Link to='/jobs' class="card-body-link">
                 <div class="card-body">
                         {/* DETAILS */}
+                        <div class="row">
+                            <strong>{props.job.jobType}</strong>
+                        </div>
                         <div class="row border-bottom">
                             <div class="col me-auto">
-                                <p>{props.details.jobDescription}</p>
+                                <p>{props.job.jobDescription}</p>
                             </div>
                             <div class="col-lg-2 col-sm-12">
-                                <b>PKR {props.details.minPay}</b>
+                                <b>PKR {props.job.minPay}</b>
                             </div>
                         </div>
                         {/* SKILLS */}
                         <div class="row mt-2 px-3">
-                            {props.details.skills.map(skill => <Skill skill={skill} />)}
+                            {props.job.skills.map(skill => <Skill skill={skill} key={props.job._id + skill}/>)}
                         </div>
                         {/* TOOLTIPS */}
                         <div class="row justify-content-end">
                             {/* EDUCATION */}
                             <div class="col-auto">
                                 <OverlayTrigger
-                                key={props.details._id + "-job-edu"}
+                                key={props.job._id + "-job-edu"}
                                 placement='top'
                                 overlay={
-                                    <Tooltip id={props.details._id + "-job-edu"}>
-                                        {props.details.education} level
+                                    <Tooltip id={props.job._id + "-job-edu"}>
+                                        {props.job.education} level
                                     </Tooltip>
                                 }
                                 >
@@ -146,11 +150,11 @@ const JobCard = (props) => {
                             {/* LOCATION */}
                             <div class="col-auto">
                                 <OverlayTrigger
-                                key={props.details._id + "-job-loc"}
+                                key={props.job._id + "-job-loc"}
                                 placement='top'
                                 overlay={
-                                    <Tooltip id={props.details._id + "-job-loc"}>
-                                        {props.details.jobLocation}
+                                    <Tooltip id={props.job._id + "-job-loc"}>
+                                        {props.job.jobLocation}
                                     </Tooltip>
                                 }
                                 >
@@ -159,14 +163,14 @@ const JobCard = (props) => {
                                     </div>
                                 </OverlayTrigger>
                             </div>
-                            {/* AGE */}
+                            {/* DAYS AGO */}
                             <div class="col-auto">
                                 <OverlayTrigger
-                                key={props.details._id + "-job-age"}
+                                key={props.job._id + "-job-age"}
                                 placement='top'
                                 overlay={
-                                    <Tooltip id={props.details._id + "-job-age"}>
-                                        Posted {props.details.dateCreated} ago
+                                    <Tooltip id={props.job._id + "-job-age"}>
+                                        Posted {timeAgo(props.job.dateCreated)} ago
                                     </Tooltip>
                                 }
                                 >
@@ -251,7 +255,7 @@ export const JobListing = (props) => {
             <JobNavigation page={page} setPage={setPage} pageCount={pageCount} results={results} />
             {joblist.map(job => 
             <JobCard 
-            details={job} 
+            job={job} 
             key={job._id} 
             user={props.user && true}
             applied={props.appliedList.includes(job._id)}

@@ -11,22 +11,9 @@ const Job = require("../models/job.model");
 const Application = require("../models/application.model");
 const Company = require("../models/company.model");
 
+const verify_token = require("../utils/token")
+
 const { removeListener } = require("../models/student.model");
-
-const verify_token = (token) => {
-  if (!token)
-    return false;
-  if (token === 'allaccess')
-    return true;
-  let verified = true
-  jwt.verify(token, 'somerandomsetofsymbols', (err, decoded) => {
-      if (err) {
-          verified = false;
-      }
-  });
-  return verified;
-}
-
 
 /* GET users listing. */
 router.get("/", function (req, res, next) {
@@ -84,7 +71,8 @@ router.post("/login", async (req, res) => {
   });
 
   if (!user) {
-    return { status: "error", error: "Invalid login" };
+    res.status(401).send("Email not found");
+    return;
   }
 
   const isPasswordValid = await bcrypt.compare(
@@ -108,35 +96,33 @@ router.post("/login", async (req, res) => {
       expiresIn: 3600,
     });
   } else {
-    return res.status(401).json({
-      token: false,
-    });
+    return res.status(401).send("Incorrect password");
   }
 });
 
-router.get("/profile", async (req, res) => {
-  if (!req.headers["token"]) {
-    res.status(401).json({ status: "error" });
-  } else {
-    try {
-      const decodedToken = jwt.verify(
-        req.headers["token"],
-        "somerandomsetofsymbols"
-      );
-      const id = decodedToken.id;
-      Student.findOne({ _id: id }, (err, doc) => {
-        if (err) {
-          res.status(500);
-        } else {
-          res.json(doc);
-        }
-      });
-    } catch (error) {
-      console.log(error);
-      res.status(500).send("Invalid token");
-    }
-  }
-});
+// router.get("/profile", async (req, res) => {
+//   if (!req.headers["token"]) {
+//     res.status(401).json({ status: "error" });
+//   } else {
+//     try {
+//       const decodedToken = jwt.verify(
+//         req.headers["token"],
+//         "somerandomsetofsymbols"
+//       );
+//       const id = decodedToken.id;
+//       Student.findOne({ _id: id }, (err, doc) => {
+//         if (err) {
+//           res.status(500);
+//         } else {
+//           res.json(doc);
+//         }
+//       });
+//     } catch (error) {
+//       console.log(error);
+//       res.status(500).send("Invalid token");
+//     }
+//   }
+// });
 
 router.post("/edit", async (req, res) => {
   if (!req.headers["token"]) {
@@ -242,6 +228,24 @@ router.post("/change-password", async (req, res) => {
 
 
 //NEW ENDPOINTS
+//?student=
+router.get('/profile', async (req, res) => {
+  if (!req.query.student) {
+    res.status(401).send("No student id");
+    return;
+  }
+  try {
+    const student = await Student.findById(req.query.student, {password: 0, saved_jobs: 0, applied_jobs: 0});
+    if (!student) {
+      res.status(401).send('Student not found');
+    }
+    res.status(200).json(student);
+  }
+  catch (error) {
+    console.log(error);
+    res.status(500);
+  }
+})
 
 router.get('/:id', async (req, res) => {
   const token = req.headers['token'];
@@ -311,6 +315,7 @@ router.get('/:id/applications', async (req, res) => {
   }
 })
 
+//?job=
 router.post("/:id/apply", async (req, res) => {
   const token = req.headers['token'];
   if (!verify_token(token)){
@@ -367,6 +372,7 @@ router.post("/:id/apply", async (req, res) => {
   }
 });
 
+//?job=
 router.post("/:id/save", async (req, res) => {
   const token = req.headers['token'];
   if (!verify_token(token)){

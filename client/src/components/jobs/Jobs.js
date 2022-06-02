@@ -28,8 +28,12 @@ export const Jobs = () => {
     }
 
     useEffect(() => {
-        if (user.type == 'student'){
+        console.log('Use effect')
+        if (user && user.type == 'student'){
             handleStudentData();
+        }
+        else {
+            setLoading(false);
         }
     }, [loading]);
 

@@ -9,7 +9,8 @@ const Company = new mongoose.Schema(
         yearFounded: { type: Number, required: false },
         description: { type: String, required: false },
 		city: {type: String},
-		country: {type: String}
+		country: {type: String},
+		jobs: [{type: mongoose.Schema.Types.ObjectId, ref: 'Job'}]
 	}
 
 )
