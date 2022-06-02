@@ -101,11 +101,13 @@ const CompanyProfile = () => {
         </Col>
         <Col className="col-lg-9 ">
           <Container>
+            {/* EDIT - ONLY FOR COMPANY */}
             <CompanyEditModalBtn
               company={companyDetails}
               email={companyDetails.email}
             />
 
+            {/* CREATE A JOB - ONLY FOR COMPANY */}
             <a className="btn btn-primary btn-lg m-1" href="/createjob">
               Create a Job
             </a>
@@ -159,11 +161,14 @@ const CompanyProfile = () => {
                 );
               })} */}
             </Row>
+
+            {/* REVIEW - ONLY FOR STUDENTS */}
             <Row className="name-age-row mt-4 education">
               <h5>Want to add a review ?</h5>
               <ReviewInput />
             </Row>
 
+              {/* CANDIDATE - ONLY FOR COMPANY */}
             <Row className="name-age-row mt-4 education">
               <h5>Candidates</h5>
               {applications && applications.filter( application => application.company === companyDetails._id ).map((application) => {

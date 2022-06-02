@@ -1,6 +1,7 @@
 const Student = require('../models/student.model');
 const Company = require('../models/company.model')
 const Job = require('../models/job.model');
+const Application = require('../models/application.model')
 const bcrypt = require ('bcryptjs')
 const password = bcrypt.hashSync('12345678', 10);
 const mongoose = require("mongoose");
@@ -15,12 +16,15 @@ mongoose.connect("mongodb://localhost:27017/StudentoDB", {
     await Student.deleteMany({});
     await Company.deleteMany({});
     await Job.deleteMany({});
+    await Application.deleteMany({});
 
     console.log('Creating students')
     await Student.create({
         name: "Abdul Muneem",
         email: "muneem@mail.com",
         password: password,
+        saved_jobs: [],
+        applied_jobs: []
     })
     await Student.create({
         name: "Ali Qumail",
@@ -37,11 +41,15 @@ mongoose.connect("mongodb://localhost:27017/StudentoDB", {
         name: "Arbisoft",
         email: "arbisoft@mail.com",
         password: password,
+        city: 'Lahore',
+        country: 'Pakistan'
     })
     await Company.create({
         name: "Devsinc",
         email: "devsinc@mail.com",
         password: password,
+        city: 'Lahore',
+        country: 'Pakistan'
     })
 
     let company = await Company.findOne({name: "Arbisoft"});
