@@ -155,6 +155,7 @@ router.post("/edit", async (req, res) => {
           name: req.body.name,
           description: req.body.description,
           age: parseInt(req.body.age),
+          gender: req.body.gender,
           location: req.body.location,
           primaryRole: req.body.primaryRole,
           university: req.body.university,

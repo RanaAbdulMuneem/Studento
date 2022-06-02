@@ -3,78 +3,83 @@ import { Button, Modal } from "react-bootstrap";
 import ExperienceInput from "./ExperienceInput";
 
 const StudentEditModalBtn = (props) => {
-  
-
   const [name, setName] = useState(props.studentDetails.name);
- 
-  const [skills, setSkills] = useState(props.studentDetails.skills);
-  const [location,setLocation] = useState(props.studentDetails.location);
-  const [age, setAge] = useState(props.studentDetails.age);
-  const [primaryRole,setPrimaryRole] = useState(props.studentDetails.primaryRole);
 
-  const [achievments, setAchievments] = useState(props.studentDetails.achievements);
+  const [skills, setSkills] = useState(props.studentDetails.skills);
+  const [location, setLocation] = useState(props.studentDetails.location);
+  const [age, setAge] = useState(props.studentDetails.age);
+  const [primaryRole, setPrimaryRole] = useState(
+    props.studentDetails.primaryRole
+  );
+  const [gender, setGender] = useState(props.studentDetails.gender);
+
+  const [achievments, setAchievments] = useState(
+    props.studentDetails.achievements
+  );
   const [experience, setExperience] = useState(props.studentDetails.experience);
 
-  const [university,setUniversity] = useState(props.studentDetails.university);
-  const [degree,setDegree] = useState(props.studentDetails.degree);
-  const [major,setMajor] = useState(props.studentDetails.major);
-  const [graduationYear,setGraduationYear] = useState(props.studentDetails.graduationYear);
- const [universityDescription, setUniversityDescription] = useState(props.studentDetails.universityDescription);
+  const [university, setUniversity] = useState(props.studentDetails.university);
+  const [degree, setDegree] = useState(props.studentDetails.degree);
+  const [major, setMajor] = useState(props.studentDetails.major);
+  const [graduationYear, setGraduationYear] = useState(
+    props.studentDetails.graduationYear
+  );
+  const [universityDescription, setUniversityDescription] = useState(
+    props.studentDetails.universityDescription
+  );
 
- const [show, setShow] = useState(false);
+  const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
- 
+
   const handleEdit = (e) => {
-  e.preventDefault();
+    e.preventDefault();
 
-  const newDetails = {
-    name : name,
-    email : props.email,
-    age:age,
-    location:location,
-    university:university,
-    degree:degree,
-    major:major,
-    graduationYear:graduationYear,
-    universityDescription:universityDescription,
-    skills:skills,
-    primaryRole:primaryRole,
-    experience:experience,
-    achievments:achievments,
+    const newDetails = {
+      name: name,
+      email: props.email,
+      age: age,
+      gender: gender,
+      location: location,
+      university: university,
+      degree: degree,
+      major: major,
+      graduationYear: graduationYear,
+      universityDescription: universityDescription,
+      skills: skills,
+      primaryRole: primaryRole,
+      experience: experience,
+      achievments: achievments,
+    };
 
+    fetch("http://localhost:3001/students/edit", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        token: localStorage.getItem("token"),
+      },
+      body: JSON.stringify(newDetails),
+    });
 
-  }
+    props.setDetails(newDetails);
+    alert("Student profile updated");
+  };
 
-  fetch("http://localhost:3001/students/edit", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "token": localStorage.getItem("token")
-    },
-    body: JSON.stringify(newDetails),
-  });
-   
-  props.setDetails(newDetails);
-   alert("Blog updated")
-  
-     
-}
-
-useEffect(() => {
-  setName(props.studentDetails.name)
-  setAge(props.studentDetails.age)
-  setLocation(props.studentDetails.location)
-  setSkills(props.studentDetails.skills)
-  setPrimaryRole(props.studentDetails.primaryRole)
-  setAchievments(props.studentDetails.achievements)
-  setExperience(props.studentDetails.experience)
-  setUniversity(props.studentDetails.university)
-  setDegree(props.studentDetails.degree)
-  setMajor(props.studentDetails.major)
-  setGraduationYear(props.studentDetails.graduationYear)
-  setUniversityDescription(props.studentDetails.universityDescription)
-},[props.studentDetails])
+  useEffect(() => {
+    setName(props.studentDetails.name);
+    setAge(props.studentDetails.age);
+    setGender(props.studentDetails.gender);
+    setLocation(props.studentDetails.location);
+    setSkills(props.studentDetails.skills);
+    setPrimaryRole(props.studentDetails.primaryRole);
+    setAchievments(props.studentDetails.achievements);
+    setExperience(props.studentDetails.experience);
+    setUniversity(props.studentDetails.university);
+    setDegree(props.studentDetails.degree);
+    setMajor(props.studentDetails.major);
+    setGraduationYear(props.studentDetails.graduationYear);
+    setUniversityDescription(props.studentDetails.universityDescription);
+  }, [props.studentDetails]);
   return (
     <>
       <Button
@@ -84,7 +89,7 @@ useEffect(() => {
       >
         Edit Profile
       </Button>
-   
+
       <Modal show={show} onHide={handleClose} animation={false}>
         <Modal.Header closeButton>
           <Modal.Title>Edit Profile</Modal.Title>
@@ -117,7 +122,16 @@ useEffect(() => {
                 onChange={(e) => setAge(e.target.value)}
               />
             </div>
-        
+            <div class="form-group mt-3">
+              <label for="exampleFormControlInput1">Gender</label>
+              <select value={gender} onChange={(e) => setGender(e.target.value)} className="form-control">
+                <option value="">Select</option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+                <option value="Prefer not to say">Prefer not to say</option>
+              </select>
+            </div>
+
             <div class="form-group mt-3">
               <label for="exampleFormControlInput1">location</label>
               <input
@@ -127,10 +141,9 @@ useEffect(() => {
                 placeholder=""
                 value={location}
                 onChange={(e) => setLocation(e.target.value)}
-                
               />
             </div>
-           
+
             <div class="form-group mt-3">
               <label for="exampleFormControlInput1">Primary role</label>
               <input
@@ -186,7 +199,9 @@ useEffect(() => {
               />
             </div>
             <div class="form-group mt-3">
-              <label for="exampleFormControlInput1">University Description</label>
+              <label for="exampleFormControlInput1">
+                University Description
+              </label>
               <input
                 type="text"
                 class="form-control"
@@ -229,17 +244,17 @@ useEffect(() => {
                 onChange={(e) => setExperience(e.target.value)}
               />
             </div>
-            <button type="submit" className="btn btn-warning"> Submit</button>
-            
+            <button type="submit" className="btn btn-warning">
+              {" "}
+              Submit
+            </button>
           </form>
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleClose}>
             Close
           </Button>
-          <Button variant="primary" onClick={handleClose}>
-            Save Changes
-          </Button>
+         
         </Modal.Footer>
       </Modal>
     </>
