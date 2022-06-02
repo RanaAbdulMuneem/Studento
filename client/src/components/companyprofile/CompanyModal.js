@@ -5,12 +5,15 @@ const CompanyEditModalBtn = (props) => {
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
-  
-  const [name,setName] = useState(props.company.name);
-  const [email,setEmail] = useState(props.company.email);
-  const [noOfEmployees,setNoOfEmployees] = useState(props.company.noOfEmployees);
-  const [description,setDescription] = useState(props.company.description);
-  const [yearFounded,setYearFounded] = useState(props.company.yearFounded);
+
+  const [name, setName] = useState(props.company.name);
+  const [email, setEmail] = useState(props.company.email);
+  const [noOfEmployees, setNoOfEmployees] = useState(
+    props.company.noOfEmployees
+  );
+  const [description, setDescription] = useState(props.company.description);
+  const [yearFounded, setYearFounded] = useState(props.company.yearFounded);
+  const [location, setLocation] = useState(props.company.location);
 
   const handleEdit = (e) => {
     e.preventDefault();
@@ -20,32 +23,33 @@ const CompanyEditModalBtn = (props) => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        name : name,
-        email : email,
-        yearFounded : yearFounded,
-        noOfEmployees : noOfEmployees,
-        description : description,
+        name: name,
+        email: email,
+        yearFounded: yearFounded,
+        noOfEmployees: noOfEmployees,
+        description: description,
+        location: location,
       }),
     });
 
-    alert("Profile updated")
-  }
+    alert("Profile updated");
+  };
   useEffect(() => {
-    setName(props.company.name)
-    setEmail(props.company.email)
-    setNoOfEmployees(props.company.noOfEmployees)
-    setDescription(props.company.description)
-    setYearFounded(props.company.yearFounded)
- 
-  },[props.company])
+    setName(props.company.name);
+    setEmail(props.company.email);
+    setNoOfEmployees(props.company.noOfEmployees);
+    setDescription(props.company.description);
+    setYearFounded(props.company.yearFounded);
+    setLocation(props.company.location);
+  }, [props.company]);
 
   useEffect(() => {
-    setName(props.company.name)
-    setEmail(props.company.email)
-    setNoOfEmployees(props.company.noOfEmployees)
-    setDescription(props.company.description)
-    setYearFounded(props.company.yearFounded)
-  },[props.company])
+    setName(props.company.name);
+    setEmail(props.company.email);
+    setNoOfEmployees(props.company.noOfEmployees);
+    setDescription(props.company.description);
+    setYearFounded(props.company.yearFounded);
+  }, [props.company]);
 
   return (
     <>
@@ -71,7 +75,7 @@ const CompanyEditModalBtn = (props) => {
                 id="exampleFormControlInput1"
                 placeholder=""
                 value={name}
-                onChange={(e)=>setName(e.target.value)}
+                onChange={(e) => setName(e.target.value)}
               />
             </div>
             <div class="form-group mt-3">
@@ -81,7 +85,7 @@ const CompanyEditModalBtn = (props) => {
                 class="form-control"
                 id="exampleFormControlInput1"
                 value={noOfEmployees}
-                onChange={(e)=>setNoOfEmployees(e.target.value)}
+                onChange={(e) => setNoOfEmployees(e.target.value)}
               />
             </div>
             <div class="form-group mt-3">
@@ -91,7 +95,17 @@ const CompanyEditModalBtn = (props) => {
                 class="form-control"
                 id="exampleFormControlInput1"
                 value={yearFounded}
-                onChange={(e)=>setYearFounded(e.target.value)}
+                onChange={(e) => setYearFounded(e.target.value)}
+              />
+            </div>
+            <div class="form-group mt-3">
+              <label for="exampleFormControlInput1">Location</label>
+              <input
+                type="text"
+                class="form-control"
+                id="exampleFormControlInput1"
+                value={location}
+                onChange={(e) => setLocation(e.target.value)}
               />
             </div>
 
@@ -102,9 +116,11 @@ const CompanyEditModalBtn = (props) => {
                 id="exampleFormControlTextarea1"
                 rows="3"
                 value={description}
-                onChange={(e)=>setDescription(e.target.value)}
+                onChange={(e) => setDescription(e.target.value)}
               ></textarea>
-              <button className="btn btn-warning mt-2" type="submit">Edit</button>
+              <button className="btn btn-warning mt-2" type="submit">
+                Edit
+              </button>
             </div>
           </form>
         </Modal.Body>
