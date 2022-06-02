@@ -17,12 +17,12 @@ const Student = new mongoose.Schema(
         experience : { type: String, required: false },
         achievements : { type: String, required: false },
         skills: { type: Array, required: false },
-        saved_jobs: [{type: mongoose.Schema.Types.ObjectId, ref: 'JobData'}],
-        applied_jobs: [{type: mongoose.Schema.Types.ObjectId, ref: 'JobData'}]
+        saved_jobs: [{type: mongoose.Schema.Types.ObjectId, ref: 'Job'}],
+        applied_jobs: [{type: mongoose.Schema.Types.ObjectId, ref: 'Application'}]
 	}
 
 )
 
-const model = mongoose.model('StudentData', Student)
+const model = mongoose.model('Student', Student)
 
 module.exports = model

@@ -137,11 +137,14 @@ router.post("/editstudentprofile", async (req, res) => {
   );
 });
 
+
+//-----------------------LEGACY-------------------------
 router.get("/getallapplications", async (req, res) => {
   console.log("reached in applications")
   const applications = await Application.find();
   return res.json(applications);
 });
+//-----------------------LEGACY-------------------------
 
 router.post("/updateapplication", async (req, res) => {
   console.log(req.body)
