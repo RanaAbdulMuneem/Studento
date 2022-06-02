@@ -16,6 +16,7 @@ const CompanyProfile = () => {
 
   const [companyDetails, setCompanyDetails] = useState({});
   const [applications, setApplications] = useState([]);
+  const [stats, setStats] = useState({});
 
   const [loading1, setLoading1] = useState(true);
   const [loading2, setLoading2] = useState(true);
@@ -28,6 +29,7 @@ const CompanyProfile = () => {
       const index = applications.findIndex(app => app._id === app_id);
       let updatedApps = [...applications];
       updatedApps[index].status = status;
+
       setLoading2(true);
       setApplications(updatedApps);
     })
@@ -55,26 +57,27 @@ const CompanyProfile = () => {
     });
   };
 
-  {/*
-  const [totalApplications, setTotalApplications] = useState(0);
-  const [totalRejected, setTotalRejected] = useState(0);
-  const [totalAccepted, setTotalAccepted] = useState(0);
+  
+  
+  // const [totalApplications, setTotalApplications] = useState(0);
+  // const [totalRejected, setTotalRejected] = useState(0);
+  // const [totalAccepted, setTotalAccepted] = useState(0);
 
-  const getStats = async () => {
-    const getApplications = applications.filter(
-      (application) => application.company === companyDetails._id
-    );
-    setTotalApplications(getApplications.length);
-    const accepted = getApplications.filter(
-      (application) => application.status === "Accepted"
-    );
-    setTotalAccepted(accepted.length);
-    const rejected = getApplications.filter(
-      (application) => application.status === "Rejected"
-    );
-    setTotalRejected(rejected.length);
-  };
-  */}
+  // const getStats = async () => {
+  //   const getApplications = applications.filter(
+  //     (application) => application.company === companyDetails._id
+  //   );
+  //   setTotalApplications(getApplications.length);
+  //   const accepted = getApplications.filter(
+  //     (application) => application.status === "Accepted"
+  //   );
+  //   setTotalAccepted(accepted.length);
+  //   const rejected = getApplications.filter(
+  //     (application) => application.status === "Rejected"
+  //   );
+  //   setTotalRejected(rejected.length);
+  // };
+  
 
 
   useEffect(() => {
@@ -92,6 +95,18 @@ const CompanyProfile = () => {
     setLoading1(false);
   }, [companyDetails]);
   useEffect(() => {
+    const app_total = applications.length;
+    let accept_total=0;
+    let reject_total=0;
+    for (let i=0; i<app_total; i++) {
+      applications[i].status === 'Accepted' && (accept_total++);
+      applications[i].status === 'Rejected' && (reject_total++);
+    }
+    setStats({
+      totalApplications: app_total,
+      totalAccepted: accept_total,
+      totalRejected: reject_total
+    })
     setLoading2(false);
   }, [applications]);
 
@@ -202,30 +217,27 @@ const CompanyProfile = () => {
                       </>
                     )}
                    </div>
-
-              {/* TRACKING
+                )
+              })}
+              
+                TRACKING
               <div className="row mt-3">
                
                 <div className="col col-lg-4 col-sm-12">
                   <b>Total Applications : </b>
-                  {applications.filter(
-                    (application) => application.company === companyDetails._id
-                  ).length}
+                  {stats.totalApplications}
                 </div>
-                <div className="col col-lg-4 col-sm-12"><b>Total Rejections : </b>
-                {applications.filter(
-                    (application) => application.company === companyDetails._id && application.status === "Rejected"
-                  ).length}
+                <div className="col col-lg-4 col-sm-12">
+                  <b>Total Rejections : </b>
+                  {stats.totalRejected}
                 </div>
                 <div className="col col-lg-4">
                   <b>Total Accepted : </b>
-                  {applications.filter(
-                    (application) => application.company === companyDetails._id && application.status === "Accepted"
-                  ).length}
+                  {stats.totalAccepted}
                 </div>
                 <hr/>
               </div>
-              */}
+             
 
 
             </Row>
