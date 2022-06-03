@@ -62,7 +62,7 @@ const StudentProfile = () => {
     <div>
       <Row className="mt-5">
         <Col className="col-lg-3">
-          <img src={img} alt="not supported" className="profile-pic" />
+          <img src={`http://localhost:3001/images/${student.photo}`} alt="not supported" className="profile-pic" width="300px"/>
         </Col>
         <Col className="col-lg-9 ">
           <h1 class="display-3">

@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { Button, Modal } from "react-bootstrap";
+import axios from "axios";
 
 const CompanyEditModalBtn = (props) => {
   const [show, setShow] = useState(false);
@@ -14,26 +15,46 @@ const CompanyEditModalBtn = (props) => {
   const [description, setDescription] = useState(props.company.description);
   const [yearFounded, setYearFounded] = useState(props.company.yearFounded);
   const [location, setLocation] = useState(props.company.location);
+  const [photo, handlePhoto] = useState('');
 
   const handleEdit = (e) => {
     e.preventDefault();
-    fetch("http://localhost:3001/editcompanyprofile", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        name: name,
-        email: email,
-        yearFounded: yearFounded,
-        noOfEmployees: noOfEmployees,
-        description: description,
-        location: location,
-      }),
-    });
+    // fetch("http://localhost:3001/editcompanyprofile", {
+    //   method: "POST",
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //   },
+    //   body: JSON.stringify({
+    //     name: name,
+    //     email: email,
+    //     yearFounded: yearFounded,
+    //     noOfEmployees: noOfEmployees,
+    //     description: description,
+    //     location: location,
+    //   }),
+    // });
+    const formData = new FormData();
+    formData.append("photo", photo)
+    formData.append("name", name);
+    formData.append("email", email);
+    formData.append("yearFounded", yearFounded);
+    formData.append("noOfEmployees", noOfEmployees);
+    formData.append("description", description);
+    formData.append("location", location);
+    console.log(formData.get("photo"))
+
+    axios
+      .post("http://localhost:3001/editcompanyprofile", formData)
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
 
     alert("Profile updated");
   };
+  
   useEffect(() => {
     setName(props.company.name);
     setEmail(props.company.email);
@@ -43,13 +64,7 @@ const CompanyEditModalBtn = (props) => {
     setLocation(props.company.location);
   }, [props.company]);
 
-  useEffect(() => {
-    setName(props.company.name);
-    setEmail(props.company.email);
-    setNoOfEmployees(props.company.noOfEmployees);
-    setDescription(props.company.description);
-    setYearFounded(props.company.yearFounded);
-  }, [props.company]);
+  
 
   return (
     <>
@@ -62,11 +77,21 @@ const CompanyEditModalBtn = (props) => {
           <Modal.Title>Change Profile</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <form className="container" onSubmit={handleEdit}>
-            <label class="form-label" for="customFile">
+          <form
+            className="container"
+            onSubmit={handleEdit}
+            encType="multipart/form-data"
+          >
+            <label class="form-label">
               Upload Company logo
             </label>
-            <input type="file" class="form-control" id="customFile" />
+            <input
+              type="file"
+              accept=".png, .jpg, .jpeg"
+              name="photo"
+              class="form-control"
+              onChange={(e) => handlePhoto(e.target.files[0])}
+            />
             <div class="form-group mt-3">
               <label for="exampleFormControlInput1">Company Name</label>
               <input

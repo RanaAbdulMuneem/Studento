@@ -1,6 +1,6 @@
 import { Container, Row, Col } from "react-bootstrap";
 // import { companyDetails } from "../../API/CompanyDetails";
-import logo from "../../images/logo.png";
+
 import CompanyEditModalBtn from "./CompanyModal";
 import { Link } from "react-router-dom";
 import "./companyProfile.css";
@@ -8,6 +8,7 @@ import ReviewInput from "./ReviewInput";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
+
 
 const CompanyProfile = () => {
   const navigate = useNavigate();
@@ -117,7 +118,7 @@ const CompanyProfile = () => {
     <Container>
       <Row className="mt-5">
         <Col className="col-lg-3">
-          <img src={logo} alt="not supported" className="profile-pic" />
+          <img src={`http://localhost:3001/images/${companyDetails.photo}`} alt="not supported" className="profile-pic" width="300px"/>
         </Col>
         <Col className="col-lg-9 ">
           <Container>
@@ -130,6 +131,7 @@ const CompanyProfile = () => {
             {/* CREATE A JOB - ONLY FOR COMPANY */}
             <a className="btn btn-primary btn-lg m-1" href="/createjob">
               Create a Job
+              
             </a>
 
             <div>

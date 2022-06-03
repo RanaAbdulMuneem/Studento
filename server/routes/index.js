@@ -1,13 +1,35 @@
 var express = require("express");
 var router = express.Router();
+const multer = require("multer");
+const { v4: uuidv4 } = require("uuid");
+let path = require("path");
 
 //OLD ENDPOINTS
 
 const Student = require("../models/student.model");
-const Company = require("../models/company.model")
-const Job = require("../models/job.model")
-const Application = require("../models/application.model")
+const Company = require("../models/company.model");
+const Job = require("../models/job.model");
+const Application = require("../models/application.model");
 
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, "images");
+  },
+  filename: function (req, file, cb) {
+    cb(null, uuidv4() + "-" + Date.now() + path.extname(file.originalname));
+  },
+});
+
+const fileFilter = (req, file, cb) => {
+  const allowedFileTypes = ["image/jpeg", "image/jpg", "image/png"];
+  if (allowedFileTypes.includes(file.mimetype)) {
+    cb(null, true);
+  } else {
+    cb(null, false);
+  }
+};
+
+let upload = multer({ storage, fileFilter });
 
 router.get("/", (req, res) => {
   res.send("hello world");
@@ -69,28 +91,34 @@ router.get("/getallcompanies", async (req, res) => {
   return res.json(companies);
 });
 
-router.post("/editcompanyprofile", async (req, res) => {
-  const { name, email, description, noOfEmployees, yearFounded, location } = req.body;
-  console.log(req.body);
-  Company.updateOne(
-    { email: email },
-    {
-      name: name,
-      description: description,
-      noOfEmployees: parseInt(noOfEmployees),
-      yearFounded: parseInt(yearFounded),
-      location: location
-    },
-    function (err) {
-      if (err) {
-        console.log(err);
+router
+  .route("/editcompanyprofile")
+  .post(upload.single("photo"), async (req, res) => {
+    const {  email } =
+      req.body;
+      
+      let query = {};
+      req.body.name && (query.name = req.body.name);
+      req.body.email && (query.email = req.body.email);
+      req.body.description && (query.description = req.body.description);
+      req.body.noOfEmployees && (query.noOfEmployees = req.body.noOfEmployees);
+      req.body.yearFounded && (query.yearFounded = req.body.yearFounded);
+      req.body.location && (query.location = req.body.location);
+      req.file && ( query.photo = req.file.filename )
+      
+      
+     Company.updateOne(
+      { email: email }, query,
+     
+      function (err) {
+        if (err) {
+          console.log(err);
+        } else {
+          res.send(200);
+        }
       }
-      else {
-        res.send(200);
-      }
-    }
-  );
-});
+    );
+  });
 
 // router.post("/addjob", async (req, res) => {
 //   const { skills } = req.body;
@@ -111,8 +139,6 @@ router.post("/editcompanyprofile", async (req, res) => {
 // });
 
 router.post("/editstudentprofile", async (req, res) => {
-  console.log(req.body);
-
   Student.updateOne(
     { email: req.body.email },
     {
@@ -138,21 +164,20 @@ router.post("/editstudentprofile", async (req, res) => {
   );
 });
 
-
 //-----------------------LEGACY-------------------------
 router.get("/getallapplications", async (req, res) => {
-  console.log("reached in applications")
+  console.log("reached in applications");
   const applications = await Application.find();
   return res.json(applications);
 });
 //-----------------------LEGACY-------------------------
 
 router.post("/updateapplication", async (req, res) => {
-  console.log(req.body)
+  console.log(req.body);
   Application.updateOne(
     { _id: req.body.id },
     {
-      status: req.body.status
+      status: req.body.status,
     },
     function (err) {
       if (err) {
@@ -161,6 +186,6 @@ router.post("/updateapplication", async (req, res) => {
       }
     }
   );
-})
+});
 
 module.exports = router;

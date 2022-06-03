@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Button, Modal } from "react-bootstrap";
 import ExperienceInput from "./ExperienceInput";
+import axios from "axios";
 
 const StudentEditModalBtn = (props) => {
   const [name, setName] = useState(props.studentDetails.name);
@@ -27,6 +28,7 @@ const StudentEditModalBtn = (props) => {
   const [universityDescription, setUniversityDescription] = useState(
     props.studentDetails.universityDescription
   );
+  const [photo, handlePhoto] = useState("");
 
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
@@ -52,14 +54,46 @@ const StudentEditModalBtn = (props) => {
       achievments: achievments,
     };
 
-    fetch("http://localhost:3001/students/edit", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        token: localStorage.getItem("token"),
-      },
-      body: JSON.stringify(newDetails),
-    });
+    const formData = new FormData();
+    formData.append("photo", photo);
+    formData.append("name", name);
+    formData.append("age", age);
+    formData.append("email", props.email);
+    formData.append("gender", gender);
+    formData.append("location", location);
+    formData.append("unversity", university);
+    formData.append("unversityDescription", universityDescription);
+    formData.append("major", major);
+    formData.append("degree", degree);
+    formData.append("graduationYear", graduationYear);
+    formData.append("skills", skills);
+    formData.append("primaryRole", primaryRole);
+    formData.append("experience", experience);
+    formData.append("achievements", achievments);
+
+    const headers = {
+      "Content-Type": "multipart/form-data",
+      token: localStorage.getItem("token"),
+    };
+    axios
+      .post("http://localhost:3001/students/edit", formData, {
+        headers,
+      })
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+
+    // fetch("http://localhost:3001/students/edit", {
+    //   method: "POST",
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //     token: localStorage.getItem("token"),
+    //   },
+    //   body: JSON.stringify(newDetails),
+    // });
 
     props.setDetails(newDetails);
     alert("Student profile updated");
@@ -99,7 +133,13 @@ const StudentEditModalBtn = (props) => {
             <label class="form-label" for="customFile">
               Upload Profile Image
             </label>
-            <input type="file" class="form-control" id="customFile" />
+            <input
+              type="file"
+              accept=".png, .jpg, .jpeg"
+              name="photo"
+              class="form-control"
+              onChange={(e) => handlePhoto(e.target.files[0])}
+            />
             <div class="form-group mt-3">
               <label for="exampleFormControlInput1">Name</label>
               <input
@@ -124,7 +164,11 @@ const StudentEditModalBtn = (props) => {
             </div>
             <div class="form-group mt-3">
               <label for="exampleFormControlInput1">Gender</label>
-              <select value={gender} onChange={(e) => setGender(e.target.value)} className="form-control">
+              <select
+                value={gender}
+                onChange={(e) => setGender(e.target.value)}
+                className="form-control"
+              >
                 <option value="">Select</option>
                 <option value="Male">Male</option>
                 <option value="Female">Female</option>
@@ -254,7 +298,6 @@ const StudentEditModalBtn = (props) => {
           <Button variant="secondary" onClick={handleClose}>
             Close
           </Button>
-         
         </Modal.Footer>
       </Modal>
     </>

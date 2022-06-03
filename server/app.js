@@ -13,10 +13,12 @@ var jobsRouter = require('./routes/jobs');
 
 var app = express();
 
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 
+app.use("/images", express.static("images"));
 app.use(logger('dev'));
 app.use(cors());
 app.use(express.json());
