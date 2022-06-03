@@ -88,9 +88,9 @@ const StudentLogin = () => {
     if (data.token) {
       localStorage.setItem("token", data.token);
       localStorage.setItem("type", "student");
-      
+
       //-------------------------
-      localStorage.setItem('user', JSON.stringify(data));
+      localStorage.setItem("user", JSON.stringify(data));
       //------------------------
 
       //console.log("data.user", data.token);
@@ -267,7 +267,7 @@ const StudentLogin = () => {
                               </p>
                               <p className="text-center">
                                 Don't have an account?{" "}
-                                <Link to={"/companysignup"}> Sign Up!</Link>
+                                <Link to={"/studentsignup"}> Sign Up!</Link>
                               </p>
                             </div>
                           </div>

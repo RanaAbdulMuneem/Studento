@@ -56,6 +56,7 @@ const StudentProfile = () => {
         },
       })
       .then((response) => {
+        console.log(response.data.verified);
         setStudentDetails(response.data);
       })
       .catch((error) => {
@@ -71,16 +72,28 @@ const StudentProfile = () => {
 
   return (
     <div>
+      {studentDetails.verified ? (
+        ""
+      ) : (
+        <div className="alert alert-warning" role="alert">
+          {" "}
+          Your account is unverified. Please visit your email to get activation
+          link!
+        </div>
+      )}
+
       <Row className="mt-5">
         <Col className="col-lg-3">
           <img src={img} alt="not supported" className="profile-pic" />
         </Col>
         <Col className="col-lg-9 ">
-          <h1 class="display-3">
-            {studentDetails.name}
-          </h1>
+          <h1 class="display-3">{studentDetails.name}</h1>
           <Container>
-            <StudentEditModalBtn studentDetails={studentDetails} setDetails={setStudentDetails} email={studentDetails.email}/>
+            <StudentEditModalBtn
+              studentDetails={studentDetails}
+              setDetails={setStudentDetails}
+              email={studentDetails.email}
+            />
             <Row className="name-age-row mt-4">
               <h5>Description</h5>
               <Col> Name : {studentDetails.name}</Col>
@@ -125,17 +138,27 @@ const StudentProfile = () => {
             <Row className="name-age-row mt-4">
               <h5>Jobs Status</h5>
               {/* {jobDetails.jobTitle} */}
-              {applications.filter(application => application.student === studentDetails._id).map((applicantion) => {
-                return (
-                  <div className="row mt-4">
-                    <div className="col col-4 h6"> {applicantion.companyName}</div>
-                    <div className="col col-4"> {applicantion.jobTitle}</div>
-                    <div className="col col-4 text-danger"> {applicantion.status}</div>
+              {applications
+                .filter(
+                  (application) => application.student === studentDetails._id
+                )
+                .map((applicantion) => {
+                  return (
+                    <div className="row mt-4">
+                      <div className="col col-4 h6">
+                        {" "}
+                        {applicantion.companyName}
+                      </div>
+                      <div className="col col-4"> {applicantion.jobTitle}</div>
+                      <div className="col col-4 text-danger">
+                        {" "}
+                        {applicantion.status}
+                      </div>
 
-                    <hr />
-                  </div>
-                );
-              })}
+                      <hr />
+                    </div>
+                  );
+                })}
             </Row>
           </Container>
         </Col>
