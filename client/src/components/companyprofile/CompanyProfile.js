@@ -148,7 +148,7 @@ const CompanyProfile = () => {
                 </Col>
                 <Col>{companyDetails.noOfEmployees} employees</Col>
                 <Col>Founded in {companyDetails.yearFounded}</Col>
-                <Col>Location: {companyDetails.location}</Col>
+                <Col>Location:  {companyDetails.city}, {companyDetails.country}</Col>
               </Row>
               <Row className="name-age-row mt-4 border-shadow">
                 <h5>Description</h5>
