@@ -272,7 +272,7 @@ const StudentLogin = () => {
                               </p>
                               <p className="text-center">
                                 Don't have an account?{" "}
-                                <Link to={"/companysignup"}> Sign Up!</Link>
+                                <Link to={"/studentsignup"}> Sign Up!</Link>
                               </p>
                             </div>
                           </div>
