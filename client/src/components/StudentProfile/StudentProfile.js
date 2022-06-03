@@ -57,8 +57,7 @@ const StudentProfile = () => {
   //-----------REPLACE WITH BOOTSTRAP LOADING-------------------
   if (loading1 || loading2)
     return <h1>Loading ...</h1>
-  return (
-    <>
+  return (<div>
     {student.verified ? (
         ""
       ) : (
@@ -69,6 +68,7 @@ const StudentProfile = () => {
         </div>
       )}
     <div className="d-flex justify-content-center">
+
       <Row className="mt-5 w-75 d-flex justify-content-center">
         <Col className="col col-lg-5 col-md-12 col-sm-12">
         {
@@ -156,7 +156,8 @@ const StudentProfile = () => {
         
       </Row>
     </div>
-    </>
+   </div>
+
   );
 };
 export default StudentProfile;
