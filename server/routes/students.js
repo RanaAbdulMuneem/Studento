@@ -214,6 +214,7 @@ router.route("/edit").post(upload.single("photo"), async (req, res) => {
       );
       const id = decodedToken.id;
       let query = {};
+      console.log(req.body)
       req.body.name && (query.name = req.body.name);
       req.body.description && (query.description = req.body.description);
       req.body.age && (query.age = req.body.age);
@@ -223,7 +224,7 @@ router.route("/edit").post(upload.single("photo"), async (req, res) => {
       req.body.universityDescription && (query.universityDescription = req.body.universityDescription);
       req.body.degree && (query.degree = req.body.degree);
       req.body.major && (query.major = req.body.major);
-      req.body.achievments && (query.achievments = req.body.achievments);
+      req.body.achievments && (query.achievements = req.body.achievments);
       req.body.experience && (query.experience = req.body.experience);
       req.body.skills && (query.skills = req.body.skills);
       req.body.graduationYear && (query.graduationYear = req.body.graduationYear);

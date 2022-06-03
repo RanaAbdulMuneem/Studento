@@ -1,9 +1,19 @@
-.review-rating{
-    color: red;
+.review-rating {
+  color: red;
 }
-.view-profile{
-    /* color:rgb(99, 95, 91); */
-    font-size: smaller;
-    outline: none;
-    margin-left: 20px;
+.view-profile {
+  /* color:rgb(99, 95, 91); */
+  font-size: smaller;
+  outline: none;
+  margin-left: 20px;
+}
+
+.border-shadow {
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+}
+
+
+.profile-pic{
+    margin: 0 auto 0;
+    max-height: 250px;
 }
