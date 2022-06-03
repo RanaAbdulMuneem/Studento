@@ -11,6 +11,7 @@ const Student = new mongoose.Schema({
   university: { type: String, required: false },
   degree: { type: String, required: false },
   major: { type: String, required: false },
+  photo: {type: String},
   graduationYear: { type: String, required: false },
   universityDescription: { type: String, required: false },
   experience: { type: String, required: false },
