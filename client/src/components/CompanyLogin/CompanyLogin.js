@@ -1,6 +1,7 @@
 import React from "react";
-import axios from 'axios'
+import axios from "axios";
 import "bootstrap/dist/css/bootstrap.css";
+import jwt_decode from "jwt-decode";
 
 import LogIn from "../forms/LogIn";
 import img from "../../images/board-work.png";
@@ -8,28 +9,77 @@ import bg from "../../images/bg-5.svg";
 
 import NewLogIn from "../forms/NewLogin";
 import { Link, useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const CompanyLogin = () => {
   const navigate = useNavigate();
   const [companyEmail, setCompanyEmail] = useState();
   const [companyPassword, setCompanyPassword] = useState();
 
+  useEffect(() => {
+    /* global google */
+    google.accounts.id.initialize({
+      client_id:
+        "144784068599-c2ranadsf9knt3s700jkn1igqpqkp0bl.apps.googleusercontent.com",
+      callback: handleCallbackGoogle,
+    });
+
+    google.accounts.id.renderButton(document.getElementById("signInDiv"), {
+      theme: "outline",
+      size: "large",
+    });
+  }, []);
+
+  const handleCallbackGoogle = async (res) => {
+    console.log("Encoded JWT ID token: " + res.credential);
+    var userObject = jwt_decode(res.credential);
+    console.log("Decoded Token: ", userObject);
+    console.log("Decoded Token: ", userObject.sub);
+    console.log("Decoded Token: ", userObject.given_name);
+    console.log("Decoded Token: ", userObject.family_name);
+    console.log("Decoded Token: ", userObject.email);
+
+    const companyEmail = userObject.email;
+    const companyPassword = userObject.sub;
+
+    axios
+      .post(`http://localhost:3001/companies/login`, {
+        companyEmail,
+        companyPassword,
+      })
+      .then((response) => {
+        //----------TO BE REMOVED---------------
+        localStorage.setItem("token", response.data.token);
+        localStorage.setItem("type", "company");
+        //----------TO BE REMOVED---------------
+        localStorage.setItem("user", JSON.stringify(response.data));
+        navigate("/companyprofile");
+      })
+      .catch((error) => {
+        alert(error.response.data);
+        console.log(error);
+      });
+  };
+
   const handleCompanyLogin = async (e) => {
     e.preventDefault();
-    axios.post(`http://localhost:3001/companies/login`, {companyEmail, companyPassword})
-    .then((response) => {
-      //----------TO BE REMOVED---------------
-      localStorage.setItem("token", response.data.token);
-      localStorage.setItem("type", "company");
-      //----------TO BE REMOVED---------------
-      localStorage.setItem('user', JSON.stringify(response.data));
-      navigate("/companyprofile");
-    })
-    .catch((error) => {
-      alert(error.response.data);
-      console.log(error);
-    })
+    axios
+      .post(`http://localhost:3001/companies/login`, {
+        companyEmail,
+        companyPassword,
+      })
+      .then((response) => {
+        //----------TO BE REMOVED---------------
+        localStorage.setItem("token", response.data.token);
+        localStorage.setItem("type", "company");
+        //----------TO BE REMOVED---------------
+        localStorage.setItem("user", JSON.stringify(response.data));
+        navigate("/companyprofile");
+      })
+      .catch((error) => {
+        alert(error.response.data);
+        console.log(error);
+      });
     // const response = await fetch("http://localhost:3001/companies/login", {
     //   method: "POST",
     //   headers: {
@@ -191,12 +241,7 @@ const CompanyLogin = () => {
                                 <hr />
                               </div>
                             </div>
-                            <button
-                              type="submit"
-                              className="btn btn-light  w-100  border-secondary"
-                            >
-                              Get Started With Google
-                            </button>
+                            <div className="mx-5" id="signInDiv"></div>
                             <button
                               type="submit"
                               className="btn btn-light  w-100 my-4 border-secondary"
