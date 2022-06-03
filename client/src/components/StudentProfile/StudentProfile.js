@@ -60,7 +60,7 @@ const StudentProfile = () => {
     return <h1>Loading ...</h1>
   return (
     <div>
-      {studentDetails.verified ? (
+      {student.verified ? (
         ""
       ) : (
         <div className="alert alert-warning" role="alert">
