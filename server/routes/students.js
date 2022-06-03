@@ -11,19 +11,9 @@ const Job = require("../models/job.model");
 const Application = require("../models/application.model");
 const Company = require("../models/company.model");
 
-const { removeListener } = require("../models/student.model");
+const verify_token = require("../utils/token")
 
-const verify_token = (token) => {
-  if (!token) return false;
-  if (token === "allaccess") return true;
-  let verified = true;
-  jwt.verify(token, "somerandomsetofsymbols", (err, decoded) => {
-    if (err) {
-      verified = false;
-    }
-  });
-  return verified;
-};
+const { removeListener } = require("../models/student.model");
 
 const sendEmail = (targetEmail, sub, content) => {
   // *********************
@@ -52,6 +42,7 @@ const sendEmail = (targetEmail, sub, content) => {
   });
   // *********************
 };
+
 
 /* GET users listing. */
 router.get("/", function (req, res, next) {
@@ -134,7 +125,8 @@ router.post("/login", async (req, res) => {
   });
 
   if (!user) {
-    return { status: "error", error: "Invalid login" };
+    res.status(401).send("Email not found");
+    return;
   }
 
   const isPasswordValid = await bcrypt.compare(
@@ -158,35 +150,33 @@ router.post("/login", async (req, res) => {
       expiresIn: 3600,
     });
   } else {
-    return res.status(401).json({
-      token: false,
-    });
+    return res.status(401).send("Incorrect password");
   }
 });
 
-router.get("/profile", async (req, res) => {
-  if (!req.headers["token"]) {
-    res.status(401).json({ status: "error" });
-  } else {
-    try {
-      const decodedToken = jwt.verify(
-        req.headers["token"],
-        "somerandomsetofsymbols"
-      );
-      const id = decodedToken.id;
-      Student.findOne({ _id: id }, (err, doc) => {
-        if (err) {
-          res.status(500);
-        } else {
-          res.json(doc);
-        }
-      });
-    } catch (error) {
-      console.log(error);
-      res.status(500).send("Invalid token");
-    }
-  }
-});
+// router.get("/profile", async (req, res) => {
+//   if (!req.headers["token"]) {
+//     res.status(401).json({ status: "error" });
+//   } else {
+//     try {
+//       const decodedToken = jwt.verify(
+//         req.headers["token"],
+//         "somerandomsetofsymbols"
+//       );
+//       const id = decodedToken.id;
+//       Student.findOne({ _id: id }, (err, doc) => {
+//         if (err) {
+//           res.status(500);
+//         } else {
+//           res.json(doc);
+//         }
+//       });
+//     } catch (error) {
+//       console.log(error);
+//       res.status(500).send("Invalid token");
+//     }
+//   }
+// });
 
 router.post("/edit", async (req, res) => {
   if (!req.headers["token"]) {
@@ -205,6 +195,7 @@ router.post("/edit", async (req, res) => {
           name: req.body.name,
           description: req.body.description,
           age: parseInt(req.body.age),
+          gender: req.body.gender,
           location: req.body.location,
           primaryRole: req.body.primaryRole,
           university: req.body.university,
@@ -291,6 +282,24 @@ router.post("/change-password", async (req, res) => {
 });
 
 //NEW ENDPOINTS
+//?student=
+router.get('/profile', async (req, res) => {
+  if (!req.query.student) {
+    res.status(401).send("No student id");
+    return;
+  }
+  try {
+    const student = await Student.findById(req.query.student, {password: 0, saved_jobs: 0, applied_jobs: 0});
+    if (!student) {
+      res.status(401).send('Student not found');
+    }
+    res.status(200).json(student);
+  }
+  catch (error) {
+    console.log(error);
+    res.status(500);
+  }
+})
 
 router.get("/:id", async (req, res) => {
   const token = req.headers["token"];
@@ -301,9 +310,24 @@ router.get("/:id", async (req, res) => {
   }
 
   try {
-    const student = await Student.findById(req.params.id, {
-      password: 0,
-    }).populate(["saved_jobs", "applied_jobs"]);
+    const student = await Student.findById(req.params.id, {password: 0}).populate([
+      {
+        path: 'saved_jobs',
+        select: {_id: 1, company:1, jobTitle:1, jobType: 1}, 
+        populate: {
+          path: 'company',
+          select: {name: 1}
+        }
+      }, 
+      {
+        path: 'applied_jobs',
+        select: {job: 1, status: 1},
+        populate: [
+          { path: 'job', select: {jobTitle: 1}},
+          { path: 'company', select: {name: 1}}
+        ]
+      }
+    ]);
     if (!student) {
       res.status(401).send("Student not found");
     } else {
@@ -315,6 +339,36 @@ router.get("/:id", async (req, res) => {
   }
 });
 
+router.get('/:id/applications', async (req, res) => {
+  const token = req.headers['token'];
+  if (!verify_token(token)){
+      console.log('Invalid token!');
+      res.status(401).send('Invalid token!');
+      return;
+  }
+  try {
+    const student = await Student.findById(req.params.id);
+    if (!student) {
+      res.status(401).send("Student not found");
+      return;
+    }
+    const applications = await Application.find({student: student._id}).populate({
+      path: 'job',
+      select: {company: 1, jobTitle: 1,},
+      populate: {
+        path: 'company',
+        select: {password: 0}
+      }
+    })
+    res.status(200).json(applications);
+  }
+  catch (error) {
+    console.log(error);
+    res.status(500);
+  }
+})
+
+//?job=
 router.post("/:id/apply", async (req, res) => {
   const token = req.headers["token"];
   if (!verify_token(token)) {
@@ -364,7 +418,7 @@ router.post("/:id/apply", async (req, res) => {
       //-----------------------------------------------------
     });
     await application.save();
-    student.applied_jobs.push(job._id);
+    student.applied_jobs.push(application._id);
     await student.save();
     res.status(200).send("Application submitted");
   } catch (error) {
@@ -373,6 +427,7 @@ router.post("/:id/apply", async (req, res) => {
   }
 });
 
+//?job=
 router.post("/:id/save", async (req, res) => {
   const token = req.headers["token"];
   if (!verify_token(token)) {

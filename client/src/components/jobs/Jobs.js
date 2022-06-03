@@ -17,7 +17,7 @@ export const Jobs = () => {
         .then(({data}) => {
             console.log('DATA', data);
             let saved_list = data.saved_jobs.map(job => job._id);
-            let applied_list = data.applied_jobs.map(job => job._id);
+            let applied_list = data.applied_jobs.map(app => app.job._id);
             setSaved(saved_list);
             setApplied(applied_list);
             setLoading(false);
@@ -28,8 +28,12 @@ export const Jobs = () => {
     }
 
     useEffect(() => {
-        if (user.type == 'student'){
+        console.log('Use effect')
+        if (user && user.type == 'student'){
             handleStudentData();
+        }
+        else {
+            setLoading(false);
         }
     }, [loading]);
 

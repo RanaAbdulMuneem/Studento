@@ -70,7 +70,7 @@ router.get("/getallcompanies", async (req, res) => {
 });
 
 router.post("/editcompanyprofile", async (req, res) => {
-  const { name, email, description, noOfEmployees, yearFounded } = req.body;
+  const { name, email, description, noOfEmployees, yearFounded, location } = req.body;
   console.log(req.body);
   Company.updateOne(
     { email: email },
@@ -79,6 +79,7 @@ router.post("/editcompanyprofile", async (req, res) => {
       description: description,
       noOfEmployees: parseInt(noOfEmployees),
       yearFounded: parseInt(yearFounded),
+      location: location
     },
     function (err) {
       if (err) {
@@ -137,11 +138,14 @@ router.post("/editstudentprofile", async (req, res) => {
   );
 });
 
+
+//-----------------------LEGACY-------------------------
 router.get("/getallapplications", async (req, res) => {
   console.log("reached in applications")
   const applications = await Application.find();
   return res.json(applications);
 });
+//-----------------------LEGACY-------------------------
 
 router.post("/updateapplication", async (req, res) => {
   console.log(req.body)

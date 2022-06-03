@@ -22,6 +22,5 @@ const Student = new mongoose.Schema({
   code: { type: String, required: true },
 });
 
-const model = mongoose.model("StudentData", Student);
-
-module.exports = model;
+const model = mongoose.model('Student', Student)
+module.exports = model
