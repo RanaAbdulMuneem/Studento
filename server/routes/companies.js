@@ -180,7 +180,8 @@ router.route("/:id/edit").patch(upload.single("photo"), async (req, res) => {
     req.body.description && (company.description = req.body.description);
     req.body.noOfEmployees && (company.noOfEmployees = parseInt(req.body.noOfEmployees));
     req.body.yearFounded && (company.yearFounded = parseInt(req.body.yearFounded));
-    req.body.location && (company.location = req.body.location);
+    req.body.city && (company.city = req.body.city);
+    req.body.country && (company.country = req.body.country);
     req.file && ( company.photo = req.file.filename )
 
     await company.save();

@@ -14,13 +14,15 @@ const CompanyEditModalBtn = (props) => {
   );
   const [description, setDescription] = useState(props.company.description);
   const [yearFounded, setYearFounded] = useState(props.company.yearFounded);
-  const [location, setLocation] = useState(props.company.location);
+  // const [location, setLocation] = useState(props.company.location);
+  const [city, setCity] = useState(props.company.city);
+  const [country, setCountry] = useState(props.company.country);
   const [photo, handlePhoto] = useState('');
 
   const handleEdit = (e) => {
     e.preventDefault();
 
-    if (!name || !email || !noOfEmployees || !description || !yearFounded || !location) {
+    if (!name || !email || !noOfEmployees || !description || !yearFounded || !city || !country) {
       alert("Please fill all the fields");
       return
     }
@@ -31,8 +33,8 @@ const CompanyEditModalBtn = (props) => {
     formData.append("yearFounded", yearFounded);
     formData.append("noOfEmployees", noOfEmployees);
     formData.append("description", description);
-    formData.append("location", location);
-    console.log(formData.get("photo"))
+    formData.append("city", city);
+    formData.append("country", country);
 
     axios.patch(`http://localhost:3001/companies/${props.company._id}/edit`, formData, {headers: {token: props.user.token}})
     .then((response) => {
@@ -50,7 +52,8 @@ const CompanyEditModalBtn = (props) => {
     setNoOfEmployees(props.company.noOfEmployees);
     setDescription(props.company.description);
     setYearFounded(props.company.yearFounded);
-    setLocation(props.company.location);
+    setCity(props.company.city);
+    setCountry(props.company.country);
   }, [props.company]);
 
   
@@ -113,13 +116,23 @@ const CompanyEditModalBtn = (props) => {
               />
             </div>
             <div class="form-group mt-3">
-              <label for="exampleFormControlInput1">Location</label>
+              <label for="exampleFormControlInput1">City</label>
               <input
                 type="text"
                 class="form-control"
                 id="exampleFormControlInput1"
-                value={location}
-                onChange={(e) => setLocation(e.target.value)}
+                value={city}
+                onChange={(e) => setCity(e.target.value)}
+              />
+            </div>
+            <div class="form-group mt-3">
+              <label for="exampleFormControlInput1">Country</label>
+              <input
+                type="text"
+                class="form-control"
+                id="exampleFormControlInput1"
+                value={country}
+                onChange={(e) => setCountry(e.target.value)}
               />
             </div>
 
