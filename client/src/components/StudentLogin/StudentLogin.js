@@ -40,27 +40,19 @@ const StudentLogin = () => {
     const studentEmail = userObject.email;
     const studentPassword = userObject.sub;
 
-    const response = await fetch("http://localhost:3001/students/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        studentEmail,
-        studentPassword,
-      }),
-    });
-
-    const data = await response.json();
-    if (data.token) {
-      localStorage.setItem("token", data.token);
+    axios.post(`http://localhost:3001/students/login`, {studentEmail, studentPassword})
+    .then((response) => {
+      //----------TO BE REMOVED---------------
+      localStorage.setItem("token", response.data.token);
       localStorage.setItem("type", "student");
-
-      console.log("data.user", data.token);
+      //----------TO BE REMOVED---------------
+      localStorage.setItem('user', JSON.stringify(response.data));
       navigate("/studentprofile");
-    } else {
-      alert("Some Error Occurred");
-    }
+    })
+    .catch((error) => {
+      alert(error.response.data);
+      console.log(error);
+    })
   };
 
   const handleStudentLogin = async (e) => {
