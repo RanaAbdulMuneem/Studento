@@ -60,6 +60,16 @@ const StudentProfile = () => {
     return <h1>Loading ...</h1>
   return (
     <div>
+      {studentDetails.verified ? (
+        ""
+      ) : (
+        <div className="alert alert-warning" role="alert">
+          {" "}
+          Your account is unverified. Please visit your email to get activation
+          link!
+        </div>
+      )}
+
       <Row className="mt-5">
         <Col className="col-lg-3">
           <img src={`http://localhost:3001/images/${student.photo}`} alt="not supported" className="profile-pic" width="300px"/>
@@ -120,11 +130,10 @@ const StudentProfile = () => {
                     <div className="col col-4 h6"> {application.job.company.name}</div>
                     <div className="col col-4"> {application.job.jobTitle}</div>
                     <div className="col col-4 text-danger"> {application.status}</div>
-
-                    <hr />
-                  </div>
-                );
-              })}
+                      <hr />
+                    </div>
+                  );
+                })}
             </Row>
             <Row className="name-age-row mt-4">
               <h5>Saved Jobs</h5>

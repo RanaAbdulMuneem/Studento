@@ -6,21 +6,21 @@ import { Link } from "react-router-dom";
 import "./companyProfile.css";
 import ReviewInput from "./ReviewInput";
 import { useNavigate, useLocation } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import axios from "axios";
 
 
 const CompanyProfile = () => {
   const navigate = useNavigate();
   const user = JSON.parse(localStorage.getItem('user'));
-  const token = localStorage.getItem("token");
 
   const [companyDetails, setCompanyDetails] = useState({});
   const [applications, setApplications] = useState([]);
   const [stats, setStats] = useState({});
+  const [pageCount, setPageCount] = useState(0);
 
-  const [loading1, setLoading1] = useState(true);
-  const [loading2, setLoading2] = useState(true);
+  const page = useRef(0);
+  
 
   const handleResolve = async (app_id, status) => {
     axios.patch(`http://localhost:3001/companies/${user.id}/resolve-application`,
@@ -31,26 +31,40 @@ const CompanyProfile = () => {
       let updatedApps = [...applications];
       updatedApps[index].status = status;
 
-      setLoading2(true);
       setApplications(updatedApps);
+      if (status === 'Accepted')
+        setStats({...stats, totalAccepted: stats.totalAccepted+1});
+      else
+      setStats({...stats, totalRejected: stats.totalRejected+1});
     })
   }
 
-  const handleApplications = async () => {
-    axios.get(`http://localhost:3001/companies/${user.id}/applications`, {headers: {token: user.token}})
+  const handleApplications = async () => {  
+    console.log(`retrieving page: ${page.current}`);
+    axios.get(`http://localhost:3001/companies/${user.id}/applications?page=${page.current}`, {headers: {token: user.token}})
     .then((response) => {
-      setApplications(response.data);
-      setLoading2(false);
+      setApplications(oldList => [...oldList, ...response.data.applications]);
+      setPageCount(response.data.pageCount);
+      console.log(pageCount);
     })
     .catch((error) => {
       console.log(error);
     })
   };
 
+  const handleStats = async () => {
+    axios.get(`http://localhost:3001/companies/${user.id}/stats`, {headers: {token: user.token}})
+    .then((response) => {
+      setStats(response.data);
+    })
+    .catch((error) => {
+      console.log(error);
+    })
+  }
+
   const handleUserData = async () => {
     axios.get(`http://localhost:3001/companies/${user.id}`, { headers: {token: user.token}})
     .then((response) => {
-      setLoading1(true);
       setCompanyDetails(response.data);
     })
     .catch((error) => {
@@ -58,62 +72,34 @@ const CompanyProfile = () => {
     });
   };
 
-  
-  
-  // const [totalApplications, setTotalApplications] = useState(0);
-  // const [totalRejected, setTotalRejected] = useState(0);
-  // const [totalAccepted, setTotalAccepted] = useState(0);
-
-  // const getStats = async () => {
-  //   const getApplications = applications.filter(
-  //     (application) => application.company === companyDetails._id
-  //   );
-  //   setTotalApplications(getApplications.length);
-  //   const accepted = getApplications.filter(
-  //     (application) => application.status === "Accepted"
-  //   );
-  //   setTotalAccepted(accepted.length);
-  //   const rejected = getApplications.filter(
-  //     (application) => application.status === "Rejected"
-  //   );
-  //   setTotalRejected(rejected.length);
-  // };
-  
-
-
   useEffect(() => {
+
+    console.log('main use effect');
     if (!user || user.type != 'company') {
       localStorage.clear('user');
       navigate('/');
       return;
     }
+    //API CALLS
     handleUserData();
+    handleStats();
     handleApplications();
-  
+
+    //SCROLL EVENT LISTENER
+    const onScroll = function () {
+      if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
+        console.log("you're at the bottom of the page")
+        page.current++;
+        handleApplications();
+      }
+    }
+    window.addEventListener('scroll', onScroll)
+    return () => window.removeEventListener('scroll', onScroll)
   }, []);
 
-  useEffect(() => {
-    setLoading1(false);
-  }, [companyDetails]);
-  useEffect(() => {
-    const app_total = applications.length;
-    let accept_total=0;
-    let reject_total=0;
-    for (let i=0; i<app_total; i++) {
-      applications[i].status === 'Accepted' && (accept_total++);
-      applications[i].status === 'Rejected' && (reject_total++);
-    }
-    setStats({
-      totalApplications: app_total,
-      totalAccepted: accept_total,
-      totalRejected: reject_total
-    })
-    setLoading2(false);
-  }, [applications]);
-
   //-------------REPLACE WITH BOOTSTRAP LOADING ---------------------
-  if (loading1 || loading2)
-    return <h1>Loading ...</h1>;
+  if (!companyDetails)
+    <h1>Loading ...</h1>
   return (
     <Container>
       <Row className="mt-5">
@@ -171,60 +157,10 @@ const CompanyProfile = () => {
               <ReviewInput />
             </Row> */}
 
-            {/* CANDIDATE - ONLY FOR COMPANY */}
-            <Row className="name-age-row mt-4 education">
-              <h5>Candidates</h5>
 
-              {applications.map((application) => {
-                return (
-                  <div className="row mt-4">
-                    
-                    <div className="col col-2">
-                      {application.job.jobTitle}
-                    </div>
-
-                    <div className="col col-2 h6">
-                      {application.student.name}
-                    </div>
-
-                    <div className="col col-2">
-                      <Link to={`/students/${application.student._id}`}>View Profile</Link>
-                    </div>
-
-                    <div className="col col-2 text-danger h6">
-                      {application.status}
-                    </div>
-
-                    {application.status === 'Pending' && (
-                      <>
-                        
-                        <div className="col col-2">
-                          <button
-                            onClick={() => handleResolve(application._id, 'Accepted')}
-                            className="btn btn-success"
-                          >
-                            Accept
-                          </button>
-                        </div>
-                        
-                        <div className="col col-2">
-                          {" "}
-                          <button
-                            onClick={() => handleResolve(application._id, 'Rejected')}
-                            className="btn btn-danger"
-                          >
-                            Reject
-                          </button>
-                        </div>
-                      </>
-                    )}
-                   </div>
-                )
-              })}
-              
-                TRACKING
-              <div className="row mt-3">
-               
+            {
+              stats ? (
+                <div className="row mt-5">               
                 <div className="col col-lg-4 col-sm-12">
                   <b>Total Applications : </b>
                   {stats.totalApplications}
@@ -239,10 +175,69 @@ const CompanyProfile = () => {
                 </div>
                 <hr/>
               </div>
-             
+              ) : (
+                <h3>Loading ...</h3>
+              )
+            }
+            {/* CANDIDATE - ONLY FOR COMPANY */}
+            {
+              applications ? (
+                <Row className="name-age-row mt-4 education">
+                  <h5>Candidates</h5>
+
+                  {applications.map((application) => {
+                    return (
+                      <div className="row mt-4">
+                        
+                        <div className="col col-2">
+                          {application.job.jobTitle}
+                        </div>
+
+                        <div className="col col-2 h6">
+                          {application.student.name}
+                        </div>
+
+                        <div className="col col-2">
+                          <Link to={`/students/${application.student._id}`}>View Profile</Link>
+                        </div>
+
+                        <div className="col col-2 text-danger h6">
+                          {application.status}
+                        </div>
+
+                        {application.status === 'Pending' && (
+                          <>
+                            
+                            <div className="col col-2">
+                              <button
+                                onClick={() => handleResolve(application._id, 'Accepted')}
+                                className="btn btn-success"
+                              >
+                                Accept
+                              </button>
+                            </div>
+                            
+                            <div className="col col-2">
+                              {" "}
+                              <button
+                                onClick={() => handleResolve(application._id, 'Rejected')}
+                                className="btn btn-danger"
+                              >
+                                Reject
+                              </button>
+                            </div>
+                          </>
+                        )}
+                      </div>
+                    )
+                  })}
 
 
-            </Row>
+                </Row>
+              ) : (
+                <h3>Loading ...</h3>
+              )
+            }
           </Container>
         </Col>
       </Row>

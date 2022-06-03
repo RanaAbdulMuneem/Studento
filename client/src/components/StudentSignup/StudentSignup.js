@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.css";
 import jwt_decode from "jwt-decode";
+import FacebookLogin from "react-facebook-login";
 
 import SignUp from "../forms/SignUp";
 import img from "../../images/boy-table.png";
@@ -63,6 +64,43 @@ const StudentSignup = () => {
     }
   };
 
+  const responseFacebook = async (res) => {
+    console.log(response);
+    // Login failed
+    if (response.status === "unknown") {
+      alert("Login failed!");
+      return false;
+    }
+
+    console.log(res);
+    console.log("response: " + res.name);
+    console.log("response: " + res.email);
+    console.log("response: " + res.userID);
+
+    const studentName = res.name;
+    const studentEmail = res.email;
+    const studentPassword = res.userID;
+
+    console.log(studentName, studentEmail, studentPassword);
+    const response = await fetch("http://localhost:3001/students/signup", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        studentName,
+        studentEmail,
+        studentPassword,
+      }),
+    });
+
+    const data = await response.json();
+
+    if (data.status === "ok") {
+      navigate("/studentlogin");
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     console.log(studentName, studentEmail, studentPassword);
@@ -87,6 +125,14 @@ const StudentSignup = () => {
 
   return (
     <div className="p-5">
+      <FacebookLogin
+        appId="512669597210683"
+        autoLoad={true}
+        fields="name,email"
+        scope="email"
+        callback={responseFacebook}
+        icon="fa-facebook"
+      />
       {/* <SignUpForm2></SignUpForm2> */}
       {/* <SignUp header="Student Signup" background={bg} image={img} type="student"></SignUp> */}
       {/* <NewSignUp header="Student Signup" background={bg} image={img} type="student" /> */}

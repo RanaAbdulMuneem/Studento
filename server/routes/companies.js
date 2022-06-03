@@ -134,6 +134,40 @@ router.get("/:id", async (req, res) => {
   }
 });
 
+router.get("/:id/stats", async (req, res) => {
+  const token = req.headers['token'];
+  if (!verify_token(token)){
+      console.log('Invalid token!');
+      res.status(401).send('Invalid token!');
+      return;
+  }
+
+  try {
+    const company = await Company.findById(req.params.id, {password: 0, jobs: 0});
+    if (!company) {
+      res.status(401).send('Company not found');
+      return;
+    }
+    const applications = await Application.find({company: company._id});
+    const app_total = applications.length;
+    let accept_total = 0;
+    let reject_total = 0;
+    for (let i=0; i<app_total; i++) {
+      applications[i].status === 'Accepted' && (accept_total++);
+      applications[i].status === 'Rejected' && (reject_total++);
+    }
+    res.status(200).json({
+      totalApplications: app_total,
+      totalAccepted: accept_total,
+      totalRejected: reject_total
+    });
+  }
+  catch (error) {
+    res.status(500);
+  }
+});
+
+//?page=
 router.get("/:id/applications/", async (req, res) => {
   const token = req.headers['token'];
   if (!verify_token(token)){
@@ -148,18 +182,22 @@ router.get("/:id/applications/", async (req, res) => {
       res.status(401).send('Company not found');
       return;
     }
+    const PAGE_SIZE = 3;
+    const page = parseInt(req.query.page || '0');
+    const results = await (await Application.find({company: company._id})).length;
+    const pageCount = Math.ceil(results/PAGE_SIZE);
+    const applications = await Application.find({company: company._id}).populate([
+      {path: 'student', select:{_id:1, name:1}},
+      {path: 'job', select:{_id:1, jobTitle:1}}
+    ])
+    .limit(PAGE_SIZE)
+    .skip(PAGE_SIZE*page)
+    ;
 
-    let applications = [];
-    for (let i=0; i<company.jobs.length; i++) {
-      const app = await Application.find({job: company.jobs[i]}).populate([
-        {path: 'student', select:{_id:1, name:1}},
-        {path: 'job', select:{_id:1, jobTitle:1}}
-      ]);
-      if (app.length > 0) {
-        applications = [...applications, ...app];
-      }
-    }
-    res.status(200).json(applications);
+    res.status(200).json({
+      pageCount,
+      applications
+    });
   }
   catch (error) {
     console.log(error);

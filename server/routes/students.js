@@ -19,6 +19,7 @@ const verify_token = require("../utils/token");
 
 const { removeListener } = require("../models/student.model");
 
+
 // UPLOAD IMAGE
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -40,50 +41,103 @@ const fileFilter = (req, file, cb) => {
 
 let upload = multer({ storage, fileFilter });
 
+const sendEmail = (targetEmail, sub, content) => {
+  // *********************
+  // NodeMailer Mail Send
+  var transporter = nodemailer.createTransport({
+    service: "gmail",
+    auth: {
+      user: "studento.assist@gmail.com",
+      pass: "Studentosupport1",
+    },
+  });
+
+  var mailOptions = {
+    from: "studento.assist@gmail.com",
+    to: targetEmail,
+    subject: sub,
+    text: content,
+  };
+
+  transporter.sendMail(mailOptions, function (error, info) {
+    if (error) {
+      console.log(error);
+    } else {
+      console.log("Email sent: " + info.response);
+    }
+  });
+  // *********************
+};
+
 /* GET users listing. */
 router.get("/", function (req, res, next) {
   res.send("Students router");
+});
+
+router.get("/email-activation/:email/:token", async (req, res) => {
+  // console.log(req.body);
+  // res.json({ status: "ok" });
+  try {
+    const user = await Student.findOne({
+      email: req.params.email,
+      token: req.params.token,
+    });
+
+    if (user) {
+      console.log("found");
+
+      Student.updateOne(
+        { email: req.params.email },
+        {
+          verified: true,
+        },
+        function (err) {
+          if (err) {
+            console.log(err);
+            res.status(500);
+          }
+        }
+      );
+
+      res.json({ status: "updated", message: "User has been registered" });
+    }
+    if (!user) {
+      console.log("not found");
+      res.json({ status: "error", error: "error" });
+      return { status: "error", error: "Invalid" };
+    }
+  } catch (err) {
+    console.log(err);
+    res.json({ status: "error", error: "error" });
+  }
 });
 
 router.post("/signup", async (req, res) => {
   console.log(req.body);
   try {
     const newPassword = await bcrypt.hash(req.body.studentPassword, 10);
+    const otp = Math.floor(Math.random() * 1000000000000 + 1);
+
     await Student.create({
       name: req.body.studentName,
       email: req.body.studentEmail,
       password: newPassword,
+      code: otp,
     });
     res.json({ status: "ok" });
 
-    // *********************
-    // NodeMailer Mail Send
-    var transporter = nodemailer.createTransport({
-      service: "gmail",
-      auth: {
-        user: "studento.assist@gmail.com",
-        pass: "Studentosupport1",
-      },
-    });
+    activationLink =
+      "http://localhost:3001/students/email-activation/" +
+      req.body.studentEmail +
+      "/" +
+      otp;
+    content =
+      "Dear, " +
+      req.body.studentName +
+      " You have successfully registed an account. Click Here To activate account: " +
+      activationLink;
 
-    var mailOptions = {
-      from: "studento.assist@gmail.com",
-      to: req.body.studentEmail,
-      subject: "Welcome To Studento",
-      text:
-        "Dear, " +
-        req.body.studentName +
-        " You have successfully registed an account.",
-    };
-
-    transporter.sendMail(mailOptions, function (error, info) {
-      if (error) {
-        console.log(error);
-      } else {
-        console.log("Email sent: " + info.response);
-      }
-    });
-    // *********************
+    sendEmail(req.body.studentEmail, "Welcome To Studento", content);
   } catch (err) {
     console.log(err);
     res.json({ status: "error", error: "Duplicate email" });
@@ -376,12 +430,15 @@ router.post("/:id/apply", async (req, res) => {
       res.status(401).send("Company not found");
     }
     //-----------------------------------------------------
-    const exists = await Application.findOne({
-      student: student._id,
-      job: job._id,
-    });
-    if (exists) {
-      res.status(401).send("Application already submitted");
+    const app = await Application.findOne({student: student._id, job: job._id});
+    if (app) {
+      const index = student.applied_jobs.indexOf(app._id);
+      if (index != -1) {
+        student.applied_jobs.splice(index, 1);
+        await student.save();
+        await Application.findByIdAndDelete(app._id);
+      }
+      res.status(200).send("Application unsubmitted");
       return;
     }
     const application = new Application({
