@@ -96,10 +96,12 @@ const JobCard = (props) => {
                             props.user && (
                                 <>
                                     {
+                                        
+                                        
                                         props.applied ? (
-                                            <button class="btn btn-primary me-3 disabled">Applied</button>
+                                            <button class="btn btn-danger me-3" onClick={() => props.handleApply(props.job._id, false)}>Unapply</button>
                                         ) : (
-                                            <button class="btn btn-primary me-3" onClick={() => props.handleApply(props.job._id)}>Apply</button>
+                                            <button class="btn btn-primary me-3" onClick={() => props.handleApply(props.job._id, true)}>Apply</button>
                                         )
                                     }
                                     <SaveButton saved={props.saved} setSaved={() => props.handleSave(props.job._id)}/>
@@ -196,12 +198,16 @@ export const JobListing = (props) => {
     const [loading, setLoading] = useState(true);
 
 
-    const handleApply = async (job_id) => {
+    const handleApply = async (job_id, status) => {
         await axios.post('http://localhost:3001/students/'+props.user.id+'/apply?job='+job_id, null,{
             headers: {'token': localStorage.getItem('token')}
         })
         .then((response) => {
-            props.setAppliedList(oldList => [...oldList, job_id]);
+            if (status)
+                props.setAppliedList(oldList => [...oldList, job_id]);
+            else {
+                props.setAppliedList(oldList => oldList.filter(job => job !== job_id));
+            }
         })
         .catch((error) => {
             console.log(error)
