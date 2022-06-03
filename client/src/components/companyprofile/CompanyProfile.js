@@ -111,7 +111,9 @@ const CompanyProfile = () => {
             {/* EDIT - ONLY FOR COMPANY */}
             <CompanyEditModalBtn
               company={companyDetails}
+              setCompany={setCompanyDetails}
               email={companyDetails.email}
+              user = {user}
             />
 
             {/* CREATE A JOB - ONLY FOR COMPANY */}

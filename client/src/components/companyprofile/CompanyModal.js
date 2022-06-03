@@ -19,20 +19,7 @@ const CompanyEditModalBtn = (props) => {
 
   const handleEdit = (e) => {
     e.preventDefault();
-    // fetch("http://localhost:3001/editcompanyprofile", {
-    //   method: "POST",
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //   },
-    //   body: JSON.stringify({
-    //     name: name,
-    //     email: email,
-    //     yearFounded: yearFounded,
-    //     noOfEmployees: noOfEmployees,
-    //     description: description,
-    //     location: location,
-    //   }),
-    // });
+
     const formData = new FormData();
     formData.append("photo", photo)
     formData.append("name", name);
@@ -43,16 +30,14 @@ const CompanyEditModalBtn = (props) => {
     formData.append("location", location);
     console.log(formData.get("photo"))
 
-    axios
-      .post("http://localhost:3001/editcompanyprofile", formData)
-      .then((res) => {
-        console.log(res);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-
-    alert("Profile updated");
+    axios.patch(`http://localhost:3001/companies/${props.company._id}/edit`, formData, {headers: {token: props.user.token}})
+    .then((response) => {
+      props.setCompany(response.data);
+    })
+    .catch((error) => {
+      console.log(error);
+      alert(error.response.data);
+    })
   };
   
   useEffect(() => {

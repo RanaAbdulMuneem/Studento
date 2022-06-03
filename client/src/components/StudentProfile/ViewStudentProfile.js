@@ -40,7 +40,7 @@ const ViewStudentProfile = () => {
     <div>
       <Row className="mt-5">
         <Col className="col-lg-3">
-          <img src={img} alt="not supported" className="profile-pic" />
+          <img src={`http://localhost:3001/images/${student.photo}`} alt="not supported" className="profile-pic" />
         </Col>
         <Col className="col-lg-9 ">
           <h1 class="display-3">
@@ -63,10 +63,11 @@ const ViewStudentProfile = () => {
             <Row className="name-age-row mt-4 ">
               <h5>Skills</h5>
 
-              {student.skills &&
+              <span>{student.skills}</span>
+              {/* {student.skills &&
                 student.skills.map((skill) => {
                   return <span>{skill}</span>;
-                })}
+                })} */}
             </Row>
             <Row className="name-age-row mt-4 education">
               <h5>Education</h5>
