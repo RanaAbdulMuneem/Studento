@@ -117,26 +117,27 @@ router.post("/password-update", async (req, res) => {
   try {
     const user = await Student.findOne({
       email: req.body.studentEmail,
-      token: req.body.studentToken,
+      code: req.body.studentToken,
     });
-
     if (user) {
       console.log("found");
       const newPassword = await bcrypt.hash(req.body.studentPassword, 10);
 
-      Student.updateOne(
-        { email: req.body.studentEmail },
-        {
-          password: newPassword,
-        },
-        function (err) {
-          if (err) {
-            console.log(err);
-            res.status(500);
-            res.json({ status: "error", error: "error" });
-          }
-        }
-      );
+      user.password = newPassword;
+      await user.save();
+      // Student.updateOne(
+      //   { email: req.body.studentEmail },
+      //   {
+      //     password: newPassword,
+      //   },
+      //   function (err) {
+      //     if (err) {
+      //       console.log(err);
+      //       res.status(500);
+      //       res.json({ status: "error", error: "error" });
+      //     }
+      //   }
+      // );
 
       res.json({ status: "updated", message: "User Password rest" });
     }
