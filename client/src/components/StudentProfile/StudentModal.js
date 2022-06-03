@@ -25,7 +25,7 @@ const StudentEditModalBtn = (props) => {
 
   const handleEdit = (e) => {
     e.preventDefault();
-    if (!name || !skills || !location || !age || !primaryRole || !university || !degree || !major || !graduationYear || !universityDescription || !experience || !achievments) {
+    if (!name || !skills || !location || !age || !primaryRole || !university || !degree || !major || !graduationYear || !universityDescription || !experience || !achievements) {
        alert("please fill in all details")
        return;
     }

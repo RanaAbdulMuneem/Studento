@@ -24,7 +24,7 @@ router.get('/', async (req, res) => {
         const jobs = await Job.find(query)
         .populate({
           path: 'company',
-          select: {name: 1, city: 1, country: 1}
+          select: {name: 1, city: 1, country: 1, photo: 1}
         })
         .limit(PAGE_SIZE)
         .skip(PAGE_SIZE * (page));
