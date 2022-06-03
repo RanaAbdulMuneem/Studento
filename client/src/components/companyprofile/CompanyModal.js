@@ -20,6 +20,10 @@ const CompanyEditModalBtn = (props) => {
   const handleEdit = (e) => {
     e.preventDefault();
 
+    if (!name || !email || !noOfEmployees || !description || !yearFounded || !location) {
+      alert("Please fill all the fields");
+      return
+    }
     const formData = new FormData();
     formData.append("photo", photo)
     formData.append("name", name);

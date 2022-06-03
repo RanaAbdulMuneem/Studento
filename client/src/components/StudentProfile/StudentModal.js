@@ -25,8 +25,10 @@ const StudentEditModalBtn = (props) => {
 
   const handleEdit = (e) => {
     e.preventDefault();
-
-
+    if (!name || !skills || !location || !age || !primaryRole || !university || !degree || !major || !graduationYear || !universityDescription || !experience || !achievments) {
+       alert("please fill in all details")
+       return;
+    }
     let newDetails = {};
     name && (newDetails.name = name);
     age && (newDetails.age = parseInt(age));
@@ -247,7 +249,7 @@ const StudentEditModalBtn = (props) => {
                 onChange={(e) => setExperience(e.target.value)}
               />
             </div>
-            <button type="submit" className="btn btn-warning">
+            <button type="submit" className="btn btn-warning mt-3">
               {" "}
               Submit
             </button>
