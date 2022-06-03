@@ -398,12 +398,15 @@ router.post("/:id/apply", async (req, res) => {
       res.status(401).send("Company not found");
     }
     //-----------------------------------------------------
-    const exists = await Application.findOne({
-      student: student._id,
-      job: job._id,
-    });
-    if (exists) {
-      res.status(401).send("Application already submitted");
+    const app = await Application.findOne({student: student._id, job: job._id});
+    if (app) {
+      const index = student.applied_jobs.indexOf(app._id);
+      if (index != -1) {
+        student.applied_jobs.splice(index, 1);
+        await student.save();
+        await Application.findByIdAndDelete(app._id);
+      }
+      res.status(200).send("Application unsubmitted");
       return;
     }
     const application = new Application({
