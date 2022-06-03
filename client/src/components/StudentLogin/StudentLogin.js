@@ -8,6 +8,7 @@ import bg from "../../images/bg-1.svg";
 import { Link, useNavigate } from "react-router-dom";
 import NewLogIn from "../forms/NewLogin";
 import axios from "axios";
+import ForgetPassword from "../utils/ForgetPassword";
 
 const StudentLogin = () => {
   const navigate = useNavigate();
@@ -40,36 +41,44 @@ const StudentLogin = () => {
     const studentEmail = userObject.email;
     const studentPassword = userObject.sub;
 
-    axios.post(`http://localhost:3001/students/login`, {studentEmail, studentPassword})
-    .then((response) => {
-      //----------TO BE REMOVED---------------
-      localStorage.setItem("token", response.data.token);
-      localStorage.setItem("type", "student");
-      //----------TO BE REMOVED---------------
-      localStorage.setItem('user', JSON.stringify(response.data));
-      navigate("/studentprofile");
-    })
-    .catch((error) => {
-      alert(error.response.data);
-      console.log(error);
-    })
+    axios
+      .post(`http://localhost:3001/students/login`, {
+        studentEmail,
+        studentPassword,
+      })
+      .then((response) => {
+        //----------TO BE REMOVED---------------
+        localStorage.setItem("token", response.data.token);
+        localStorage.setItem("type", "student");
+        //----------TO BE REMOVED---------------
+        localStorage.setItem("user", JSON.stringify(response.data));
+        navigate("/studentprofile");
+      })
+      .catch((error) => {
+        alert(error.response.data);
+        console.log(error);
+      });
   };
 
   const handleStudentLogin = async (e) => {
     e.preventDefault();
-    axios.post(`http://localhost:3001/students/login`, {studentEmail, studentPassword})
-    .then((response) => {
-      //----------TO BE REMOVED---------------
-      localStorage.setItem("token", response.data.token);
-      localStorage.setItem("type", "student");
-      //----------TO BE REMOVED---------------
-      localStorage.setItem('user', JSON.stringify(response.data));
-      navigate("/studentprofile");
-    })
-    .catch((error) => {
-      alert(error.response.data);
-      console.log(error);
-    })
+    axios
+      .post(`http://localhost:3001/students/login`, {
+        studentEmail,
+        studentPassword,
+      })
+      .then((response) => {
+        //----------TO BE REMOVED---------------
+        localStorage.setItem("token", response.data.token);
+        localStorage.setItem("type", "student");
+        //----------TO BE REMOVED---------------
+        localStorage.setItem("user", JSON.stringify(response.data));
+        navigate("/studentprofile");
+      })
+      .catch((error) => {
+        alert(error.response.data);
+        console.log(error);
+      });
     // const response = await fetch("http://localhost:3001/students/login", {
     //   method: "POST",
     //   headers: {
@@ -87,12 +96,12 @@ const StudentLogin = () => {
     //   localStorage.setItem("token", data.token);
     //   localStorage.setItem("type", "student");
     //   //----------TO BE REMOVED---------------
-      
+
     //   localStorage.setItem('user', JSON.stringify(data));
 
-      //console.log("data.user", data.token);
-      //navigate("/studentprofile");
-      //handleStudentProfile(data.token);
+    //console.log("data.user", data.token);
+    //navigate("/studentprofile");
+    //handleStudentProfile(data.token);
     // } else {
     //   alert("Please check your username and password");
     // }
@@ -231,8 +240,7 @@ const StudentLogin = () => {
                             >
                               Log Me In!
                             </button>
-                            {/* <a href="#">Forgot Password?</a> */}
-                            {/* <ForgetPassword /> */}
+                            <ForgetPassword />
                             <div className="row ">
                               <div className="col-3  m-0 p-0">
                                 <hr />

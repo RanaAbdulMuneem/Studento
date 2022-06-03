@@ -125,14 +125,6 @@ const StudentSignup = () => {
 
   return (
     <div className="p-5">
-      <FacebookLogin
-        appId="512669597210683"
-        autoLoad={true}
-        fields="name,email"
-        scope="email"
-        callback={responseFacebook}
-        icon="fa-facebook"
-      />
       {/* <SignUpForm2></SignUpForm2> */}
       {/* <SignUp header="Student Signup" background={bg} image={img} type="student"></SignUp> */}
       {/* <NewSignUp header="Student Signup" background={bg} image={img} type="student" /> */}
@@ -207,13 +199,16 @@ const StudentSignup = () => {
               <div className="mx-5" id="signUpDiv"></div>
             </div>
             <div class="row mb-1">
-              <a
-                href="/https://facebook.com"
-                target="_blank"
-                class="btn btn-light border-secondary w-100"
-              >
-                Login with Facebook
-              </a>
+              <div className="mx-5">
+                <FacebookLogin
+                  appId="512669597210683"
+                  autoLoad={false}
+                  fields="name,email"
+                  scope="email"
+                  callback={responseFacebook}
+                  icon="fa-facebook"
+                />
+              </div>
             </div>
             <div class="row">
               <p className="text-center" style={{ fontSize: "12px" }}>

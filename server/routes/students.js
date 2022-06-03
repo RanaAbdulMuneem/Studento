@@ -19,7 +19,6 @@ const verify_token = require("../utils/token");
 
 const { removeListener } = require("../models/student.model");
 
-
 // UPLOAD IMAGE
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -105,6 +104,57 @@ router.get("/email-activation/:email/:token", async (req, res) => {
       console.log("not found");
       res.json({ status: "error", error: "error" });
       return { status: "error", error: "Invalid" };
+    }
+  } catch (err) {
+    console.log(err);
+    res.json({ status: "error", error: "error" });
+  }
+});
+
+router.post("/password-reset", async (req, res) => {
+  console.log(req.body);
+  const otp = Math.floor(Math.random() * 1000000000000 + 1);
+
+  try {
+    const user = await Student.findOne({
+      email: req.body.email,
+    });
+
+    if (user) {
+      console.log("found");
+
+      Student.updateOne(
+        { email: req.body.email },
+        {
+          code: otp,
+        },
+        function (err) {
+          if (err) {
+            console.log(err);
+            res.status(500);
+            res.json({ status: "error", error: "error" });
+          }
+        }
+      );
+
+      resetLink =
+        "http://localhost:3000/students/newPassword/" +
+        req.body.email +
+        "/" +
+        otp;
+
+      content =
+        "Dear, User" +
+        " You have requested password reset. Click Here To reset account: " +
+        resetLink;
+
+      sendEmail(req.body.email, "Password Reset", content);
+
+      res.json({ status: "updated", message: "User reset sent" });
+    }
+    if (!user) {
+      console.log("not found");
+      res.json({ status: "error", error: "error" });
     }
   } catch (err) {
     console.log(err);
@@ -221,26 +271,24 @@ router.route("/edit").post(upload.single("photo"), async (req, res) => {
       req.body.gender && (query.gender = req.body.gender);
       req.body.primaryRole && (query.primaryRole = req.body.primaryRole);
       req.body.university && (query.university = req.body.university);
-      req.body.universityDescription && (query.universityDescription = req.body.universityDescription);
+      req.body.universityDescription &&
+        (query.universityDescription = req.body.universityDescription);
       req.body.degree && (query.degree = req.body.degree);
       req.body.major && (query.major = req.body.major);
       req.body.achievments && (query.achievements = req.body.achievments);
       req.body.experience && (query.experience = req.body.experience);
       req.body.skills && (query.skills = req.body.skills);
-      req.body.graduationYear && (query.graduationYear = req.body.graduationYear);
-      
-      req.file && ( query.photo = req.file.filename )
+      req.body.graduationYear &&
+        (query.graduationYear = req.body.graduationYear);
 
-      Student.updateOne(
-        { _id: id },
-       query,
-        function (err) {
-          if (err) {
-            console.log(err);
-            res.status(500);
-          }
+      req.file && (query.photo = req.file.filename);
+
+      Student.updateOne({ _id: id }, query, function (err) {
+        if (err) {
+          console.log(err);
+          res.status(500);
         }
-      );
+      });
     } catch (error) {
       console.log(error);
       res.status(500).send("Invalid token");
@@ -431,7 +479,10 @@ router.post("/:id/apply", async (req, res) => {
       res.status(401).send("Company not found");
     }
     //-----------------------------------------------------
-    const app = await Application.findOne({student: student._id, job: job._id});
+    const app = await Application.findOne({
+      student: student._id,
+      job: job._id,
+    });
     if (app) {
       const index = student.applied_jobs.indexOf(app._id);
       if (index != -1) {
