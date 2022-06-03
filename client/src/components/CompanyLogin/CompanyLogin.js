@@ -234,20 +234,20 @@ const CompanyLogin = () => {
                                 <hr />
                               </div>
                               <div className="col d-flex justify-content-center justify-text-center mx-1 px-0">
-                                <lead className="text-center p-0 m-0">Or</lead>
+                                {/* <lead className="text-center p-0 m-0">Or</lead> */}
                               </div>
 
-                              <div className="col-3 m-0 p-0">
+                              {/* <div className="col-3 m-0 p-0">
                                 <hr />
-                              </div>
+                              </div> */}
                             </div>
-                            <div className="mx-5" id="signInDiv"></div>
-                            <button
+                            {/* <div className="mx-5" id="signInDiv"></div> */}
+                            {/* <button
                               type="submit"
                               className="btn btn-light  w-100 my-4 border-secondary"
                             >
                               Login With Facebook
-                            </button>
+                            </button> */}
                             <div>
                               <p
                                 className="text-center"
