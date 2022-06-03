@@ -101,7 +101,7 @@ router
       req.body.name && (query.name = req.body.name);
       req.body.email && (query.email = req.body.email);
       req.body.description && (query.description = req.body.description);
-      req.body.noOfEmployees && (query.noOfEmployees = req.body.noOfEmployees);
+      req.body.noOfEmployees && (query.noOfEmployees = parseInt(req.body.noOfEmployees));
       req.body.yearFounded && (query.yearFounded = req.body.yearFounded);
       req.body.location && (query.location = req.body.location);
       req.file && ( query.photo = req.file.filename )

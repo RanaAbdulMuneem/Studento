@@ -24,17 +24,27 @@ mongoose.connect("mongodb://localhost:27017/StudentoDB", {
         email: "muneem@mail.com",
         password: password,
         saved_jobs: [],
-        applied_jobs: []
+        applied_jobs: [],
+        verified: true,
+        code: '123',
     })
     await Student.create({
         name: "Ali Qumail",
         email: "ali@mail.com",
         password: password,
+        saved_jobs: [],
+        applied_jobs: [],
+        verified: true,
+        code: '123',
     })
     await Student.create({
         name: "Behzad Khokher",
         email: "behzad@mail.com",
         password: password,
+        saved_jobs: [],
+        applied_jobs: [],
+        verified: true,
+        code: '123',
     })
     console.log('Creating companies')
     await Company.create({
