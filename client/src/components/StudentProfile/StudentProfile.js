@@ -68,16 +68,12 @@ const StudentProfile = () => {
         </div>
       )}
     <div className="d-flex justify-content-center">
-     
-      
-    
-      
 
       <Row className="mt-5 w-75 d-flex justify-content-center">
         <Col className="col col-lg-5 col-md-12 col-sm-12">
         {
           student.photo &&
-          <img src={`http://localhost:3001/images/${student.photo}`} alt="not supported" className="profile-pic w-100" />
+          <img src={`http://localhost:3001/images/${student.photo}`} alt="not supported" className="profile-pic" />
         }
         </Col>
         <Col className="col-lg-6 col-md-12 col-sm-12">
@@ -160,7 +156,8 @@ const StudentProfile = () => {
         
       </Row>
     </div>
-    </div>
+   </div>
+
   );
 };
 export default StudentProfile;

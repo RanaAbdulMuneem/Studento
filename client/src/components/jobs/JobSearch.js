@@ -18,12 +18,12 @@ export const JobSearch = (props) => {
                         <input type="text" value={value} placeholder="Search Keyword" class="w-100 form-control search-field" onChange={(e) => setValue(e.target.value)}/>
                     </div>
                 </div>
-                <div class="col-sm">
+                {/* <div class="col-sm">
                     <div class="d-flex flex-row align-items-center">
                         <FaSearchLocation class="me-2"/>
                         <input type="text" placeholder="Online Job" class="w-100 form-control search-field"/>
                     </div>
-                </div>
+                </div> */}
                 <div class="col-sm-auto">
                     <button class="btn btn-primary search-button w-100" onClick={() => props.setSearch({...props.filters, search: value})}>Search</button>
                 </div>

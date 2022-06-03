@@ -80,7 +80,10 @@ const JobCard = (props) => {
                 <div class="row">
                     <div class="col-auto">
                         <a href="#">
-                            <img src={Logo} class="img-thumbnail" width={60}></img>
+                            {
+                                props.job.company.photo &&
+                                <img src={`http://localhost:3001/images/${props.job.company.photo}`} class="img-thumbnail" width={60}></img>
+                            }
                         </a>
                     </div>
                     <div class="col-auto me-auto">
