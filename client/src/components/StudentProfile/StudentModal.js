@@ -15,7 +15,7 @@ const StudentEditModalBtn = (props) => {
   const [gender, setGender] = useState(props.studentDetails.gender);
 
   const [achievments, setAchievments] = useState(
-    props.studentDetails.achievements
+    props.studentDetails.achievments
   );
   const [experience, setExperience] = useState(props.studentDetails.experience);
 
@@ -36,8 +36,13 @@ const StudentEditModalBtn = (props) => {
 
   const handleEdit = (e) => {
     e.preventDefault();
-
-    const newDetails = {
+    if (!name || !skills || !location || !age || !primaryRole || !university || !degree || !major || !graduationYear || !universityDescription || !experience || !achievments) {
+       alert("please fill in all details")
+       return;
+    }
+    
+    
+      const newDetails = {
       name: name,
       email: props.email,
       age: age,
@@ -61,15 +66,15 @@ const StudentEditModalBtn = (props) => {
     formData.append("email", props.email);
     formData.append("gender", gender);
     formData.append("location", location);
-    formData.append("unversity", university);
-    formData.append("unversityDescription", universityDescription);
+    formData.append("university", university);
+    formData.append("universityDescription", universityDescription);
     formData.append("major", major);
     formData.append("degree", degree);
     formData.append("graduationYear", graduationYear);
     formData.append("skills", skills);
     formData.append("primaryRole", primaryRole);
     formData.append("experience", experience);
-    formData.append("achievements", achievments);
+    formData.append("achievments", achievments);
 
     const headers = {
       "Content-Type": "multipart/form-data",
@@ -288,7 +293,7 @@ const StudentEditModalBtn = (props) => {
                 onChange={(e) => setExperience(e.target.value)}
               />
             </div>
-            <button type="submit" className="btn btn-warning">
+            <button type="submit" className="btn btn-warning mt-3">
               {" "}
               Submit
             </button>

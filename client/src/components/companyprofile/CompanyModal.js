@@ -19,6 +19,11 @@ const CompanyEditModalBtn = (props) => {
 
   const handleEdit = (e) => {
     e.preventDefault();
+
+    if (!name || !email || !noOfEmployees || !description || !yearFounded || !location) {
+      alert("Please fill all the fields");
+      return
+    }
     // fetch("http://localhost:3001/editcompanyprofile", {
     //   method: "POST",
     //   headers: {
