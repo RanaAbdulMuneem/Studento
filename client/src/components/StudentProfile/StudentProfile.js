@@ -54,7 +54,6 @@ const StudentProfile = () => {
     }
     // handleJobsData();
   }, []);
-
   //-----------REPLACE WITH BOOTSTRAP LOADING-------------------
   if (loading1 || loading2)
     return <h1>Loading ...</h1>
@@ -72,16 +71,18 @@ const StudentProfile = () => {
 
       <Row className="mt-5 w-75 d-flex justify-content-center">
         <Col className="col col-lg-5 col-md-12 col-sm-12">
+        {
+          student.photo &&
           <img src={`http://localhost:3001/images/${student.photo}`} alt="not supported" className="profile-pic w-100" />
+        }
         </Col>
         <Col className="col-lg-6 col-md-12 col-sm-12">
           <h2 class="display-3 pt-3">
           Hi {student.name},
           </h2>
-          <StudentEditModalBtn studentDetails={student} setDetails={setStudent} email={student.email}/>
+          <StudentEditModalBtn studentDetails={student} setDetails={setStudent} email={student.email} user={user}/>
         </Col>
           <Container>
-           
             <Row className="name-age-row mt-4 border-shadow" >
               <h5>Description</h5>
               <Col> Name : {student.name}</Col>
@@ -98,10 +99,11 @@ const StudentProfile = () => {
             <Row className="name-age-row mt-4 border-shadow">
               <h5>Skills</h5>
 
-              {student.skills &&
+              <span>{student.skills}</span>
+              {/* {student.skills &&
                 student.skills.map((skill) => {
                   return <span>{skill}</span>;
-                })}
+                })} */}
             </Row>
             <Row className="name-age-row mt-4 education border-shadow">
               <h5>Education</h5>
@@ -126,7 +128,7 @@ const StudentProfile = () => {
             <Row className="name-age-row mt-4 border-shadow">
               <h5>Jobs Status</h5>
               {/* {jobDetails.jobTitle} */}
-              {applications.map((application) => {
+              {applications && applications.map((application) => {
                 return (
                   <div className="row mt-4">
                     <div className="col col-4 h6"> {application.job.company.name}</div>
@@ -139,7 +141,7 @@ const StudentProfile = () => {
             </Row>
             <Row className="name-age-row mt-4 border-shadow">
               <h5>Saved Jobs</h5>
-              {student.saved_jobs.map((job) => {
+              {student.saved_jobs && student.saved_jobs.map((job) => {
                 return (
                   <div className="row mt-4">
                     <div className="col col-4 h6"> {job.company.name}</div>

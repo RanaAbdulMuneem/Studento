@@ -47,7 +47,7 @@ const ViewCompanyProfile = () => {
     <Container>
       <Row className="mt-5">
         <Col className="col-lg-3">
-          <img src={logo} alt="not supported" className="profile-pic" />
+          <img src={`http://localhost:3001/images/${companyDetails.photo}`} alt="not supported" className="profile-pic" />
         </Col>
         <Col className="col-lg-9 ">
           <Container>

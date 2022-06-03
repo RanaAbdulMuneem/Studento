@@ -1,11 +1,12 @@
 import { useState, useEffect } from "react";
 import { CheckBoxControls } from "../utils/CheckBoxControls";
-import {useLocation} from "react-router-dom"
+import {useLocation, useNavigate} from "react-router-dom"
 import axios from "axios"
-const CreateJob = () => {
 
-  // const { state } = useLocation();
-  // const { company } = state;
+
+const CreateJob = () => {
+  const navigate = useNavigate();
+  const user = JSON.parse(localStorage.getItem('user'));
 
   const [jobTitle, setJobTitle] = useState("");
   const [education, setEducation] = useState("");
@@ -16,55 +17,42 @@ const CreateJob = () => {
   const [minPay, setMinPay] = useState("");
   const [skills, setSkills] = useState("");
 
-
-  const [companyDetails, setCompanyDetails] = useState({});
-
-  const handleUserData = async () => {
-    axios
-      .get("http://localhost:3001/companies/profile", {
-        headers: {
-          token: localStorage.getItem("token"),
-        },
-      })
-      .then((response) => {
-        setCompanyDetails(response.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
-
   useEffect(() => {
-    handleUserData();
+    if (!user || user.type != 'company') {
+      localStorage.clear('user');
+      navigate('/');
+      return;
+    }
   }, []);
 
   const handleSubmit = (e) => {
        e.preventDefault();
-       console.log(jobTitle, education, jobType, jobLocation, jobDescription, jobDomain, minPay, skills);
-       fetch("http://localhost:3001/jobs/addjob", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        jobTitle,
-        education,
-        jobType,
-        jobLocation,
-        jobDescription,
-        jobDomain,
-        minPay,
-        skills,
-        id: companyDetails._id,
-        dateCreated: new Date()
-      }),
-    });
+       console.log(jobTitle, education, jobType, jobLocation, jobDescription, jobDomain, minPay, skills, user.id);
+
+       const job = {
+         jobTitle,
+         education,
+         jobType,
+         jobLocation,
+         jobDescription,
+         jobDomain,
+         minPay,
+         skills,
+       };
+       
+       axios.post(`http://localhost:3001/companies/${user.id}/add-job`, job, {headers: {token: user.token}})
+       .then((response) => {
+         alert(response.data);
+       })
+       .catch((error) => {
+         console.log(error);
+         alert(error.response.data);
+       })    
     alert("Job posted")
   }
 
   return (
     <div>
-      Job posted by {companyDetails.name}
       <h4 className="mt-5">Create Job</h4>
       <form onSubmit={handleSubmit}>
         <div class="form-group mt-4">

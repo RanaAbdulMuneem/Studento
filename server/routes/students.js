@@ -419,6 +419,64 @@ router.get("/:id", async (req, res) => {
   }
 });
 
+router.route("/:id/edit").patch(upload.single("photo"), async (req, res) => {
+  const token = req.headers["token"];
+  if (!verify_token(token)) {
+    console.log("Invalid token!");
+    res.status(401).send("Invalid token!");
+    return;
+  }
+
+  try {
+    const student = await Student.findById(req.params.id, {
+      password: 0,
+    }).populate([
+      {
+        path: "saved_jobs",
+        select: { _id: 1, company: 1, jobTitle: 1, jobType: 1 },
+        populate: {
+          path: "company",
+          select: { name: 1 },
+        },
+      },
+      {
+        path: "applied_jobs",
+        select: { job: 1, status: 1 },
+        populate: [
+          { path: "job", select: { jobTitle: 1 } },
+          { path: "company", select: { name: 1 } },
+        ],
+      },
+    ]);
+    if (!student) {
+      res.status(401).send("Student not found");
+      return;
+    }
+    req.body.name && (student.name = req.body.name);
+    req.body.age && (student.age = parseInt(req.body.age));
+    req.body.gender && (student.gender = req.body.gender);
+    req.body.location && (student.location = req.body.location);
+    req.body.primaryRole && (student.primaryRole = req.body.primaryRole);
+    req.body.university && (student.university = req.body.university);
+    req.body.universityDescription && (student.universityDescription = req.body.universityDescription);
+    req.body.degree && (student.degree = req.body.degree);
+    req.body.major && (student.major = req.body.major);
+    req.body.achievements && (student.achievements = req.body.achievements);
+    req.body.experience && (student.experience = req.body.experience);
+    req.body.skills && (student.skills = req.body.skills);
+    req.body.graduationYear && (student.graduationYear = req.body.graduationYear);
+    req.file && ( student.photo = req.file.filename )
+
+    await student.save();
+    res.status(200).json(student);
+
+  }
+  catch (error) {
+    console.log(error);
+    res.status(500);
+  }
+});
+
 router.get("/:id/applications", async (req, res) => {
   const token = req.headers["token"];
   if (!verify_token(token)) {

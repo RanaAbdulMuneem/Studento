@@ -1,33 +1,22 @@
 import { useEffect, useState } from "react";
-import { Button, Modal } from "react-bootstrap";
+import { Button, Form, Modal } from "react-bootstrap";
 import ExperienceInput from "./ExperienceInput";
 import axios from "axios";
 
 const StudentEditModalBtn = (props) => {
   const [name, setName] = useState(props.studentDetails.name);
-
   const [skills, setSkills] = useState(props.studentDetails.skills);
   const [location, setLocation] = useState(props.studentDetails.location);
   const [age, setAge] = useState(props.studentDetails.age);
-  const [primaryRole, setPrimaryRole] = useState(
-    props.studentDetails.primaryRole
-  );
+  const [primaryRole, setPrimaryRole] = useState(props.studentDetails.primaryRole);
   const [gender, setGender] = useState(props.studentDetails.gender);
-
-  const [achievments, setAchievments] = useState(
-    props.studentDetails.achievments
-  );
+  const [achievements, setAchievements] = useState(props.studentDetails.achievements);
   const [experience, setExperience] = useState(props.studentDetails.experience);
-
   const [university, setUniversity] = useState(props.studentDetails.university);
   const [degree, setDegree] = useState(props.studentDetails.degree);
   const [major, setMajor] = useState(props.studentDetails.major);
-  const [graduationYear, setGraduationYear] = useState(
-    props.studentDetails.graduationYear
-  );
-  const [universityDescription, setUniversityDescription] = useState(
-    props.studentDetails.universityDescription
-  );
+  const [graduationYear, setGraduationYear] = useState(props.studentDetails.graduationYear);
+  const [universityDescription, setUniversityDescription] = useState(props.studentDetails.universityDescription);
   const [photo, handlePhoto] = useState("");
 
   const [show, setShow] = useState(false);
@@ -40,68 +29,35 @@ const StudentEditModalBtn = (props) => {
        alert("please fill in all details")
        return;
     }
+    let newDetails = {};
+    name && (newDetails.name = name);
+    age && (newDetails.age = parseInt(age));
+    gender && (newDetails.gender = gender);
+    location && (newDetails.location = location);
+    primaryRole && (newDetails.primaryRole = primaryRole);
+    university && (newDetails.university = university);
+    universityDescription && (newDetails.universityDescription = universityDescription);
+    degree && (newDetails.degree = degree);
+    major && (newDetails.major = major);
+    achievements && (newDetails.achievements = achievements);
+    experience && (newDetails.experience = experience);
+    skills && (newDetails.skills = skills);
+    graduationYear && (newDetails.graduationYear = graduationYear);
+    photo && ( newDetails.photo = photo);
     
-    
-      const newDetails = {
-      name: name,
-      email: props.email,
-      age: age,
-      gender: gender,
-      location: location,
-      university: university,
-      degree: degree,
-      major: major,
-      graduationYear: graduationYear,
-      universityDescription: universityDescription,
-      skills: skills,
-      primaryRole: primaryRole,
-      experience: experience,
-      achievments: achievments,
-    };
-
     const formData = new FormData();
-    formData.append("photo", photo);
-    formData.append("name", name);
-    formData.append("age", age);
-    formData.append("email", props.email);
-    formData.append("gender", gender);
-    formData.append("location", location);
-    formData.append("university", university);
-    formData.append("universityDescription", universityDescription);
-    formData.append("major", major);
-    formData.append("degree", degree);
-    formData.append("graduationYear", graduationYear);
-    formData.append("skills", skills);
-    formData.append("primaryRole", primaryRole);
-    formData.append("experience", experience);
-    formData.append("achievments", achievments);
+    for (const key in newDetails) {
+      formData.append(key, newDetails[key]);
+    }
 
-    const headers = {
-      "Content-Type": "multipart/form-data",
-      token: localStorage.getItem("token"),
-    };
-    axios
-      .post("http://localhost:3001/students/edit", formData, {
-        headers,
-      })
-      .then((res) => {
-        console.log(res);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-
-    // fetch("http://localhost:3001/students/edit", {
-    //   method: "POST",
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //     token: localStorage.getItem("token"),
-    //   },
-    //   body: JSON.stringify(newDetails),
-    // });
-
-    props.setDetails(newDetails);
-    alert("Student profile updated");
+    axios.patch(`http://localhost:3001/students/${props.studentDetails._id}/edit`, formData, {headers: {token: props.user.token}})
+    .then((response) => {
+      props.setDetails(response.data);
+    })
+    .catch((error) => {
+      console.log(error);
+      alert(error.response.data);
+    })
   };
 
   useEffect(() => {
@@ -111,7 +67,7 @@ const StudentEditModalBtn = (props) => {
     setLocation(props.studentDetails.location);
     setSkills(props.studentDetails.skills);
     setPrimaryRole(props.studentDetails.primaryRole);
-    setAchievments(props.studentDetails.achievements);
+    setAchievements(props.studentDetails.achievements);
     setExperience(props.studentDetails.experience);
     setUniversity(props.studentDetails.university);
     setDegree(props.studentDetails.degree);
@@ -267,8 +223,8 @@ const StudentEditModalBtn = (props) => {
                 class="form-control"
                 id="exampleFormControlInput1"
                 placeholder=""
-                value={achievments}
-                onChange={(e) => setAchievments(e.target.value)}
+                value={achievements}
+                onChange={(e) => setAchievements(e.target.value)}
               />
             </div>
             <div class="form-group mt-3">

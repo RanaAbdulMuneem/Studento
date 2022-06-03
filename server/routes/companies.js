@@ -4,10 +4,37 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const mongoose = require("mongoose");
 
+const multer = require("multer");
+const { v4: uuidv4 } = require("uuid");
+let path = require("path");
+
 const Company = require("../models/company.model");
 const Application = require("../models/application.model");
+const Job = require("../models/job.model")
 
 const verify_token = require("../utils/token")
+
+// UPLOAD IMAGE
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, "images");
+  },
+  filename: function (req, file, cb) {
+    cb(null, uuidv4() + "-" + Date.now() + path.extname(file.originalname));
+  },
+});
+
+const fileFilter = (req, file, cb) => {
+  const allowedFileTypes = ["image/jpeg", "image/jpg", "image/png"];
+  if (allowedFileTypes.includes(file.mimetype)) {
+    cb(null, true);
+  } else {
+    cb(null, false);
+  }
+};
+
+let upload = multer({ storage, fileFilter });
+
 
 router.get("/", function (req, res, next) {
   res.send("Companies router");
@@ -134,6 +161,38 @@ router.get("/:id", async (req, res) => {
   }
 });
 
+router.route("/:id/edit").patch(upload.single("photo"), async (req, res) => {
+  const token = req.headers["token"];
+  if (!verify_token(token)) {
+    console.log("Invalid token!");
+    res.status(401).send("Invalid token!");
+    return;
+  }
+
+  try {
+    const company = await Company.findById(req.params.id, {password: 0});
+    if (!company) {
+      res.status(401).send("Student not found");
+      return;
+    }
+    req.body.name && (company.name = req.body.name);
+    req.body.email && (company.email = req.body.email);
+    req.body.description && (company.description = req.body.description);
+    req.body.noOfEmployees && (company.noOfEmployees = parseInt(req.body.noOfEmployees));
+    req.body.yearFounded && (company.yearFounded = parseInt(req.body.yearFounded));
+    req.body.location && (company.location = req.body.location);
+    req.file && ( company.photo = req.file.filename )
+
+    await company.save();
+    res.status(200).json(company);
+
+  }
+  catch (error) {
+    console.log(error);
+    res.status(500);
+  }
+});
+
 router.get("/:id/stats", async (req, res) => {
   const token = req.headers['token'];
   if (!verify_token(token)){
@@ -231,6 +290,44 @@ router.patch("/:id/resolve-application/", async (req, res) => {
     application.status = req.body.status;
     await application.save();
     res.status(200).send(`Application ${application.status}`);
+  }
+  catch (error) {
+    console.log(error);
+    res.status(500);
+  }
+});
+
+router.post("/:id/add-job", async (req, res) => {
+  const token = req.headers['token'];
+  if (!verify_token(token)){
+      console.log('Invalid token!');
+      res.status(401).send('Invalid token!');
+      return;
+  }
+  try {
+    const company = await Company.findById(req.params.id, {password: 0});
+    if (!company) {
+      res.status(401).send('Company not found');
+      return;
+    }
+    const { skills } = req.body;
+    const skillsArr = skills.split(",");
+    let job = new Job({
+      company : company._id,
+      jobTitle: req.body.jobTitle,
+      jobType: req.body.jobType,
+      education: req.body.education,
+      jobLocation: req.body.jobLocation,
+      jobDomain: req.body.jobDomain,
+      minPay: req.body.minPay,
+      jobDescription: req.body.jobDescription,
+      skills: skillsArr,
+      dateCreated: Date.now()
+    });
+    await job.save();
+    company.jobs.push(job._id);
+    await company.save();
+    res.status(200).send("Job created");
   }
   catch (error) {
     console.log(error);

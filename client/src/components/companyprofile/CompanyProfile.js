@@ -122,6 +122,7 @@ const CompanyProfile = () => {
             width="300px"
           />
         </Col>
+        
         <Col className="col-lg-9  col-sm-12">
           <Container className="mt-2">
             
@@ -129,11 +130,12 @@ const CompanyProfile = () => {
 
               <CompanyEditModalBtn
                 company={companyDetails}
+                setCompany={setCompanyDetails}
                 email={companyDetails.email}
+                user = {user}
               />
 
               {/* CREATE A JOB - ONLY FOR COMPANY */}
-
               <a className="btn btn-primary btn-lg m-1" href="/createjob">
                 Create a Job
               </a>

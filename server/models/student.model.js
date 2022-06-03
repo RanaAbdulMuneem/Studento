@@ -16,9 +16,9 @@ const Student = new mongoose.Schema({
   universityDescription: { type: String, required: false },
   experience: { type: String, required: false },
   achievements: { type: String, required: false },
-  skills: { type: Array, required: false },
+  skills: { type: String, required: false },
   saved_jobs: [{ type: mongoose.Schema.Types.ObjectId, ref: "Job" }],
-  applied_jobs: [{ type: mongoose.Schema.Types.ObjectId, ref: "Job" }],
+  applied_jobs: [{ type: mongoose.Schema.Types.ObjectId, ref: "Application" }],
   verified: { type: Boolean, default: false },
   code: { type: String, required: true },
 });
