@@ -143,7 +143,7 @@ const CompanySignup = () => {
                   onChange={(e) => setCompanyPassword(e.target.value)}
                 />
 
-                <button class="btn btn-primary text-center w-100" type="submit">
+                <button class="btn btn-primary text-center w-100 mt-2" type="submit">
                   Register
                 </button>
               </form>
@@ -152,22 +152,22 @@ const CompanySignup = () => {
               <div class="col">
                 <hr />
               </div>
-              <div class="col-auto">OR</div>
+              {/* <div class="col-auto">OR</div> */}
               <div class="col">
                 <hr />
               </div>
             </div>
-            <div class="row mb-3">
+            {/* <div class="row mb-3">
               <div className="mx-5" id="signUpDiv"></div>
-            </div>
+            </div> */}
             <div class="row mb-1">
-              <a
+              {/* <a
                 href="/https://facebook.com"
                 target="_blank"
                 class="btn btn-light border-secondary w-100"
               >
                 Login with Facebook
-              </a>
+              </a> */}
             </div>
             <div class="row">
               <p className="text-center" style={{ fontSize: "12px" }}>
