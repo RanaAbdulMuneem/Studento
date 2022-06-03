@@ -111,20 +111,59 @@ router.get("/email-activation/:email/:token", async (req, res) => {
   }
 });
 
+router.post("/password-update", async (req, res) => {
+  console.log(req.body);
+
+  try {
+    const user = await Student.findOne({
+      email: req.body.studentEmail,
+      token: req.body.studentToken,
+    });
+
+    if (user) {
+      console.log("found");
+      const newPassword = await bcrypt.hash(req.body.studentPassword, 10);
+
+      Student.updateOne(
+        { email: req.body.studentEmail },
+        {
+          password: newPassword,
+        },
+        function (err) {
+          if (err) {
+            console.log(err);
+            res.status(500);
+            res.json({ status: "error", error: "error" });
+          }
+        }
+      );
+
+      res.json({ status: "updated", message: "User Password rest" });
+    }
+    if (!user) {
+      console.log("not found");
+      res.json({ status: "error", error: "error" });
+    }
+  } catch (err) {
+    console.log(err);
+    res.json({ status: "error", error: "error" });
+  }
+});
+
 router.post("/password-reset", async (req, res) => {
   console.log(req.body);
   const otp = Math.floor(Math.random() * 1000000000000 + 1);
 
   try {
     const user = await Student.findOne({
-      email: req.body.email,
+      email: req.body.studentEmail,
     });
 
     if (user) {
       console.log("found");
 
       Student.updateOne(
-        { email: req.body.email },
+        { email: req.body.studentEmail },
         {
           code: otp,
         },
@@ -138,8 +177,8 @@ router.post("/password-reset", async (req, res) => {
       );
 
       resetLink =
-        "http://localhost:3000/students/newPassword/" +
-        req.body.email +
+        "http://localhost:3000/passwordreset/" +
+        req.body.studentEmail +
         "/" +
         otp;
 
@@ -148,7 +187,7 @@ router.post("/password-reset", async (req, res) => {
         " You have requested password reset. Click Here To reset account: " +
         resetLink;
 
-      sendEmail(req.body.email, "Password Reset", content);
+      sendEmail(req.body.studentEmail, "Password Reset", content);
 
       res.json({ status: "updated", message: "User reset sent" });
     }

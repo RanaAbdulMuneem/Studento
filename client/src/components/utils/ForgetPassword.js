@@ -16,21 +16,33 @@ const ForgetPassword = () => {
     alert(studentEmail);
     console.log(studentEmail);
 
-    const response = await fetch("localhost:3001/students/password-reset", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
+    axios
+      .post(`http://localhost:3001/students/password-reset`, {
         studentEmail,
-      }),
-    });
+      })
+      .then((response) => {
+        console.log(response);
+      })
+      .catch((error) => {
+        alert(error);
+        console.log(error);
+      });
+    //--------------------------------------
+    // const response = await fetch("localhost:3001/students/password-reset", {
+    //   method: "POST",
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //   },
+    //   body: JSON.stringify({
+    //     studentEmail,
+    //   }),
+    // });
 
-    const data = await response.json();
+    // const data = await response.json();
 
-    if (data.status === "ok") {
-      console.log("hello");
-    }
+    // if (data.status === "ok") {
+    //   console.log("hello");
+    // }
 
     //   axios
     //     .post(`localhost:3001/students/password-reset`, {
