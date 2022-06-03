@@ -5,6 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import NewSignUp from "../forms/NewSignUp";
 import { useParams } from "react-router-dom";
+import axios from 'axios'
 
 const PasswordReset = () => {
   const navigate = useNavigate();
@@ -19,6 +20,14 @@ const PasswordReset = () => {
     // Hit Api: localhost:3001/students/password-update
     // Parameters: studentEmail, studentToken, studentPassword
     // Redirect user to login
+    axios.post(`http://localhost:3001/students/password-update`, {studentEmail: email, studentPassword: studentPassword, studentToken: token})
+    .then((response) => {
+      console.log(response.data);
+      navigate('/studentlogin');
+    })
+    .catch((error) => {
+      console.log(error);
+    })
   };
 
   return (
