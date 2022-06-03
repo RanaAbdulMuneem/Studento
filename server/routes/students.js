@@ -165,9 +165,17 @@ router.post("/password-reset", async (req, res) => {
 router.post("/signup", async (req, res) => {
   console.log(req.body);
   try {
+    const student = await Student.findOne({email: req.body.studentEmail}, {password: 0});
+    if (student) {
+      res.status(401).json({
+        registered: true,
+        msg: "Already registered"
+      });
+      return;
+    }
+    
     const newPassword = await bcrypt.hash(req.body.studentPassword, 10);
     const otp = Math.floor(Math.random() * 1000000000000 + 1);
-
     await Student.create({
       name: req.body.studentName,
       email: req.body.studentEmail,

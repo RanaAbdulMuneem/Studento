@@ -10,7 +10,7 @@ const Company = new mongoose.Schema(
     description: { type: String, required: false },
     city: {type: String},
     country: {type: String},
-    photo: {type: String},
+    photo: {type: String, default: 'default-user.png'},
     jobs: [{type: mongoose.Schema.Types.ObjectId, ref: 'Job'}]
 	}
 

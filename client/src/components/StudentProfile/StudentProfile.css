@@ -1,7 +1,6 @@
 .profile-pic{
   border-radius: 5%;
-  min-width: 200px;
-  
+  width: 300px;
 }
 
 .name-age-row{
