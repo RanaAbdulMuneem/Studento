@@ -232,11 +232,10 @@ const StudentLogin = () => {
                         </button>
                       </div> */}
                         <div className="d-flex flex-row align-items-center mb-4">
-                          <i className="fas fa-lock fa-lg me-3 fa-fw" />
                           <div className="form-outline flex-fill mb-0 text-center">
                             <button
                               type="submit"
-                              className="btn btn-primary  w-100 mb-4"
+                              className="btn btn-primary  w-75 mb-4"
                             >
                               Log Me In!
                             </button>
