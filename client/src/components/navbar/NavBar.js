@@ -38,7 +38,10 @@ export const NavBar = (props) => {
           </Navbar.Brand>
         <Nav className="me-auto">
           <Nav.Link as={Link} to="/">Home</Nav.Link>
-          <Nav.Link as={Link} to="/jobs">Jobs</Nav.Link>
+          {
+            localStorage.getItem("type") !== 'company' &&
+            <Nav.Link as={Link} to="/jobs">Jobs</Nav.Link>
+          }
         </Nav>
         <Nav>
           {

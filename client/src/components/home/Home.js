@@ -29,6 +29,7 @@ const CompanyCard = (props) => {
 
 
 export const Home = () => {
+    const user = JSON.parse(localStorage.getItem('user'));
     const top_companies = [
         {name: "FAST-NUCES", logo: FastLogo},
         {name: "FAST-NUCES", logo: FastLogo},
@@ -44,26 +45,32 @@ export const Home = () => {
                     <h1 class="display-1 mb-5">Studento</h1>
                     <p class="info">Occaecat ut eiusmod pariatur sint culpa in culpa Lorem minim veniam dolore ad laborum deserunt.</p>
                     <p class="info">Cupidatat eiusmod laboris consectetur est magna.</p>
-                    <div class="row mt-5">
-                        <div class="d-flex flex-row">
-                            <Link to="/studentlogin">
-                                <button class="btn button-student me-3">For students</button>
-                            </Link>    
-                            <Link to="/companylogin">
-                                <button class="btn button-company">For companies</button>
-                            </Link>
+                    {
+                        !user &&
+                        <div class="row mt-5">
+                            <div class="d-flex flex-row">
+                                <Link to="/studentlogin">
+                                    <button class="btn button-student me-3">For students</button>
+                                </Link>    
+                                <Link to="/companylogin">
+                                    <button class="btn button-company">For companies</button>
+                                </Link>
+                            </div>
                         </div>
-                    </div>
-                    <div class="row mt-5 align-items-center">
-                        <div class="col-auto">
-                            <h5>Just want to explore?</h5>
+                    }
+                    {
+                        (!user || user.type!='company') &&
+                        <div class="row mt-5 align-items-center">
+                            <div class="col-auto">
+                                <h5>Just want to explore?</h5>
+                            </div>
+                            <div class="col-auto">
+                                <Link to="/jobs">
+                                    <button class="btn button-jobs">Checkout Jobs</button>
+                                </Link>
+                            </div>
                         </div>
-                        <div class="col-auto">
-                            <Link to="/jobs">
-                                <button class="btn button-jobs">Checkout Jobs</button>
-                            </Link>
-                        </div>
-                    </div>
+                    }
                 </div>
                 <div class="col-md-6 col-sm-12">
                     <img src={ChillingImage} class="img-fluid"></img>

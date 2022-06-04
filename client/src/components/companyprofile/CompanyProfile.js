@@ -100,7 +100,7 @@ const CompanyProfile = () => {
     //SCROLL EVENT LISTENER
     const onScroll = function () {
       if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
-        console.log("you're at the bottom of the page");
+        //console.log("you're at the bottom of the page");
         page.current++;
         handleApplications();
       }
